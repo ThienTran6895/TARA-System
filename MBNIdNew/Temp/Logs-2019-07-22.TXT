@@ -1,0 +1,167 @@
+﻿# Main
+# time level ip user class thread message
+
+# Main
+# time level ip user class thread message
+
+# Main
+# time level ip user class thread message
+
+# Main
+# time level ip user class thread message
+
+# Main
+# time level ip user class thread message
+
+# Main
+# time level ip user class thread message
+
+# Main
+# time level ip user class thread message
+
+# Main
+# time level ip user class thread message
+
+# Main
+# time level ip user class thread message
+
+# Main
+# time level ip user class thread message
+
+# Main
+# time level ip user class thread message
+
+# Main
+# time level ip user class thread message
+15:31:03 INFO  ::1 duong [OMS.CustomerController] [9] - iRow:2-SourceId:12381
+15:31:03 INFO  ::1 duong [OMS.CustomerController] [9] - NumberPhone:84933716809
+15:31:03 INFO  ::1 duong [OMS.CustomerController] [9] - iRow:3-SourceId:12381
+15:31:03 INFO  ::1 duong [OMS.CustomerController] [9] - Gửi mail import
+15:31:06 FATAL ::1 duong [OMS.CustomerController] [9] - Error: Gửi mail, Detail:System.Net.Mail.SmtpException: Transaction failed. The server response was: 5.7.1 Permission denied
+   at System.Net.Mail.SmtpConnection.GetConnection(ServicePoint servicePoint)
+   at System.Net.Mail.SmtpTransport.GetConnection(ServicePoint servicePoint)
+   at System.Net.Mail.SmtpClient.GetConnection()
+   at System.Net.Mail.SmtpClient.Send(MailMessage message)
+   at MB.Common.Helpers.CommonHelper.SendEmail(String subject, String body, String toAddress, String toName, IEnumerable`1 bcc, IEnumerable`1 cc) in D:\Dev\BPO_OMS_MVC_AUTOCALL\Infrastructure\MB.Common\Helpers\CommonHelper.cs:line 164
+   at MB.OMS.Telesale.Controller.CustomerController.HandlingImportExcel(CustomerDTO model) in D:\Dev\BPO_OMS_MVC_AUTOCALL\Module\OMS\MB.OMS.Telesale.Controller\CustomerController.cs:line 1261
+16:19:36 INFO  ::1 duong [OMS.CustomerController] [33] - iRow:2-SourceId:12383
+16:19:36 INFO  ::1 duong [OMS.CustomerController] [33] - NumberPhone:13213213
+16:19:37 INFO  ::1 duong [OMS.CustomerController] [33] - iRow:3-SourceId:12383
+16:19:37 INFO  ::1 duong [OMS.CustomerController] [33] - NumberPhone:51354354
+16:19:37 INFO  ::1 duong [OMS.CustomerController] [33] - iRow:4-SourceId:12383
+16:19:37 INFO  ::1 duong [OMS.CustomerController] [33] - NumberPhone:546768
+16:19:37 INFO  ::1 duong [OMS.CustomerController] [33] - iRow:5-SourceId:12383
+16:19:37 INFO  ::1 duong [OMS.CustomerController] [33] - NumberPhone:654645
+16:19:37 INFO  ::1 duong [OMS.CustomerController] [33] - iRow:6-SourceId:12383
+16:19:37 INFO  ::1 duong [OMS.CustomerController] [33] - NumberPhone:21321
+16:19:37 INFO  ::1 duong [OMS.CustomerController] [33] - iRow:7-SourceId:12383
+16:19:37 INFO  ::1 duong [OMS.CustomerController] [33] - Gửi mail import
+16:19:39 FATAL ::1 duong [OMS.CustomerController] [33] - Error: Gửi mail, Detail:System.Net.Mail.SmtpException: Transaction failed. The server response was: 5.7.1 Permission denied
+   at System.Net.Mail.SmtpConnection.GetConnection(ServicePoint servicePoint)
+   at System.Net.Mail.SmtpTransport.GetConnection(ServicePoint servicePoint)
+   at System.Net.Mail.SmtpClient.GetConnection()
+   at System.Net.Mail.SmtpClient.Send(MailMessage message)
+   at MB.Common.Helpers.CommonHelper.SendEmail(String subject, String body, String toAddress, String toName, IEnumerable`1 bcc, IEnumerable`1 cc) in D:\Dev\BPO_OMS_MVC_AUTOCALL\Infrastructure\MB.Common\Helpers\CommonHelper.cs:line 164
+   at MB.OMS.Telesale.Controller.CustomerController.HandlingImportExcel(CustomerDTO model) in D:\Dev\BPO_OMS_MVC_AUTOCALL\Module\OMS\MB.OMS.Telesale.Controller\CustomerController.cs:line 1261
+16:26:53 INFO  ::1 duong [OMS.CustomerController] [41] - iRow:2-SourceId:12384
+16:26:53 INFO  ::1 duong [OMS.CustomerController] [41] - NumberPhone:908503919
+16:26:54 INFO  ::1 duong [OMS.CustomerController] [41] - iRow:3-SourceId:12384
+16:26:54 INFO  ::1 duong [OMS.CustomerController] [41] - Gửi mail import
+16:26:54 FATAL ::1 duong [OMS.CustomerController] [41] - Error: Gửi mail, Detail:System.Net.Mail.SmtpException: Transaction failed. The server response was: 5.7.1 Permission denied
+   at System.Net.Mail.SmtpConnection.GetConnection(ServicePoint servicePoint)
+   at System.Net.Mail.SmtpTransport.GetConnection(ServicePoint servicePoint)
+   at System.Net.Mail.SmtpClient.GetConnection()
+   at System.Net.Mail.SmtpClient.Send(MailMessage message)
+   at MB.Common.Helpers.CommonHelper.SendEmail(String subject, String body, String toAddress, String toName, IEnumerable`1 bcc, IEnumerable`1 cc) in D:\Dev\BPO_OMS_MVC_AUTOCALL\Infrastructure\MB.Common\Helpers\CommonHelper.cs:line 164
+   at MB.OMS.Telesale.Controller.CustomerController.HandlingImportExcel(CustomerDTO model) in D:\Dev\BPO_OMS_MVC_AUTOCALL\Module\OMS\MB.OMS.Telesale.Controller\CustomerController.cs:line 1261
+16:28:27 FATAL ::1 duong [OMS.ReportRepository] [7] - Error ThongKeBaoCaoChiTietDatasource, Detail: System.Data.SqlClient.SqlException (0x80131904): Invalid object name '#termT'.
+   at System.Data.SqlClient.SqlConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   at System.Data.SqlClient.SqlInternalConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   at System.Data.SqlClient.TdsParser.ThrowExceptionAndWarning(TdsParserStateObject stateObj, Boolean callerHasConnectionLock, Boolean asyncClose)
+   at System.Data.SqlClient.TdsParser.TryRun(RunBehavior runBehavior, SqlCommand cmdHandler, SqlDataReader dataStream, BulkCopySimpleResultSet bulkCopyHandler, TdsParserStateObject stateObj, Boolean& dataReady)
+   at System.Data.SqlClient.SqlDataReader.TryConsumeMetaData()
+   at System.Data.SqlClient.SqlDataReader.get_MetaData()
+   at System.Data.SqlClient.SqlCommand.FinishExecuteReader(SqlDataReader ds, RunBehavior runBehavior, String resetOptionsString, Boolean isInternal, Boolean forDescribeParameterEncryption, Boolean shouldCacheForAlwaysEncrypted)
+   at System.Data.SqlClient.SqlCommand.RunExecuteReaderTds(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, Boolean async, Int32 timeout, Task& task, Boolean asyncWrite, Boolean inRetry, SqlDataReader ds, Boolean describeParameterEncryptionRequest)
+   at System.Data.SqlClient.SqlCommand.RunExecuteReader(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, String method, TaskCompletionSource`1 completion, Int32 timeout, Task& task, Boolean& usedCache, Boolean asyncWrite, Boolean inRetry)
+   at System.Data.SqlClient.SqlCommand.RunExecuteReader(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, String method)
+   at System.Data.SqlClient.SqlCommand.ExecuteReader(CommandBehavior behavior, String method)
+   at System.Data.SqlClient.SqlCommand.ExecuteDbDataReader(CommandBehavior behavior)
+   at System.Data.Common.DbCommand.System.Data.IDbCommand.ExecuteReader(CommandBehavior behavior)
+   at Dapper.SqlMapper.ExecuteReaderWithFlagsFallback(IDbCommand cmd, Boolean wasClosed, CommandBehavior behavior)
+   at Dapper.SqlMapper.<QueryImpl>d__125`1.MoveNext()
+   at System.Collections.Generic.List`1..ctor(IEnumerable`1 collection)
+   at System.Linq.Enumerable.ToList[TSource](IEnumerable`1 source)
+   at Dapper.SqlMapper.Query[T](IDbConnection cnn, String sql, Object param, IDbTransaction transaction, Boolean buffered, Nullable`1 commandTimeout, Nullable`1 commandType)
+   at DAL.Core.DALHelpers.Query[T](String sql, UserLogin userInfo, DynamicParameters param) in D:\Dev\BPO_OMS_MVC_AUTOCALL\Infrastructure\DAL\BaseRepository\DALHelpers.cs:line 36
+   at MB.OMS.Telesale.Repository.ReportRepository.ThongKeBaoCaoChiTietDatasource(DataSourceRequest dsRequest, Report model) in D:\Dev\BPO_OMS_MVC_AUTOCALL\Module\OMS\MB.OMS.Telesale.Repository\ReportRepository.cs:line 216
+ClientConnectionId:63df5e01-2773-4e64-bd05-4229003f3249
+Error Number:208,State:0,Class:16
+16:29:11 FATAL ::1 duong [OMS.ReportRepository] [7] - Error ThongKeBaoCaoChiTietDatasource, Detail: System.Data.SqlClient.SqlException (0x80131904): Invalid object name '#termT'.
+   at System.Data.SqlClient.SqlConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   at System.Data.SqlClient.SqlInternalConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   at System.Data.SqlClient.TdsParser.ThrowExceptionAndWarning(TdsParserStateObject stateObj, Boolean callerHasConnectionLock, Boolean asyncClose)
+   at System.Data.SqlClient.TdsParser.TryRun(RunBehavior runBehavior, SqlCommand cmdHandler, SqlDataReader dataStream, BulkCopySimpleResultSet bulkCopyHandler, TdsParserStateObject stateObj, Boolean& dataReady)
+   at System.Data.SqlClient.SqlDataReader.TryConsumeMetaData()
+   at System.Data.SqlClient.SqlDataReader.get_MetaData()
+   at System.Data.SqlClient.SqlCommand.FinishExecuteReader(SqlDataReader ds, RunBehavior runBehavior, String resetOptionsString, Boolean isInternal, Boolean forDescribeParameterEncryption, Boolean shouldCacheForAlwaysEncrypted)
+   at System.Data.SqlClient.SqlCommand.RunExecuteReaderTds(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, Boolean async, Int32 timeout, Task& task, Boolean asyncWrite, Boolean inRetry, SqlDataReader ds, Boolean describeParameterEncryptionRequest)
+   at System.Data.SqlClient.SqlCommand.RunExecuteReader(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, String method, TaskCompletionSource`1 completion, Int32 timeout, Task& task, Boolean& usedCache, Boolean asyncWrite, Boolean inRetry)
+   at System.Data.SqlClient.SqlCommand.RunExecuteReader(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, String method)
+   at System.Data.SqlClient.SqlCommand.ExecuteReader(CommandBehavior behavior, String method)
+   at System.Data.SqlClient.SqlCommand.ExecuteDbDataReader(CommandBehavior behavior)
+   at System.Data.Common.DbCommand.System.Data.IDbCommand.ExecuteReader(CommandBehavior behavior)
+   at Dapper.SqlMapper.ExecuteReaderWithFlagsFallback(IDbCommand cmd, Boolean wasClosed, CommandBehavior behavior)
+   at Dapper.SqlMapper.<QueryImpl>d__125`1.MoveNext()
+   at System.Collections.Generic.List`1..ctor(IEnumerable`1 collection)
+   at System.Linq.Enumerable.ToList[TSource](IEnumerable`1 source)
+   at Dapper.SqlMapper.Query[T](IDbConnection cnn, String sql, Object param, IDbTransaction transaction, Boolean buffered, Nullable`1 commandTimeout, Nullable`1 commandType)
+   at DAL.Core.DALHelpers.Query[T](String sql, UserLogin userInfo, DynamicParameters param) in D:\Dev\BPO_OMS_MVC_AUTOCALL\Infrastructure\DAL\BaseRepository\DALHelpers.cs:line 36
+   at MB.OMS.Telesale.Repository.ReportRepository.ThongKeBaoCaoChiTietDatasource(DataSourceRequest dsRequest, Report model) in D:\Dev\BPO_OMS_MVC_AUTOCALL\Module\OMS\MB.OMS.Telesale.Repository\ReportRepository.cs:line 216
+ClientConnectionId:63df5e01-2773-4e64-bd05-4229003f3249
+Error Number:208,State:0,Class:16
+# Main
+# time level ip user class thread message
+
+# Main
+# time level ip user class thread message
+
+# Main
+# time level ip user class thread message
+
+# Main
+# time level ip user class thread message
+17:05:03 INFO  ::1 duong [OMS.CustomerController] [14] - iRow:2-SourceId:12381
+17:05:04 INFO  ::1 duong [OMS.CustomerController] [14] - NumberPhone:908503919
+17:05:04 INFO  ::1 duong [OMS.CustomerController] [14] - iRow:3-SourceId:12381
+17:05:04 INFO  ::1 duong [OMS.CustomerController] [14] - NumberPhone:933716809
+17:05:04 INFO  ::1 duong [OMS.CustomerController] [14] - iRow:4-SourceId:12381
+17:05:04 INFO  ::1 duong [OMS.CustomerController] [14] - NumberPhone:123456789
+17:05:04 INFO  ::1 duong [OMS.CustomerController] [14] - iRow:5-SourceId:12381
+17:05:04 INFO  ::1 duong [OMS.CustomerController] [14] - NumberPhone:933456789
+17:05:04 INFO  ::1 duong [OMS.CustomerController] [14] - iRow:6-SourceId:12381
+17:05:04 INFO  ::1 duong [OMS.CustomerController] [14] - Gửi mail import
+17:05:06 FATAL ::1 duong [OMS.CustomerController] [14] - Error: Gửi mail, Detail:System.Net.Mail.SmtpException: Transaction failed. The server response was: 5.7.1 Permission denied
+   at System.Net.Mail.SmtpConnection.GetConnection(ServicePoint servicePoint)
+   at System.Net.Mail.SmtpTransport.GetConnection(ServicePoint servicePoint)
+   at System.Net.Mail.SmtpClient.GetConnection()
+   at System.Net.Mail.SmtpClient.Send(MailMessage message)
+   at MB.Common.Helpers.CommonHelper.SendEmail(String subject, String body, String toAddress, String toName, IEnumerable`1 bcc, IEnumerable`1 cc) in D:\Dev\BPO_OMS_MVC_AUTOCALL\Infrastructure\MB.Common\Helpers\CommonHelper.cs:line 164
+   at MB.OMS.Telesale.Controller.CustomerController.HandlingImportExcel(CustomerDTO model) in D:\Dev\BPO_OMS_MVC_AUTOCALL\Module\OMS\MB.OMS.Telesale.Controller\CustomerController.cs:line 1261
+17:10:48 INFO  ::1 duong [OMS.CustomerController] [7] - iRow:2-SourceId:12382
+17:10:49 INFO  ::1 duong [OMS.CustomerController] [7] - NumberPhone:908503919
+17:10:49 INFO  ::1 duong [OMS.CustomerController] [7] - iRow:3-SourceId:12382
+17:10:49 INFO  ::1 duong [OMS.CustomerController] [7] - NumberPhone:933716809
+17:10:49 INFO  ::1 duong [OMS.CustomerController] [7] - iRow:4-SourceId:12382
+17:10:49 INFO  ::1 duong [OMS.CustomerController] [7] - NumberPhone:123456789
+17:10:49 INFO  ::1 duong [OMS.CustomerController] [7] - iRow:5-SourceId:12382
+17:10:49 INFO  ::1 duong [OMS.CustomerController] [7] - NumberPhone:933456789
+17:10:49 INFO  ::1 duong [OMS.CustomerController] [7] - iRow:6-SourceId:12382
+17:10:49 INFO  ::1 duong [OMS.CustomerController] [7] - Gửi mail import
+17:10:49 FATAL ::1 duong [OMS.CustomerController] [7] - Error: Gửi mail, Detail:System.Net.Mail.SmtpException: Transaction failed. The server response was: 5.7.1 Permission denied
+   at System.Net.Mail.SmtpConnection.GetConnection(ServicePoint servicePoint)
+   at System.Net.Mail.SmtpTransport.GetConnection(ServicePoint servicePoint)
+   at System.Net.Mail.SmtpClient.GetConnection()
+   at System.Net.Mail.SmtpClient.Send(MailMessage message)
+   at MB.Common.Helpers.CommonHelper.SendEmail(String subject, String body, String toAddress, String toName, IEnumerable`1 bcc, IEnumerable`1 cc) in D:\Dev\BPO_OMS_MVC_AUTOCALL\Infrastructure\MB.Common\Helpers\CommonHelper.cs:line 164
+   at MB.OMS.Telesale.Controller.CustomerController.HandlingImportExcel(CustomerDTO model) in D:\Dev\BPO_OMS_MVC_AUTOCALL\Module\OMS\MB.OMS.Telesale.Controller\CustomerController.cs:line 1261

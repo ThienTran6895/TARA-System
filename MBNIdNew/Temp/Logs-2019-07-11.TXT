@@ -1,0 +1,26 @@
+﻿# Main
+# time level ip user class thread message
+
+# Main
+# time level ip user class thread message
+18:44:16 INFO  ::1 duong [ReportController] [9] - BEGIN at 18:44:16
+18:44:33 INFO  ::1 duong [ReportController] [9] - Excute store GetCustomerFieldByProject(rows=10), ThongKeBaoCaoChiTietFull(rows=4840))
+18:44:34 INFO  ::1 duong [ReportController] [9] - End prepare template -TotalSecond=18:44:34
+18:44:34 INFO  ::1 duong [ReportController] [9] - Excute GetSurveyByQuestionIdTK
+18:44:34 INFO  ::1 duong [ReportController] [9] - Excute LoadAllSurveyAnswerTK
+18:44:34 INFO  ::1 duong [ReportController] [9] - Load nội dung thống kê có trong store
+18:46:06 INFO  ::1 duong [ReportController] [15] - BEGIN at 18:46:06
+18:46:54 INFO  ::1 duong [ReportController] [15] - Excute store GetCustomerFieldByProject(rows=10), ThongKeBaoCaoChiTietFull(rows=4840))
+18:46:54 INFO  ::1 duong [ReportController] [15] - End prepare template -TotalSecond=18:46:54
+18:46:54 INFO  ::1 duong [ReportController] [15] - Excute GetSurveyByQuestionIdTK
+18:46:54 INFO  ::1 duong [ReportController] [15] - Excute LoadAllSurveyAnswerTK
+18:46:55 INFO  ::1 duong [ReportController] [15] - Load nội dung thống kê có trong store
+18:49:58 INFO  ::1 duong [ReportController] [9] - END at 18:49:58
+18:51:09 INFO  ::1 duong [ReportController] [15] - END at 18:51:09
+18:51:35 INFO  ::1 duong [ReportController] [15] - BEGIN at 18:51:35
+18:51:42 INFO  ::1 duong [ReportController] [15] - Excute store GetCustomerFieldByProject(rows=10), ThongKeBaoCaoChiTietFull(rows=1378))
+18:51:42 INFO  ::1 duong [ReportController] [15] - End prepare template -TotalSecond=18:51:42
+18:51:42 INFO  ::1 duong [ReportController] [15] - Excute GetSurveyByQuestionIdTK
+18:51:42 INFO  ::1 duong [ReportController] [15] - Excute LoadAllSurveyAnswerTK
+18:51:42 INFO  ::1 duong [ReportController] [15] - Load nội dung thống kê có trong store
+18:52:13 INFO  ::1 duong [ReportController] [15] - END at 18:52:13

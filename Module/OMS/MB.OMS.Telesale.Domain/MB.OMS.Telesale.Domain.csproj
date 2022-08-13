@@ -1,0 +1,157 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{89D65F96-E216-47CF-A225-D9A61352A4C2}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>MB.OMS.Telesale.Domain</RootNamespace>
+    <AssemblyName>MB.OMS.Telesale.Domain</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="EPPlus">
+      <HintPath>..\..\..\packages\EPPlus.4.1.0\lib\net40\EPPlus.dll</HintPath>
+    </Reference>
+    <Reference Include="log4net, Version=2.0.7.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
+      <HintPath>..\..\..\packages\log4net.2.0.7\lib\net45-full\log4net.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Web.Mvc, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\packages\Microsoft.AspNet.Mvc.5.2.3\lib\net45\System.Web.Mvc.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Interface\ICallLogRepository.cs" />
+    <Compile Include="Interface\ICallRepository.cs" />
+    <Compile Include="Interface\ICampaignsRepository.cs" />
+    <Compile Include="Interface\ICustomerErrorFieldValueRepository.cs" />
+    <Compile Include="Interface\ICustomerErrorRepository.cs" />
+    <Compile Include="Interface\ICustomerExistFieldValueRepository.cs" />
+    <Compile Include="Interface\ICustomerExistRepository.cs" />
+    <Compile Include="Interface\ICustomerFieldRepository.cs" />
+    <Compile Include="Interface\ICustomerFieldValueRepository.cs" />
+    <Compile Include="Interface\ICustomerRepository.cs" />
+    <Compile Include="Interface\IPermisionsRepository.cs" />
+    <Compile Include="Interface\IProjectCustomerFieldRepository.cs" />
+    <Compile Include="Interface\IProjectCustomerRepository.cs" />
+    <Compile Include="Interface\IProjectQuestionsRepository.cs" />
+    <Compile Include="Interface\IProjectsRepository.cs" />
+    <Compile Include="Interface\IProjectStatusCallRepository.cs" />
+    <Compile Include="Interface\IProjectUsersRepository.cs" />
+    <Compile Include="Interface\IQuestionRepository.cs" />
+    <Compile Include="Interface\IQuestionsSurveyRepository.cs" />
+    <Compile Include="Interface\IReportRepository.cs" />
+    <Compile Include="Interface\IRolePermisionRepository.cs" />
+    <Compile Include="Interface\IRoleRepository.cs" />
+    <Compile Include="Interface\ISourcesRepository.cs" />
+    <Compile Include="Interface\IStatusCallRepository.cs" />
+    <Compile Include="Interface\ISurveyAnswerRepository.cs" />
+    <Compile Include="Interface\ISurveyRepository.cs" />
+    <Compile Include="Interface\IUserRepository.cs" />
+    <Compile Include="Interface\IEwayAPIService.cs" />
+    <Compile Include="Interface\IUserRoleRepository.cs" />
+    <Compile Include="Model\CisCallModel.cs" />
+    <Compile Include="Model\EwayCustomer.cs" />
+    <Compile Include="Model\Call.cs" />
+    <Compile Include="Model\CallLog.cs" />
+    <Compile Include="Model\CallSurvey.cs" />
+    <Compile Include="Model\Campaigns.cs" />
+    <Compile Include="Model\ChangePassWord.cs" />
+    <Compile Include="Model\ChooseProjectDTO.cs" />
+    <Compile Include="Model\Customer.cs" />
+    <Compile Include="Model\CustomerDTO.cs" />
+    <Compile Include="Model\CustomerError.cs" />
+    <Compile Include="Model\CustomerErrorDTO.cs" />
+    <Compile Include="Model\CustomerErrorFieldValue.cs" />
+    <Compile Include="Model\CustomerExist.cs" />
+    <Compile Include="Model\CustomerExistDTO.cs" />
+    <Compile Include="Model\CustomerExistFieldValue.cs" />
+    <Compile Include="Model\CustomerField.cs" />
+    <Compile Include="Model\CustomerFieldDTO.cs" />
+    <Compile Include="Model\CustomerFieldValue.cs" />
+    <Compile Include="Model\ListSurverAnswer.cs" />
+    <Compile Include="Model\Permisions.cs" />
+    <Compile Include="Model\PermisionsDTO.cs" />
+    <Compile Include="Model\PG_Employee.cs" />
+    <Compile Include="Model\ProjectCustomer.cs" />
+    <Compile Include="Model\ProjectCustomerField.cs" />
+    <Compile Include="Model\ProjectQuestions.cs" />
+    <Compile Include="Model\Projects.cs" />
+    <Compile Include="Model\ProjectsDTO.cs" />
+    <Compile Include="Model\ProjectStatusCall.cs" />
+    <Compile Include="Model\ProjectUsers.cs" />
+    <Compile Include="Model\Question.cs" />
+    <Compile Include="Model\QuestionDTO.cs" />
+    <Compile Include="Model\QuestionsSurvey.cs" />
+    <Compile Include="Model\Report.cs" />
+    <Compile Include="Model\RoleDTO.cs" />
+    <Compile Include="Model\RolePermision.cs" />
+    <Compile Include="Model\Roles.cs" />
+    <Compile Include="Model\Sources.cs" />
+    <Compile Include="Model\Status.cs" />
+    <Compile Include="Model\StatusCall.cs" />
+    <Compile Include="Model\StatusCallDTO.cs" />
+    <Compile Include="Model\Survey.cs" />
+    <Compile Include="Model\SurveyAnswer.cs" />
+    <Compile Include="Model\SurveyDTO.cs" />
+    <Compile Include="Model\User.cs" />
+    <Compile Include="Model\UserDTO.cs" />
+    <Compile Include="Model\UserRole.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\Infrastructure\MB.Common\MB.Common.csproj">
+      <Project>{bfc1a0ca-06dc-470c-b4c0-dd46f26dc616}</Project>
+      <Name>MB.Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\Infrastructure\Web.Core\MB.Web.Core.csproj">
+      <Project>{2e9791ee-e29c-40c1-a75e-66f646b94d9a}</Project>
+      <Name>MB.Web.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Common\MB.Id.Common.Domain\MB.OMS.Common.Domain.csproj">
+      <Project>{a48ad52c-bbcc-455a-96b2-6468845f1221}</Project>
+      <Name>MB.OMS.Common.Domain</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

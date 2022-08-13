@@ -1,0 +1,128 @@
+﻿@using MB.Web.Core
+@using MB.Common.Helpers
+@using MB.OMS.Telesale.Domain.Model
+@model TsReportModel
+
+@{
+    ViewBag.Title = "<small>Overview</small>";
+    Layout = "~/Views/Shared/_MasterLayout.cshtml";
+}
+
+@section Breadcrumb {
+    <h1>
+        Báo cáo hiệu quả sử dụng data
+    </h1>
+}
+
+<div class="box box-success">
+    <div class="box-header with-border">
+        <div class="row form-horizontal">
+            <div class="form-group">
+                <label class="col-sm-2 control-label">Chọn ngày</label>
+                <div class="col-sm-3">
+                    <div class="input-group">
+                        <input type="text" class="form-control pull-right" id="DateStart" value="@Model.DateStart.ToString("MM/dd/yyyy")">
+                        <div class="input-group-addon">
+                            <i class="fa fa-calendar"></i>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-3">
+                    <div class="input-group">
+                        <input type="text" class="form-control pull-right" id="DateEnd" value="@Model.DateEnd.ToString("MM/dd/yyyy")">
+                        <div class="input-group-addon">
+                            <i class="fa fa-calendar"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2 control-label">Chọn nguồn</label>
+                <div class="col-sm-6">
+                    <select class="form-control" id="ddlsource">
+                        <option value="0">-- Tất cả --</option>
+                        @{
+                            foreach (var it in Model.AvaiableSources)
+                            {
+                                <option value="@it.Value" @(it.Selected ? "selected" : "")>@it.Text</option>
+                            }
+                        }
+                    </select>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-2"></div>
+                    <div class="col-sm-6">
+                        <button type="button" id="search" class="btn btn-default"><i class="fa fa-fw fa-search"></i>Tìm kiếm</button>
+                        
+                        <div class="btn-group open">
+                            <button type="button" class="btn btn-default">Export</button>
+                            <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="true">
+                                <span class="caret"></span>
+                                <span class="sr-only">Toggle Dropdown</span>
+                            </button>
+                            <ul class="dropdown-menu" role="menu">
+                                <li><a href="#" id="btnExport">Báo cáo hiệu xuất</a></li>
+                                <li><a href="#" id="btnExportByDTV">Báo cáo hiệu xuất theo ĐTV</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+        </div>
+    </div>
+    <div class="box-body">
+        
+
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>Nội dung</th>
+                <th>Số lượng</th>
+                <th>Tỷ lệ</th>
+            </tr>
+        </thead>
+        <tbody>
+            @{
+                foreach (ReportOverviewData rp in Model.ReportData)
+                {
+                    <tr>
+                        <td>@rp.RowTitle</td>
+                        <td>@rp.Number</td>
+                        <td>@rp.Ratio</td>
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+</div>
+</div>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $("#DateStart").datepicker({ autoclose: true });
+        $("#DateEnd").datepicker({autoclose: true});
+    });
+
+    $('#search').click(function () {
+        var DateFrom = $('#DateStart').val();
+        var DateEnd = $('#DateEnd').val();
+        var SourceID = $("#ddlsource").val();
+
+        window.location.href = '@Url.Action("OverviewData", "Report")?sourceId=' + SourceID + '&ds=' + DateFrom + '&de=' + DateEnd;
+    });
+
+    $("#btnExport").click(function () {
+        var DateFrom = $('#DateStart').val();
+        var DateEnd = $('#DateEnd').val();
+
+        var SourceID = $("#ddlsource").val();
+        window.location.href = '@Url.Action("ExportOverviewData", "Report")?sourceId=' + SourceID + '&ds=' + DateFrom + '&de=' + DateEnd;
+    });
+
+    $("#btnExportByDTV").click(function () {
+        var DateFrom = $('#DateStart').val();
+        var DateEnd = $('#DateEnd').val();
+
+        var SourceID = $("#ddlsource").val();
+        window.location.href = '@Url.Action("ExportOverviewData", "Report")?sourceId=' + SourceID + '&ds=' + DateFrom + '&de=' + DateEnd;
+    });
+</script>

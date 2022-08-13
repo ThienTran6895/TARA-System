@@ -1,0 +1,16 @@
+﻿@using MB.Web.Core.HTMLHelpers;
+@model MB.OMS.Telesale.Domain.Model.CustomerDTO
+
+
+<div class="form-group">
+    @Html.LabelFor(model => model.ProjectID, new { @class = "col-sm-2 control-label" })
+    <div class="col-sm-10">
+        @Html.DropDownListFor(model => model.ProjectID, Model.AvailableProject, new { @class = "form-control", @style = "width:100%;" })
+    </div>
+</div>
+
+<script>
+    $(document).ready(function () {
+        $("#@Html.IdFor(model => model.ProjectID)").select2();
+    });
+</script>

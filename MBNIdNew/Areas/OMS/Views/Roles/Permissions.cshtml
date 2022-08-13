@@ -1,0 +1,96 @@
+﻿@using MB.Web.Core.HTMLHelpers
+@model MB.OMS.Telesale.Domain.Model.RoleDTO
+@{
+    ViewBag.Title = "Quản lý quyền";
+    Layout = "~/Views/Shared/_MasterLayout.cshtml";
+}
+
+@using (Html.MBForm("PermissionsSave", "Roles", new Dictionary<string, object>() { { "id", "formPermission" }, { "class", "form-horizontal" } }))
+{
+    @section Breadcrumb {
+        <h1>
+            Quản lý quyền
+            <small>Cài đặt quyền</small>
+        </h1>
+    }
+    @Html.HiddenFor(model => model.Id)
+    <div class="form-horizontal">
+        <div class="panel-group">
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    <div class="pull-right">
+                        @Html.MBButton("btnSave", "Lưu", null, "btn btn-primary")
+                        <a href="@Url.Action("ListRole", "Roles")">
+                            <input type="button" class="btn btn-danger" value="Hủy" />
+                        </a>
+                    </div>
+                    @if (Model.AvailablePermision.Count == 0)
+                    {
+                        <text>Chưa có quyền nào được tạo</text>
+                    }
+                    else
+                    {
+                        <table class="table table-hover table-bordered">
+                            <tbody>
+                                <tr>
+                                    <th scope="col">
+                                        <strong>Tên quyền truy cập</strong>
+                                    </th>
+                                    @foreach (var cr in Model.AvailableAction)
+                                    {
+                                        <th scope="col">
+                                            <div class="checkbox">
+                                                <label>
+                                                    <strong>@cr.RoleName</strong>
+                                                </label>
+                                            </div>
+                                        </th>
+                                    }
+                                </tr>
+                                @foreach (var pr in Model.AvailablePermision)
+                                {
+                                    <tr>
+                                        <td>
+                                            <span>@pr.PermisionName</span>
+                                        </td>
+                                        @foreach (var cr in Model.AvailableAction)
+                                        {
+                                            var allowed = pr.AvailablePermisions.Where(c => c.ActionType == cr.Id).Count() != 0 ? true: false;
+                                            <td>
+                                                <input class="allow_@(cr.Id)" type="checkbox" value="@(pr.PermisionName)" name="allow_@(cr.Id)" @(allowed ? " checked=checked" : null) />
+                                            </td>
+                                        }
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('#btnSave').click(function (e) {
+            e.preventDefault();
+            debugger;
+            var form = $("#formPermission").serialize();
+
+            $.ajax({
+                type: "POST",
+                url: "@(Url.Action("PermissionsSave", "Roles"))",
+                data: form,
+                dataType: 'json',
+                success: function (data) {
+                    window.location.href = "/OMS/Roles/Permissions/" + $('#Id').val();
+                },
+                error: function(xhr, ajaxOptions, thrownError) {
+                    alert(thrownError);
+                },
+            });
+            return false;
+        });
+    });
+</script>

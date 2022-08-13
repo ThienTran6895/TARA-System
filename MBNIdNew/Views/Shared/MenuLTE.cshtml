@@ -1,0 +1,83 @@
+﻿@using MB.Web.Core
+@using MB.Common.Helpers
+
+<!-- sidebar menu: : style can be found in sidebar.less -->
+<div class="app-brand demo">
+    <a href="index.html" class="app-brand-link">
+        <span class="app-brand-logo demo">
+            <img src="~/Content/assets/img/logo/site-logo.png" />
+        </span>
+    </a>
+
+    <a href="javascript:void(0);" class="layout-menu-toggle menu-link text-large ms-auto d-block d-xl-none">
+        <i class="bx bx-chevron-left bx-sm align-middle"></i>
+    </a>
+</div>
+
+<div class="menu-inner-shadow"></div>
+
+<ul class="menu-inner py-1">
+    <!-- Dashboard -->
+    <li class="menu-item active">
+        <a href="@Url.Action("Index", "Home")" class="menu-link">
+            <i class="menu-icon tf-icons bx bx-home-circle"></i>
+            <div data-i18n="Analytics">Dashboard</div>
+        </a>
+    </li>
+
+    <li class="menu-header small text-uppercase">
+        <span class="menu-header-text">Tools</span>
+    </li>
+
+
+    <li class="menu-item">
+        <a href="@Url.Action("ListPGEmployee", "Employee")" class="menu-link">
+            <i class="menu-icon tf-icons bx bx-collection"></i>
+            <div data-i18n="Rà sát nhân viên">Rà soát nhân viên</div>
+        </a>
+    </li>
+
+    <li class="menu-item">
+        <a href="@Url.Action("convertFAST", "convertFAST")" class="menu-link">
+            <i class="menu-icon tf-icons bx bx-collection"></i>
+            <div data-i18n="convertFAST">Convert Key FAST</div>
+        </a>
+    </li>
+
+    <li class="menu-item">
+        <a href="@Url.Action("ListSources", "Sources")" class="menu-link">
+            <i class="menu-icon tf-icons bx bx-collection"></i>
+            <div data-i18n="convertFAST">Nguồn</div>
+        </a>
+    </li>
+
+    <!-- Forms & Tables -->
+    <li class="menu-header small text-uppercase"><span class="menu-header-text">Forms &amp; Tables</span></li>
+
+    <!-- Tables -->
+    <li class="menu-item">
+        <a href="tables-basic.html" class="menu-link">
+            <i class="menu-icon tf-icons bx bx-table"></i>
+            <div data-i18n="Tables">Tables</div>
+        </a>
+    </li>
+    <!-- Misc -->
+    <li class="menu-header small text-uppercase"><span class="menu-header-text">Misc</span></li>
+    <li class="menu-item">
+        <a href="https://github.com/themeselection/sneat-html-admin-template-free/issues"
+           target="_blank"
+           class="menu-link">
+            <i class="menu-icon tf-icons bx bx-support"></i>
+            <div data-i18n="Support">Support</div>
+        </a>
+    </li>
+    <li class="menu-item">
+        <a href="https://themeselection.com/demo/sneat-bootstrap-html-admin-template/documentation/"
+           target="_blank"
+           class="menu-link">
+            <i class="menu-icon tf-icons bx bx-file"></i>
+            <div data-i18n="Documentation">Documentation</div>
+        </a>
+    </li>
+</ul>
+

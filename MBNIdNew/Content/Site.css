@@ -1,0 +1,118 @@
+﻿.modal-header, h4, .close {
+      background-color: #428bca;
+      color:white !important;
+      text-align: center;
+      font-size: 30px;
+  }
+.btnPre {
+    margin-left: 2px;
+    margin-right: 2px;
+    float: left;
+}
+
+.btnNext {
+    margin-left: 2px;
+    margin-right: 2px;
+    float: left;
+}
+
+.img-logo {
+    float: left;
+    width:40px;
+    height:40px;
+    margin-top:5px;
+}
+.logo-lg .img-logo{
+   margin-left:-5px;
+}
+.logo-mini .img-logo{
+   margin-left:5px;
+}
+
+/*.k-grid table {
+   table-layout: fixed;
+}
+  
+.k-grid td{
+   white-space: pre;
+   text-overflow: ellipsis !important;
+}*/
+.select2-container .select2-selection--single .select2-selection__rendered{
+    height: 2em;
+}
+.k-grid td,.k-grid-header th.k-header,.k-grid tbody .k-button, .k-ie8 .k-grid tbody button.k-button{
+    padding:2px 5px!important;
+    text-transform:none;
+
+}
+h3.box-title{
+    color:#ec5b03;
+}
+
+.k-tooltip-content{
+    text-align:justify;
+}
+
+.modal-backdrop{
+    z-index: 1000 !important;
+}
+
+.f-custom{
+    padding-left: 15px;
+    padding-right: 15px;
+}
+.f-custom .f-container{
+        margin: 0;
+    padding: 0;
+    border-right: 1px solid #ddd;
+    border-bottom: 1px solid #ddd;
+}
+.f-custom .f-container .form-group{
+    margin:0!important;
+    padding: 0!important;
+    border: 1px solid #eee;
+}
+.f-custom .f-container .form-group label.control-label{
+    font-weight: normal;
+    padding: 7px 5px;
+    background: #f7f7f9;
+    border-top: 1px solid #ddd;
+    border-left: 1px solid #ddd;
+    color:#999999;
+}
+.f-custom .f-container .form-group .col-sm-8{
+    border-left: 1px solid #ddd;
+    border-top: 1px solid #ddd;
+    min-height:35px;
+}
+.f-custom .f-container .form-group input.form-control{
+    border: 0;
+}
+.f-custom .f-container .form-group input[type=text]:focus
+{
+    border: 1px solid #eaabab;
+    height:25px;
+    margin-top:5px;
+}
+.f-custom .f-container .form-group input[type=checkbox],.f-custom .f-container .form-group input[type=radio]   {
+    margin-left:15px;
+    margin-top:10px;
+}
+ul.dropdown-menu li {
+    cursor: pointer;
+}
+
+.k-arrow{
+    min-width:25px!important;
+}
+
+.main-header .navbar-static-top h2{
+    float: left;
+    color: #fff;
+    font-size: 18px;
+    padding: 0;
+    margin: 0;
+    margin-top: 15px;
+    font-weight: bold;
+    text-transform: uppercase;
+}

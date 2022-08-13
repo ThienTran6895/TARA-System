@@ -1,0 +1,116 @@
+﻿@using MB.Web.Core.HTMLHelpers
+@model MB.OMS.Telesale.Domain.Model.ProjectsDTO
+@{
+    ViewBag.Title = "Thêm mới dự án";
+    Layout = "~/Views/Shared/_MasterLayout.cshtml";
+}
+
+@using (Html.MBForm("AddProjects", "Project", new Dictionary<string, object>() { { "id", "form" }, { "class", "form-horizontal" } }))
+{
+    @Html.HiddenFor(model => model.ProjectID)
+    @section Breadcrumb {
+        <h1>
+            Quản lý dự án
+            <small>Thêm mới dự án</small>
+        </h1>
+    }
+    <div class="box box-primary">
+        <div class="box-header with-border">
+            <h3 class="box-title">Thông tin dự án</h3>
+        </div>
+        <div class="box-body">
+            <div class="row">
+                <div class="col-md-8 center">
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.Name, new { @class = "col-sm-4 control-label" })
+                        <div class="col-sm-8">
+                            @Html.TextBoxFor(model => model.Name, new { @class = "form-control", data_placement = "top", data_title = "Tên dự án", data_toggle = "tooltip", @placeholder = "" })
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.Code, new { @class = "col-sm-4 control-label" })
+                        <div class="col-sm-8">
+                            @Html.TextBoxFor(model => model.Code, new { @class = "form-control", data_placement = "top", data_title = "Mã dự án", data_toggle = "tooltip", @placeholder = "" })
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.Greeting, new { @class = "col-sm-4 control-label" })
+                        <div class="col-sm-8">
+                            @Html.TextAreaFor(model => model.Greeting, new { style = "width: 100%; height: 200px; font-size: 14px; line-height: 18px; border: 1px solid #dddddd; padding: 10px;" })
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.Conclusion, new { @class = "col-sm-4 control-label" })
+                        <div class="col-sm-8">
+                            @Html.TextAreaFor(model => model.Conclusion, new { style = "width: 100%; height: 200px; font-size: 14px; line-height: 18px; border: 1px solid #dddddd; padding: 10px;" })
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.CampaignID, new { @class = "col-sm-4 control-label" })
+                        <div class="col-sm-8">
+                            @Html.DropDownListFor(model => model.CampaignID, Model.AvailableCampaign, new { @class = "form-control", @style = "width:100%;" })
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.Visiable, new { @class = "col-sm-4 control-label" })
+                        <div class="col-sm-4">
+                            @Html.CheckBoxFor(model => model.Visiable)
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.TotalPlan, new { @class = "col-sm-4 control-label" })
+                        <div class="col-sm-8">
+                            @Html.TextBoxFor(model => model.TotalPlan, new { @class = "form-control", data_placement = "top", data_title = "", data_toggle = "tooltip", @placeholder = "" })
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.TotalTarget, new { @class = "col-sm-4 control-label" })
+                        <div class="col-sm-8">
+                            @Html.TextBoxFor(model => model.TotalTarget, new { @class = "form-control", data_placement = "top", data_title = "Mã dự án", data_toggle = "tooltip", @placeholder = "" })
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.MonthlyPlan, new { @class = "col-sm-4 control-label" })
+                        <div class="col-sm-8">
+                            @Html.TextBoxFor(model => model.MonthlyPlan, new { @class = "form-control", data_placement = "top", data_title = "Mã dự án", data_toggle = "tooltip", @placeholder = "" })
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.MonthlyTarget, new { @class = "col-sm-4 control-label" })
+                        <div class="col-sm-8">
+                            @Html.TextBoxFor(model => model.MonthlyTarget, new { @class = "form-control", data_placement = "top", data_title = "Mã dự án", data_toggle = "tooltip", @placeholder = "" })
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.DailyPlan, new { @class = "col-sm-4 control-label" })
+                        <div class="col-sm-8">
+                            @Html.TextBoxFor(model => model.DailyPlan, new { @class = "form-control", data_placement = "top", data_title = "Mã dự án", data_toggle = "tooltip", @placeholder = "" })
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.DailyTarget, new { @class = "col-sm-4 control-label" })
+                        <div class="col-sm-8">
+                            @Html.TextBoxFor(model => model.DailyTarget, new { @class = "form-control", data_placement = "top", data_title = "Mã dự án", data_toggle = "tooltip", @placeholder = "" })
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="box-footer text-center">
+            <div class="col-md-8 center">
+                @Html.MBButton("btnSave", "Lưu", null, "btn btn-primary")
+                <a href="@Url.Action("ListProjects", "Project")">
+                    <input type="button" class="btn btn-danger" value="Hủy" />
+                </a>
+            </div>
+        </div>
+    </div>
+}
+<script src="~/Areas/OMS/Scripts/project.js"></script>
+<script>
+    $(document).ready(function () {
+        $(@Html.IdFor(model => model.Greeting)).wysihtml5();
+        $(@Html.IdFor(model => model.Conclusion)).wysihtml5();
+        $("#@Html.IdFor(model => model.CampaignID)").select2();
+    });
+</script>

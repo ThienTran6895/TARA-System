@@ -1,0 +1,108 @@
+﻿# Main
+# time level ip user class thread message
+
+# Main
+# time level ip user class thread message
+09:26:50 INFO  ::1 duong [OMS.CallLogRepository] [15] - GetAllCallHistoryDatasource ,142dc2bd-3ecc-4b36-8dbd-02ceb90c8739
+# Main
+# time level ip user class thread message
+
+# Main
+# time level ip user class thread message
+09:29:32 INFO  ::1 duong [OMS.CallLogRepository] [7] - GetAllCallHistoryDatasource ,b4b8cd08-c897-47f9-919e-8a68d7d757d2
+09:31:02 INFO  ::1 duong [OMS.CallLogRepository] [7] - GetAllCallHistoryDatasource ,88faaba3-7073-41cc-91b6-389dd8bc04ac
+09:31:02 INFO  ::1 duong [OMS.CallLogRepository] [10] - GetAllCallHistoryDatasource ,88faaba3-7073-41cc-91b6-389dd8bc04ac
+09:34:55 INFO  ::1 duong [OMS.CallLogRepository] [12] - GetAllCallHistoryDatasource ,88faaba3-7073-41cc-91b6-389dd8bc04ac
+09:37:44 INFO  ::1 duong [OMS.CallLogRepository] [11] - GetAllCallHistoryDatasource ,142dc2bd-3ecc-4b36-8dbd-02ceb90c8739
+# Main
+# time level ip user class thread message
+
+# Main
+# time level ip user class thread message
+09:41:05 INFO  ::1 duong [OMS.CallLogRepository] [7] - GetAllCallHistoryDatasource ,2d3cd446-33aa-4a4e-a8f7-2e62ff5cf19f
+09:41:54 INFO  ::1 duong [OMS.CallLogRepository] [8] - GetAllCallHistoryDatasource ,88faaba3-7073-41cc-91b6-389dd8bc04ac
+# Main
+# time level ip user class thread message
+
+# Main
+# time level ip user class thread message
+10:10:38 INFO  ::1 duong [OMS.CallLogRepository] [7] - GetAllCallHistoryDatasource ,142dc2bd-3ecc-4b36-8dbd-02ceb90c8739
+10:11:10 INFO  ::1 duong [OMS.CallLogRepository] [7] - UpdateCallLog
+# Main
+# time level ip user class thread message
+
+# Main
+# time level ip user class thread message
+10:19:15 INFO  ::1 duong [OMS.CallLogRepository] [7] - GetAllCallHistoryDatasource ,142dc2bd-3ecc-4b36-8dbd-02ceb90c8739
+10:22:05 INFO  ::1 duong [OMS.CallLogRepository] [8] - GetAllCallHistoryDatasource ,142dc2bd-3ecc-4b36-8dbd-02ceb90c8739
+10:22:40 INFO  ::1 duong [OMS.CallLogRepository] [12] - UpdateCallLog
+10:32:43 INFO  ::1 duong [OMS.CallLogRepository] [29] - GetAllCallHistoryDatasource ,06945a7b-65eb-46b4-92c1-0490dd9c4178
+10:35:36 INFO  ::1 duong [OMS.CallLogRepository] [35] - GetAllCallHistoryDatasource ,88faaba3-7073-41cc-91b6-389dd8bc04ac
+10:36:38 INFO  ::1 duong [OMS.CallLogRepository] [26] - GetAllCallHistoryDatasource ,88faaba3-7073-41cc-91b6-389dd8bc04ac
+10:36:56 INFO  ::1 duong [OMS.CallLogRepository] [19] - GetAllCallHistoryDatasource ,3958d24f-f8ab-4690-bb3d-000196d1e5dc
+# Main
+# time level ip user class thread message
+
+# Main
+# time level ip user class thread message
+12:42:13 INFO  ::1 duong [OMS.CallLogRepository] [6] - GetAllCallHistoryDatasource ,297fb785-5978-466d-8b59-0060533f98ae
+12:43:14 INFO  ::1 duong [OMS.CallLogRepository] [5] - UpdateCallLog
+12:43:40 INFO  ::1 duong [OMS.CallLogRepository] [7] - GetAllCallHistoryDatasource ,297fb785-5978-466d-8b59-0060533f98ae
+12:45:20 INFO  ::1 duong [OMS.CallLogRepository] [10] - GetAllCallHistoryDatasource ,0bed3363-6d97-4208-b2af-00844a4ac0b4
+12:45:27 INFO  ::1 duong [OMS.CallLogRepository] [8] - GetAllCallHistoryDatasource ,0dd6cb35-491c-4150-a601-0983121f5145
+12:46:12 INFO  ::1 duong [OMS.CallLogRepository] [10] - GetAllCallHistoryDatasource ,0dd6cb35-491c-4150-a601-0983121f5145
+12:48:16 INFO  ::1 duong [OMS.CallLogRepository] [12] - GetAllCallHistoryDatasource ,0dd6cb35-491c-4150-a601-0983121f5145
+# Main
+# time level ip user class thread message
+
+# Main
+# time level ip user class thread message
+12:55:17 INFO  ::1 duong [OMS.CallLogRepository] [5] - GetAllCallHistoryDatasource ,0de88625-ff58-485e-a28c-01e354e62e25
+12:56:35 INFO  ::1 duong [OMS.CallLogRepository] [8] - GetAllCallHistoryDatasource ,f6f7d9e3-285b-4312-95a3-0471bd7d6ef6
+15:11:00 INFO  ::1 duong [OMS.ReportRepository] [36] - Starting GetReportProjectData
+15:11:01 FATAL ::1 duong [OMS.ReportRepository] [36] - Error spa_Report_GetReportProjectData, Detail: System.Data.SqlClient.SqlException (0x80131904): Could not find stored procedure 'spa_Report_GetReportProjectData'.
+   at System.Data.SqlClient.SqlConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   at System.Data.SqlClient.SqlInternalConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   at System.Data.SqlClient.TdsParser.ThrowExceptionAndWarning(TdsParserStateObject stateObj, Boolean callerHasConnectionLock, Boolean asyncClose)
+   at System.Data.SqlClient.TdsParser.TryRun(RunBehavior runBehavior, SqlCommand cmdHandler, SqlDataReader dataStream, BulkCopySimpleResultSet bulkCopyHandler, TdsParserStateObject stateObj, Boolean& dataReady)
+   at System.Data.SqlClient.SqlDataReader.TryConsumeMetaData()
+   at System.Data.SqlClient.SqlDataReader.get_MetaData()
+   at System.Data.SqlClient.SqlCommand.FinishExecuteReader(SqlDataReader ds, RunBehavior runBehavior, String resetOptionsString, Boolean isInternal, Boolean forDescribeParameterEncryption, Boolean shouldCacheForAlwaysEncrypted)
+   at System.Data.SqlClient.SqlCommand.RunExecuteReaderTds(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, Boolean async, Int32 timeout, Task& task, Boolean asyncWrite, Boolean inRetry, SqlDataReader ds, Boolean describeParameterEncryptionRequest)
+   at System.Data.SqlClient.SqlCommand.RunExecuteReader(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, String method, TaskCompletionSource`1 completion, Int32 timeout, Task& task, Boolean& usedCache, Boolean asyncWrite, Boolean inRetry)
+   at System.Data.SqlClient.SqlCommand.RunExecuteReader(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, String method)
+   at System.Data.SqlClient.SqlCommand.ExecuteReader(CommandBehavior behavior, String method)
+   at System.Data.SqlClient.SqlCommand.ExecuteDbDataReader(CommandBehavior behavior)
+   at System.Data.Common.DbCommand.System.Data.IDbCommand.ExecuteReader(CommandBehavior behavior)
+   at Dapper.SqlMapper.ExecuteReaderWithFlagsFallback(IDbCommand cmd, Boolean wasClosed, CommandBehavior behavior)
+   at Dapper.SqlMapper.<QueryImpl>d__125`1.MoveNext()
+   at System.Collections.Generic.List`1..ctor(IEnumerable`1 collection)
+   at System.Linq.Enumerable.ToList[TSource](IEnumerable`1 source)
+   at Dapper.SqlMapper.Query[T](IDbConnection cnn, String sql, Object param, IDbTransaction transaction, Boolean buffered, Nullable`1 commandTimeout, Nullable`1 commandType)
+   at DAL.Core.DALHelpers.Query[T](String sql, UserLogin userInfo, DynamicParameters param) in D:\Workspace\SVN\BPO_OMS_MVC_AUTOCALL\Infrastructure\DAL\BaseRepository\DALHelpers.cs:line 36
+   at MB.OMS.Telesale.Repository.ReportRepository.GetReportProjectData(Int32 sourceId, Int32 statusId, Int32 projectID, DateTime dateFrom, DateTime dateEnd) in D:\Workspace\SVN\BPO_OMS_MVC_AUTOCALL\Module\OMS\MB.OMS.Telesale.Repository\ReportRepository.cs:line 427
+ClientConnectionId:347f2204-7f90-472c-a8d5-1b6c02160d36
+Error Number:2812,State:62,Class:16
+15:28:45 INFO  ::1 duong [OMS.CallLogRepository] [33] - GetAllCallHistoryDatasource ,4acf4c56-c02d-436a-83ec-89ac74dada92
+# Main
+# time level ip user class thread message
+
+# Main
+# time level ip user class thread message
+15:54:54 INFO  ::1 duong [OMS.CallLogRepository] [10] - GetAllCallHistoryDatasource ,4acf4c56-c02d-436a-83ec-89ac74dada92
+15:55:51 INFO  ::1 duong [OMS.CallLogRepository] [6] - UpdateCallLog
+# Main
+# time level ip user class thread message
+
+# Main
+# time level ip user class thread message
+16:20:12 INFO  ::1 duong [OMS.ReportRepository] [28] - Starting GetReportProjectData
+16:20:22 INFO  ::1 duong [OMS.ReportRepository] [28] - Completed
+# Main
+# time level ip user class thread message
+
+# Main
+# time level ip user class thread message
+23:54:26 INFO  ::1 duong [OMS.ReportRepository] [14] - Starting GetReportProjectData
+23:54:26 INFO  ::1 duong [OMS.ReportRepository] [14] - Completed
+

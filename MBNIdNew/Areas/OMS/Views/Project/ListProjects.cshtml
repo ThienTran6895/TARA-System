@@ -1,0 +1,295 @@
+﻿@using MB.Web.Core
+@using MB.Common.Helpers
+@model MB.OMS.Telesale.Domain.Model.ProjectsDTO
+
+@{
+    ViewBag.Title = "Quản lý dự án";
+    Layout = "~/Views/Shared/_MasterLayout.cshtml";
+}
+
+@section Breadcrumb {
+    <h1>
+        Quản lý dự án
+        <small>Danh sách dự án</small>
+    </h1>
+}
+
+<div class="box box-primary">
+    <div class="box-header with-border">
+        <h3 class="box-title">Tìm kiếm</h3>
+        <div class="box-tools pull-right">
+            <button type="button" class="btn btn-box-tool" data-widget="collapse">
+                <i class="fa fa-minus"></i>
+            </button>
+        </div>
+    </div>
+    <form role="form" class="form-horizontal">
+        <div class="box-body">
+            <div class="row">
+                <div class="col-md-6 col-md-offset-2">
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.CampaignID, new { @class = "col-sm-4 control-label" })
+                        <div class="col-sm-8">
+                            @Html.DropDownListFor(model => model.CampaignID, Model.AvailableCampaign, new { @class = "form-control", @style = "width:100%;" })
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-8 col-sm-offset-4">
+                            <button type="button" id="search" class="btn btn-default" style="margin-right: 5px;"><i class="fa fa-fw fa-search"></i>Tìm kiếm</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+<div class="box box-default">
+    <div class="box-header with-border">
+        <h3 class="box-title">Danh sách dự án</h3>
+        <div class="box-tools pull-right">
+            @if (CommonHelper.CheckPermisionExist(Permissions.ThemDuAn.ToString()))
+            {
+                <a href="@Url.Action("AddProjects")" class="btn btn-primary"><i class="fa fa-plus-square"></i> Thêm mới</a>
+            }
+            @if (CommonHelper.CheckPermisionExist(Permissions.XoaDuAn.ToString()))
+            {
+                <a id="deleteProject" class="btn btn-primary"><i class="fa fa-remove"></i> Xóa</a>
+            }          
+        </div>
+    </div>
+    <div class="box-body">
+        <div id="grid" class="box-body table-responsive no-padding k-grid k-widget">
+            <script type="text/javascript">
+
+                $(document).ready(function () {
+                    $("#grid").kendoGrid({
+                        dataSource: {
+                            type: "json",
+                            transport: {
+                                read: {
+                                    url: "@Html.Raw(Url.Action("GetListProjects", "Project"))",
+                                    type: "POST",
+                                    dataType: "json",
+                                    data: additionalData,
+                                    success: function (result) {
+                                        options.success(result);
+                                    }
+                                }
+                            },
+                            schema: {
+                                data: "Data",
+                                total: "Total",
+                                errors: "Errors"
+                            },
+                            error: function (e) {
+                                display_kendoui_grid_error(e);
+                                // Cancel the changes
+                                this.cancelChanges();
+                            },
+                            parameterMap: function (options, type) {
+                                return JSON.stringify(options);
+                            },
+                            pageSize: 20,
+                            serverPaging: true,
+                            serverFiltering: true,
+                            serverSorting: true
+                        },
+                        pageable: {
+                            refresh: true,
+                            pageSizes: [20, 50, 100, 200, 500],
+                            messages: {
+                                display: "Hiển thị {0} - {1} trong {2} dòng",
+                                empty: "Không có dữ liệu",
+                                itemsPerPage: "dòng trên trang. "
+                            }
+                        },
+                        sortable: true,
+                        filterable: {
+                            extra: false,
+                            operators: {
+                                string: {
+                                    contains: "Kết quả chứa"
+                                }
+                            },
+                            messages: {
+                                info: "Chọn các mục tìm kiếm : ",
+                                clear: "Xóa",
+                                filter: "Tìm kiếm"
+                            }
+                        },
+                        scrollable: false,
+                        dataBound: onDataBound,
+                        columns: [{
+                            field: "ProjectID",
+                            headerTemplate: "<input id='mastercheckbox' type='checkbox'/>",
+                            headerAttributes: { style: "text-align:center" },
+                            attributes: { style: "text-align:center" },
+                            template: "<input type='checkbox' value='#=ProjectID#' class='checkboxGroups'/>",
+                            width: 30,
+                            filterable: false,
+                            sortable: false
+                        }, {
+                            field: "Name",
+                            title: "Tên dự án",
+                            headerAttributes: { style: "text-align:left;" }
+                        }, {
+                            field: "Code",
+                            title: "Mã dự án",
+                            headerAttributes: { style: "text-align:left;" },
+                            width: 170
+                        }, {
+                            field: "Visiable",
+                            title: "Trạng thái",
+                            attributes: { style: "text-align:center; width:50px;" },
+                            template: "#if(Visiable) {#<div class='text-center'><span class='label label-primary'>Kích hoạt</span></div>#} else{#<div class='text-center'><span class='label label-danger'>Chưa kích hoạt</span></div>#}#",
+                            width: 30,
+                            groupable: false,
+                            filterable: false,
+                            sortable: false
+                        }, {
+                            @if (CommonHelper.CheckPermisionExist(Permissions.SuaDuAn.ToString()))
+                            {
+                                <text>
+                                    field: "",
+                                    title: "Cập nhật",
+                                    attributes: { style: "text-align:center; width:30px;" },
+                                    template: '<a title="Cập nhật" href="@Url.Action("EditProjects", "Project")/#=ProjectID#"><span class="glyphicon glyphicon-edit"></span></a>',
+                                    width: 30,
+                                </text>
+                            }                           
+                        }
+                        ]
+                    });
+                });
+            </script>
+            <script type="text/javascript">
+                var selectedIds = [];
+                $(document).ready(function () {
+
+                    $("#@Html.IdFor(model => model.CampaignID)").select2();
+
+                    //search button
+                    $('#search').click(function () {
+                        //search
+                        var grid = $('#grid').data('kendoGrid');
+                        grid.dataSource.page(1);
+
+                        $('.checkboxGroups').attr('checked', false).change();
+                        selectedIds = [];
+
+                        return false;
+                    });
+
+                    $('#mastercheckbox').click(function () {
+                        $('.checkboxGroups').attr('checked', $(this).is(':checked')).change();
+                    });
+
+                    //wire up checkboxes.
+                    $('#grid').on('change', 'input[type=checkbox][id!=mastercheckbox]', function (e) {
+                        var $check = $(this);
+                        if ($check.is(":checked") == true) {
+                            var checked = jQuery.inArray($check.val(), selectedIds);
+                            if (checked == -1) {
+                                //add id to selectedIds.
+                                selectedIds.push($check.val());
+                            }
+                        }
+                        else {
+                            var checked = jQuery.inArray($check.val(), selectedIds);
+                            if (checked > -1) {
+                                //remove id from selectedIds.
+                                selectedIds = $.grep(selectedIds, function (item, index) {
+                                    return item != $check.val();
+                                });
+                            }
+                        }
+                        updateMasterCheckbox();
+                    });
+
+                    //Delete Project
+                    $('#deleteProject').click(function (e) {
+                        e.preventDefault();
+
+                        var postData = {
+                            selectedIds: selectedIds
+                        };
+
+                        if (selectedIds.length <= 0)
+                        {
+                            swal({ title: "Xóa dự án không thành công", text: "Chọn dự án trước khi xóa", type: "error" });
+                        }
+                        else {
+
+                            swal({
+                                title: "Xác nhận xóa!",
+                                text: "Bạn có chắc chắn xóa không?",
+                                type: "warning",
+                                showCancelButton: true,
+                                cancelButtonText: "Hủy",
+                                confirmButtonColor: "#DD6B55",
+                                confirmButtonText: "Xác nhận!",
+                                closeOnConfirm: false,
+                                showLoaderOnConfirm: true,
+                            }, function (isConfirm) {
+                                if (isConfirm) {
+                                    $.ajax({
+                                        cache: false,
+                                        type: "POST",
+                                        url: "@(Url.Action("DeleteSelected", "Project"))",
+                                        data: postData,
+                                    success: function (data) {
+                                        //reload grid
+                                        var grid = $('#grid').data('kendoGrid');
+                                        grid.dataSource.read();
+
+                                        swal({title: data.Title, text: data.Message, type: "success"});
+
+                                        selectedIds = [];
+                                    },
+                                    error: function(xhr, ajaxOptions, thrownError) {
+                                        alert(thrownError);
+                                    },
+                                    traditional: true
+                                });
+                            }
+                            });                            
+                    }
+                       
+                        return false;
+                });
+                    $('#CampaignID').keydown(function (even) {
+                        if (even.keyCode == 13) {
+                            var grid = $('#grid').data('kendoGrid');
+                            grid.dataSource.page(1);
+                            return false;
+                        }
+                    });
+                });
+
+                function additionalData() {
+                    return {
+                        CampaignID: $('#CampaignID').val()
+                    };
+                }
+                function onDataBound(e) {
+                    $('#grid input[type=checkbox][id!=mastercheckbox]').each(function () {
+                        var currentId = $(this).val();
+                        var checked = jQuery.inArray(currentId, selectedIds);
+                        //set checked based on if current checkbox's value is in selectedIds.
+                        $(this).attr('checked', checked > -1);
+                    });
+
+                    updateMasterCheckbox();
+                }
+
+                function updateMasterCheckbox() {
+                    var numChkBoxes = $('#grid input[type=checkbox][id!=mastercheckbox]').length;
+                    var numChkBoxesChecked = $('#grid input[type=checkbox][id!=mastercheckbox]:checked').length;
+                    $('#mastercheckbox').attr('checked', numChkBoxes == numChkBoxesChecked && numChkBoxes > 0);
+                }
+            </script>
+        </div>
+
+    </div>
+</div>
+

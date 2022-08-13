@@ -1,0 +1,84 @@
+﻿@using MB.Web.Core.HTMLHelpers
+@using MB.Common.Helpers
+@using MB.Web.Core
+@model MB.OMS.Telesale.Domain.Model.SurveyDTO
+@{
+    ViewBag.Title = "Cập nhật câu trả lời";
+    Layout = "~/Views/Shared/_MasterLayout.cshtml";
+}
+
+@using (Html.MBForm("EditSurvey", "Survey", new Dictionary<string, object>() { { "id", "form" }, { "class", "form-horizontal" } }))
+{
+    @Html.HiddenFor(model => model.SurveyID)
+    @section Breadcrumb {
+        <h1>
+            Quản lý câu trả lời
+            <small>Cập nhật câu trả lời</small>
+        </h1>
+        @*<ol class="breadcrumb">
+            <li><a href="@Url.Action("ListSurvey")"><i class="fa fa-dashboard"></i> Quản lý câu trả lời</a></li>
+            <li class="active">Cập nhật câu trả lời</li>
+        </ol>*@
+    }
+    <div class="box box-primary">
+        <div class="box-header with-border">
+            <h3 class="box-title">Cập nhật câu trả lời</h3>
+        </div>
+        <div class="box-body">
+            <div class="row">
+                <div class="col-md-8 center">
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.SurveyContent, new { @class = "col-sm-4 control-label" })
+                        <div class="col-sm-8">
+                            @Html.TextAreaFor(model => model.SurveyContent, new { style = "width: 100%; height: 200px; font-size: 14px; line-height: 18px; border: 1px solid #dddddd; padding: 10px;" })
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.Code, new { @class = "col-sm-4 control-label" })
+                        <div class="col-sm-8">
+                            @Html.TextBoxFor(model => model.Code, new { @class = "form-control", data_placement = "top", data_title = "Code", data_toggle = "tooltip", @placeholder = "", @readonly = "readonly" })
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.SurveyType, new { @class = "col-sm-4 control-label" })
+                        <div class="col-sm-8">
+                            @Html.DropDownListFor(model => model.SurveyType, Model.AvailableTypeSurvey.ToSelectList(), new { @class = "form-control", @style = "width:100%;" })
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.Visiable, new { @class = "col-sm-4 control-label" })
+                        <div class="col-sm-4">
+                            @Html.CheckBoxFor(model => model.Visiable)
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="box-footer text-center">
+            <div class="col-md-8 center">
+                @Html.MBButton("btnSave", "Lưu", null, "btn btn-primary")
+                @if (CommonHelper.CheckPermisionExist(Permissions.SuaDapAn.ToString()))
+                {
+                    @Html.MBButton("btnDelete", "Xóa", null, "btn btn-warning")
+                }
+                <a href="@Url.Action("ListSurvey", "Survey")">
+                    <input type="button" class="btn btn-danger" value="Hủy" />
+                </a>
+            </div>
+        </div>
+    </div>
+
+}
+<script src="~/Areas/OMS/Scripts/survey.js"></script>
+<script>
+    $(document).ready(function () {
+        $(".numeric").kendoNumericTextBox({
+            format: "n0"
+        });
+
+        $(@Html.IdFor(model => model.SurveyContent)).wysihtml5({
+            useLineBreaks: false
+        });
+        $("#@Html.IdFor(model => model.SurveyType)").select2();
+    });
+</script>

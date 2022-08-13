@@ -1,0 +1,136 @@
+﻿@using MB.Web.Core.HTMLHelpers
+@model MB.OMS.Telesale.Domain.Model.UserDTO
+@{
+    ViewBag.Title = "Thêm mới nhân viên";
+    Layout = "~/Views/Shared/_MasterLayout.cshtml";
+}
+
+@using (Html.MBForm("AddUser", "User", new Dictionary<string, object>() { { "id", "form" }, { "class", "form-horizontal" } }))
+{
+    @section Breadcrumb {
+        <h1>
+            Quản lý nhân viên
+            <small>Thêm mới nhân viên</small>
+        </h1>
+    }
+    <div class="row">
+        <div class="col-md-8">
+            <div class="box box-primary">
+                <div class="box-header with-border">
+                    <h3 class="box-title">Thông tin nhân viên</h3>
+                </div>
+                <div class="box-body">
+                    <div class="row">
+                        <div class="col-md-10">
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.UserName, new { @class = "col-sm-4 control-label" })
+                                <div class="col-sm-8">
+                                    @Html.TextBoxFor(model => model.UserName, new { @class = "form-control", data_placement = "top", data_title = "Tên đăng nhập", data_toggle = "tooltip", @placeholder = "" })
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.Password, new { @class = "col-sm-4 control-label" })
+                                <div class="col-sm-8">
+                                    @Html.PasswordFor(model => model.Password, new { @class = "form-control", data_placement = "top", data_title = "Mật khẩu", data_toggle = "tooltip", @placeholder = "" })
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.LastName, new { @class = "col-sm-4 control-label" })
+                                <div class="col-sm-8">
+                                    @Html.TextBoxFor(model => model.LastName, new { @class = "form-control", data_placement = "top", data_title = "Họ", data_toggle = "tooltip", @placeholder = "" })
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.FirstName, new { @class = "col-sm-4 control-label" })
+                                <div class="col-sm-8">
+                                    @Html.TextBoxFor(model => model.FirstName, new { @class = "form-control", data_placement = "top", data_title = "FirstName", data_toggle = "tooltip", @placeholder = "" })
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.Email, new { @class = "col-sm-4 control-label" })
+                                <div class="col-sm-8">
+                                    @Html.TextBoxFor(model => model.Email, new { @class = "form-control", data_placement = "top", data_title = "Email", data_toggle = "tooltip", @placeholder = "" })
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.Address, new { @class = "col-sm-4 control-label" })
+                                <div class="col-sm-8">
+                                    @Html.TextBoxFor(model => model.Address, new { @class = "form-control", data_placement = "top", data_title = "Địa chỉ", data_toggle = "tooltip", @placeholder = "" })
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.Phone, new { @class = "col-sm-4 control-label" })
+                                <div class="col-sm-8">
+                                    @Html.TextBoxFor(model => model.Phone, new { @class = "form-control", data_placement = "top", data_title = "Điện thoại", data_toggle = "tooltip", @placeholder = "" })
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.BirthDay, new { @class = "col-sm-4 control-label" })
+                                <div class="col-sm-8">
+                                    <div class="input-group date">
+                                        <div class="input-group-addon">
+                                            <i class="fa fa-calendar"></i>
+                                        </div>
+                                        @Html.TextBoxFor(model => model.BirthDay, new { @class = "form-control pull-right" })
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.Visible, new { @class = "col-sm-4 control-label" })
+                                <div class="col-sm-4">
+                                    @Html.CheckBoxFor(model => model.Visible)
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.Gender, new { @class = "col-sm-4 control-label" })
+                                <div class="col-sm-8">
+                                    @Html.DropDownListFor(model => model.Gender, Model.AvailableGenders, new { @class = "form-control" })
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="box-footer text-center">
+                    <div class="col-md-10 center">
+                        @Html.MBButton("btnSave", "Lưu", null, "btn btn-primary")
+                        <a href="@Url.Action("ListUser", "User")">
+                            <input type="button" class="btn btn-danger" value="Hủy" />
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="box box-info">
+                <div class="box-header with-border">
+                    <h3 class="box-title">Role</h3>
+                </div>
+                <div class="box-body">
+                    @if (Model.AvailableRoles != null && Model.AvailableRoles.Count > 0)
+                    {
+                        foreach (var role in Model.AvailableRoles)
+                        {
+                            <div>
+                                <input type="checkbox" name="SelectedRoleIds" value="@role.Id" checked="@(Model.SelectedRoleIds != null && Model.SelectedRoleIds.Contains(role.Id))"  /> @role.RoleName
+                            </div>
+                        }
+                    }
+                    else
+                    {
+                        <label class="label label-danger">Chưa có quyền nào được tạo</label>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>   
+}
+<script src="~/Areas/OMS/Scripts/user.js"></script>
+<script>
+    $(document).ready(function () {
+        $("#@Html.IdFor(model => model.BirthDay)").datepicker({
+            autoclose: true
+        });
+        $("#@Html.IdFor(model => model.Gender)").select2();
+    });
+</script>

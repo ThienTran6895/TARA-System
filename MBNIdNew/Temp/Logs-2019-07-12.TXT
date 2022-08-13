@@ -1,0 +1,63 @@
+﻿# Main
+# time level ip user class thread message
+
+# Main
+# time level ip user class thread message
+09:33:18 INFO  ::1 duong [OMS.CallLogRepository] [8] - GetAllCallHistoryDatasource 0,
+09:33:41 FATAL ::1 duong [OMS.CallLogRepository] [12] - Error AddNewCallLog, Detail: System.Data.SqlClient.SqlException (0x80131904): Procedure or function telesales_AddNewCallLog has too many arguments specified.
+   at System.Data.SqlClient.SqlConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   at System.Data.SqlClient.SqlInternalConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   at System.Data.SqlClient.TdsParser.ThrowExceptionAndWarning(TdsParserStateObject stateObj, Boolean callerHasConnectionLock, Boolean asyncClose)
+   at System.Data.SqlClient.TdsParser.TryRun(RunBehavior runBehavior, SqlCommand cmdHandler, SqlDataReader dataStream, BulkCopySimpleResultSet bulkCopyHandler, TdsParserStateObject stateObj, Boolean& dataReady)
+   at System.Data.SqlClient.SqlDataReader.TryConsumeMetaData()
+   at System.Data.SqlClient.SqlDataReader.get_MetaData()
+   at System.Data.SqlClient.SqlCommand.FinishExecuteReader(SqlDataReader ds, RunBehavior runBehavior, String resetOptionsString, Boolean isInternal, Boolean forDescribeParameterEncryption, Boolean shouldCacheForAlwaysEncrypted)
+   at System.Data.SqlClient.SqlCommand.RunExecuteReaderTds(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, Boolean async, Int32 timeout, Task& task, Boolean asyncWrite, Boolean inRetry, SqlDataReader ds, Boolean describeParameterEncryptionRequest)
+   at System.Data.SqlClient.SqlCommand.RunExecuteReader(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, String method, TaskCompletionSource`1 completion, Int32 timeout, Task& task, Boolean& usedCache, Boolean asyncWrite, Boolean inRetry)
+   at System.Data.SqlClient.SqlCommand.RunExecuteReader(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, String method)
+   at System.Data.SqlClient.SqlCommand.ExecuteReader(CommandBehavior behavior, String method)
+   at System.Data.SqlClient.SqlCommand.ExecuteDbDataReader(CommandBehavior behavior)
+   at System.Data.Common.DbCommand.System.Data.IDbCommand.ExecuteReader(CommandBehavior behavior)
+   at Dapper.SqlMapper.ExecuteReaderWithFlagsFallback(IDbCommand cmd, Boolean wasClosed, CommandBehavior behavior)
+   at Dapper.SqlMapper.<QueryImpl>d__125`1.MoveNext()
+   at System.Collections.Generic.List`1..ctor(IEnumerable`1 collection)
+   at System.Linq.Enumerable.ToList[TSource](IEnumerable`1 source)
+   at Dapper.SqlMapper.Query[T](IDbConnection cnn, String sql, Object param, IDbTransaction transaction, Boolean buffered, Nullable`1 commandTimeout, Nullable`1 commandType)
+   at DAL.Core.DALHelpers.Query[T](String sql, UserLogin userInfo, DynamicParameters param) in D:\Workspace\SVN\BPO_OMS_MVC_AUTOCALL\Infrastructure\DAL\BaseRepository\DALHelpers.cs:line 36
+   at MB.OMS.Telesale.Repository.CallLogRepository.AddNewCallLog(CallLog callLog) in D:\Workspace\SVN\BPO_OMS_MVC_AUTOCALL\Module\OMS\MB.OMS.Telesale.Repository\CallLogRepository.cs:line 35
+ClientConnectionId:025a9df3-8599-4a25-81d8-cce031c7bcef
+Error Number:8144,State:2,Class:16
+# Main
+# time level ip user class thread message
+
+# Main
+# time level ip user class thread message
+
+# Main
+# time level ip user class thread message
+
+# Main
+# time level ip user class thread message
+
+# Main
+# time level ip user class thread message
+
+# Main
+# time level ip user class thread message
+
+# Main
+# time level ip user class thread message
+
+# Main
+# time level ip user class thread message
+
+# Main
+# time level ip user class thread message
+19:25:20 INFO  ::1 duong [ReportController] [10] - BEGIN at 19:25:20
+19:28:29 INFO  ::1 duong [ReportController] [10] - Excute store GetCustomerFieldByProject(rows=10), ThongKeBaoCaoChiTietFull(rows=12648))
+19:28:29 INFO  ::1 duong [ReportController] [10] - End prepare template -TotalSecond=19:28:29
+19:28:29 INFO  ::1 duong [ReportController] [10] - Excute GetSurveyByQuestionIdTK
+19:28:29 INFO  ::1 duong [ReportController] [10] - Excute LoadAllSurveyAnswerTK
+19:28:29 INFO  ::1 duong [ReportController] [10] - Load nội dung thống kê có trong store
+19:50:55 INFO  ::1 duong [ReportController] [10] - END at 19:50:55
+

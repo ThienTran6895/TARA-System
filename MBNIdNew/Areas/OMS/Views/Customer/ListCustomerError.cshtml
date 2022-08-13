@@ -1,0 +1,267 @@
+﻿@model MB.OMS.Telesale.Domain.Model.CustomerErrorDTO
+
+@{
+    ViewBag.Title = "Quản lý khách hàng lỗi";
+    Layout = "~/Views/Shared/_MasterLayout.cshtml";
+}
+
+@section Breadcrumb {
+    <h1>
+        Quản lý khách hàng lỗi
+        <small>Danh sách khách hàng lỗi</small>
+    </h1>
+    }
+<div class="box box-default">
+    <div class="box-header with-border col-md-8">
+        <h3 class="box-title">Danh sách khách hàng lỗi</h3>
+    </div>      
+    <div class="box-body">
+        <div class="row">
+            <div class="col-md-8">
+                <div class="form-group col-md-5">
+                    @Html.DropDownListFor(model => model.SourceID, Model.AvailableSource, new { @class = "form-control", @style = "width:100%;" })
+                </div>
+                <div class="form-group col-md-2">
+                    <div class="col-sm-12">
+                        <button type="button" id="search" class="btn btn-default" style="margin-right: 5px;"><i class="fa fa-fw fa-search"></i>Tìm kiếm</button>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 box-tools">
+                <div class="btn-group pull-right">
+                    <button type="button" class="btn btn-primary">Thao tác</button>
+                    <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
+                        <span class="caret"></span>
+                        <span class="sr-only">Toggle Dropdown</span>
+                    </button>
+                    <ul class="dropdown-menu" role="menu">
+                        <li><a id="deleteCustomer"><i class="fa fa-remove"></i> Xóa</a></li>
+                        <li class="divider"></li>
+                        <li><a id="exportCustomer"><i class="fa fa-cloud-upload"></i> Export excel</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div id="grid" class="box-body table-responsive no-padding k-grid k-widget">
+            <script type="text/javascript">
+                var array = @Html.Raw(Json.Encode(ViewBag.ListCustomerField))
+                array.unshift({
+                    field: "[6].Value",
+                    headerTemplate: "<input id='mastercheckbox' type='checkbox'/>",
+                    headerAttributes: { style: "text-align:center" },
+                    attributes: { style: "text-align:center" },
+                    template: "<input type='checkbox' value='#=data[6].Value#' class='checkboxGroups'/>",
+                    width: 100,
+                    filterable: false,
+                    sortable: false
+                });
+                $(document).ready(function () {
+                    var dataSource = new kendo.data.DataSource({
+                        type: "json",
+                        transport: {
+                            read: {
+                                url: "@Html.Raw(Url.Action("GetListCustomerError", "Customer"))",
+                                type: "POST",
+                                dataType: "json",
+                                data: additionalData,
+                                success: function (result) {
+                                    options.success(result);
+                                }
+                            }
+                        },
+                        schema: {
+                            data: "Data",
+                            total: "Total",
+                            errors: "Errors"
+                        },
+                        error: function (e) {
+                            display_kendoui_grid_error(e);
+                            // Cancel the changes
+                            this.cancelChanges();
+                        },
+                        parameterMap: function (options, type) {
+                            return JSON.stringify(options);
+                        },
+                        pageSize: 20,
+                        serverPaging: true
+                    });
+                    $("#grid").kendoGrid({
+                        dataSource: dataSource,
+                        pageable: {
+                            refresh: true,
+                            pageSizes: [20, 50, 100, 200, 500],
+                            messages: {
+                                display: "Hiển thị {0} - {1} trong {2} dòng",
+                                empty: "Không có dữ liệu",
+                                itemsPerPage: "dòng trên trang. "
+                            }
+                        },
+                        sortable: true,
+                        height: 550,
+                        filterable: {
+                            extra: false,
+                            operators: {
+                                string: {
+                                    contains: "Kết quả chứa"
+                                }
+                            },
+                            messages: {
+                                info: "Chọn các mục tìm kiếm : ",
+                                clear: "Xóa",
+                                filter: "Tìm kiếm"
+                            }
+                        },
+                        scrollable: true,
+                        columns: array
+                    });
+                    dataSource.fetch(function () {
+                        var data = this.data();
+                        $("#grid th[data-field='" + array[1] + "'] .k-link").html("Số di động");
+                        $("#grid th[data-field='" + array[2] + "'] .k-link").html("Dòng lỗi");
+                        for (var i = 3; i <= array.length; i++) {
+                            $("#grid th[data-field='" + array[i] + "'] .k-link").html(data[0][4 + i].Key);
+                        }
+                    });
+                });
+            </script>
+            <script type="text/javascript">
+                var selectedIds = [];
+
+                $(document).ready(function () {
+
+                    $("#@Html.IdFor(model => model.SourceID)").select2();
+
+                    //search button
+                    $('#search').click(function () {
+                        //search
+                        var grid = $('#grid').data('kendoGrid');
+                        grid.dataSource.page(1);
+
+                        $('.checkboxGroups').attr('checked', false).change();
+                        selectedIds = [];
+
+                        return false;
+
+                    });
+
+
+                    //Export
+                    $('#exportCustomer').click(function () {
+                        var SourceID = $("#SourceID").val();
+                        window.location.href = '@Url.Action("ExportExcelError","Customer")?SourceID=' + SourceID;
+
+                    });
+
+                    $('#SourceID').keydown(function (even) {
+                        if (even.keyCode == 13) {
+                            var grid = $('#grid').data('kendoGrid');
+                            grid.dataSource.page(1);
+                            return false;
+                        }
+                    });
+
+                    $('#mastercheckbox').click(function () {
+                        $('.checkboxGroups').attr('checked', $(this).is(':checked')).change();
+                    });
+
+                    //wire up checkboxes.
+                    $('#grid').on('change', 'input[type=checkbox][id!=mastercheckbox]', function (e) {
+                        var $check = $(this);
+                        if ($check.is(":checked") == true) {
+                            var checked = jQuery.inArray($check.val(), selectedIds);
+                            if (checked == -1) {
+                                //add id to selectedIds.
+                                selectedIds.push($check.val());
+                            }
+                        }
+                        else {
+                            var checked = jQuery.inArray($check.val(), selectedIds);
+                            if (checked > -1) {
+                                //remove id from selectedIds.
+                                selectedIds = $.grep(selectedIds, function (item, index) {
+                                    return item != $check.val();
+                                });
+                            }
+                        }
+                        updateMasterCheckbox();
+                    });
+                    //Delete Customer
+                    $('#deleteCustomer').click(function (e) {
+                        e.preventDefault();
+                        var postData = {
+                            selectedIds: selectedIds
+                        };
+                        if (selectedIds.length <= 0) {
+                            swal({ title: "Xóa khách hàng không thành công", text: "Chọn khách hàng trước khi xóa", type: "error" });
+                        }
+                        else {
+
+                            swal({
+                                title: "Xác nhận xóa!",
+                                text: "Bạn có chắc chắn xóa không?",
+                                type: "warning",
+                                showCancelButton: true,
+                                cancelButtonText: "Hủy",
+                                confirmButtonColor: "#DD6B55",
+                                confirmButtonText: "Xác nhận!",
+                                closeOnConfirm: false,
+                                showLoaderOnConfirm: true,
+                            }, function (isConfirm) {
+                                if (isConfirm) {
+                                    $.ajax({
+                                        cache: false,
+                                        type: "POST",
+                                        url: "@(Url.Action("DeleteSelectedCustomerError", "Customer"))",
+                                        data: postData,
+                                        success: function (data) {
+                                            //reload grid
+                                            var grid = $('#grid').data('kendoGrid');
+                                            grid.dataSource.read();
+
+                                            swal({ title: data.Title, text: data.Message, type: "success" });
+
+                                            selectedIds = [];
+                                        },
+                                        error: function (xhr, ajaxOptions, thrownError) {
+                                            alert(thrownError);
+                                        },
+                                        traditional: true
+                                    });
+                                }
+                            });
+                        }
+
+                        return false;
+                    });
+
+                });
+
+
+
+                //Check box
+                function onDataBound(e) {
+                    $('#grid input[type=checkbox][id!=mastercheckbox]').each(function () {
+                        var currentId = $(this).val();
+                        var checked = jQuery.inArray(currentId, selectedIds);
+                        //set checked based on if current checkbox's value is in selectedIds.
+                        $(this).attr('checked', checked > -1);
+                    });
+
+                    updateMasterCheckbox();
+                }
+
+                function updateMasterCheckbox() {
+                    var numChkBoxes = $('#grid input[type=checkbox][id!=mastercheckbox]').length;
+                    var numChkBoxesChecked = $('#grid input[type=checkbox][id!=mastercheckbox]:checked').length;
+                    $('#mastercheckbox').attr('checked', numChkBoxes == numChkBoxesChecked && numChkBoxes > 0);
+                }
+
+                function additionalData() {
+                    return {
+                        SourceID: $('#SourceID').val()
+                    };
+                }
+            </script>
+        </div>
+    </div>
+</div>

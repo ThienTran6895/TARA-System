@@ -1,0 +1,28 @@
+﻿@using MB.Web.Core.HTMLHelpers
+
+@{
+    ViewBag.Title = "EditUser";
+    Layout = "~/Views/Shared/_MasterLayout.cshtml";
+}
+
+@model MB.OMS.Account.Domain.Model.User
+<h2>EditUser</h2>
+
+@using (Html.MBForm("EditUser", "User"))
+{
+    @Html.DropDownListFor(m => m.UserRole,new SelectList(ViewBag.UserRoles,"DataKey", "DataValue",1))
+    @Html.LabelFor(model => model.Username)
+    @Html.TextBoxFor(model => model.Username, new { @maxlength = 10 })
+    @Html.LabelFor(model => model.Password)
+    @Html.TextBoxFor(model => model.Password, new { @maxlength = 10 })
+    @Html.LabelFor(model => model.FirstName)
+    @Html.TextBoxFor(model => model.FirstName, new { @maxlength = 10 })
+    @Html.LabelFor(model => model.LastName)
+    @Html.TextBoxFor(model => model.LastName, new { @maxlength = 10 })
+    <div class="action-container">
+        @Html.MBButton("btnSubmit", "Save")
+        @Html.MBButton("btnCancel", "Cancel")
+    </div>
+}
+<script src="~/Areas/Account/Scripts/user.js"></script>
+

@@ -1,0 +1,38 @@
+﻿# Main
+# time level ip user class thread message
+
+# Main
+# time level ip user class thread message
+17:42:42 INFO  ::1 duong [ReportController] [136] - BEGIN at 17:42:42
+17:42:42 INFO  ::1 duong [ReportController] [136] - Excute store GetCustomerFieldByProject(rows=10), ThongKeBaoCaoChiTietFull(rows=37))
+17:42:43 INFO  ::1 duong [ReportController] [136] - End prepare template -TotalSecond=17:42:43
+17:42:43 INFO  ::1 duong [ReportController] [136] - Excute GetSurveyByQuestionIdTK
+17:42:43 INFO  ::1 duong [ReportController] [136] - Excute LoadAllSurveyAnswerTK
+17:42:43 INFO  ::1 duong [ReportController] [136] - Load nội dung thống kê có trong store
+17:42:43 INFO  ::1 duong [ReportController] [136] - END at 17:42:43
+
+# Main
+# time level ip user class thread message
+
+# Main
+# time level ip user class thread message
+17:45:04 INFO  ::1 duong [ReportController] [28] - BEGIN at 17:45:04
+17:45:06 INFO  ::1 duong [ReportController] [28] - Excute store GetCustomerFieldByProject(rows=10), ThongKeBaoCaoChiTietFull(rows=378))
+17:45:06 INFO  ::1 duong [ReportController] [28] - End prepare template -TotalSecond=17:45:06
+17:45:06 INFO  ::1 duong [ReportController] [28] - Excute GetSurveyByQuestionIdTK
+17:45:06 INFO  ::1 duong [ReportController] [28] - Excute LoadAllSurveyAnswerTK
+17:45:06 INFO  ::1 duong [ReportController] [28] - Load nội dung thống kê có trong store
+17:45:08 INFO  ::1 duong [ReportController] [28] - END at 17:45:08
+
+# Main
+# time level ip user class thread message
+
+# Main
+# time level ip user class thread message
+17:51:01 INFO  ::1 duong [ReportController] [5] - BEGIN at 17:51:01
+17:55:27 INFO  ::1 duong [ReportController] [5] - Excute store GetCustomerFieldByProject(rows=10), ThongKeBaoCaoChiTietFull(rows=1754))
+17:55:27 INFO  ::1 duong [ReportController] [5] - End prepare template -TotalSecond=17:55:27
+17:55:27 INFO  ::1 duong [ReportController] [5] - Excute GetSurveyByQuestionIdTK
+17:55:27 INFO  ::1 duong [ReportController] [5] - Excute LoadAllSurveyAnswerTK
+17:55:27 INFO  ::1 duong [ReportController] [5] - Load nội dung thống kê có trong store
+17:56:20 INFO  ::1 duong [ReportController] [5] - END at 17:56:20

@@ -1,0 +1,275 @@
+﻿@using MB.Web.Core.HTMLHelpers
+@model MB.OMS.Telesale.Domain.Model.CustomerDTO
+
+@{
+    ViewBag.Title = "Quản lý dự án";
+    Layout = "~/Views/Shared/_MasterLayout.cshtml";
+}
+
+@section Breadcrumb {
+    <h1>
+        Quản lý dự án
+        <small>Chuyển KH cho ĐTV</small>
+    </h1>
+}
+
+<div class="box box-primary">
+    <div class="box-header with-border">
+        <h3 class="box-title">Chuyển KH cho ĐTV</h3>
+    </div>
+    <div class="box-body form-horizontal">
+        <div class="row">
+            <div class="col-md-10 center">
+                <div class="form-group">
+                    @Html.LabelFor(model => model.UserId1, new { @class = "col-sm-3 control-label" })
+                    <div class="col-sm-8">
+                        @Html.DropDownListFor(model => model.UserId1, Model.AvailableUser, new { @class = "form-control", @style = "width:100%;" })
+                    </div>
+                    <div class="col-md-1"><button type="button" id="searchUser" class="btn btn-primary">Tìm kiếm</button></div>
+                </div>
+                <div class="form-group">
+                    @Html.Label("Danh sách khách hàng", new { @class = "col-sm-3 control-label" })
+                    <div class="col-sm-8">
+                        <div id="grid" class="box-body table-responsive no-padding k-grid k-widget">
+                            <script type="text/javascript">
+
+                                $(document).ready(function () {
+                                    $("#grid").kendoGrid({
+                                        dataSource: {
+                                            type: "json",
+                                            transport: {
+                                                read: {
+                                                    url: "@Html.Raw(Url.Action("SearchUser", "Project"))",
+                                                    type: "POST",
+                                                    dataType: "json",
+                                                    data: additionalData,
+                                                    success: function (result) {
+                                                        options.success(result);
+                                                    }
+                                                }
+                                            },
+                                            schema: {
+                                                data: "Data",
+                                                total: "Total",
+                                                errors: "Errors"
+                                            },
+                                            error: function (e) {
+                                                display_kendoui_grid_error(e);
+                                                // Cancel the changes
+                                                this.cancelChanges();
+                                            },
+                                            parameterMap: function (options, type) {
+                                                return JSON.stringify(options);
+                                            },
+                                            pageSize: 20,
+                                            serverPaging: true
+                                        },
+                                        pageable: {
+                                            refresh: true,
+                                            pageSizes: [20, 50, 100, 200, 500],
+                                            messages: {
+                                                display: "Hiển thị {0} - {1} trong {2} dòng",
+                                                empty: "Không có dữ liệu",
+                                                itemsPerPage: "dòng trên trang. "
+                                            }
+                                        },
+                                        sortable: true,
+                                        filterable: {
+                                            extra: false,
+                                            operators: {
+                                                string: {
+                                                    contains: "Kết quả chứa"
+                                                }
+                                            },
+                                            messages: {
+                                                info: "Chọn các mục tìm kiếm : ",
+                                                clear: "Xóa",
+                                                filter: "Tìm kiếm"
+                                            }
+                                        },
+                                        scrollable: false,
+                                        dataBound: onDataBound,
+                                        columns: [{
+                                            field: "CustomerID",
+                                            headerTemplate: "<input id='mastercheckbox' type='checkbox'/>",
+                                            headerAttributes: { style: "text-align:center" },
+                                            attributes: { style: "text-align:center" },
+                                            template: "<input type='checkbox' value='#=CustomerID#' class='checkboxGroups'/>",
+                                            width: 30,
+                                            filterable: false,
+                                            sortable: false,
+                                        }, {
+                                            field: "MobilePhone",
+                                            title: "Số điện thoại",
+                                            headerAttributes: { style: "text-align:left;" },
+                                            width: 100
+                                        }, {
+                                            field: "FullName",
+                                            title: "Họ tên khách hàng",
+                                            headerAttributes: { style: "text-align:left;" },
+                                            width: 100
+                                        }, {
+                                            field: "StatusName",
+                                            title: "Tên trạng thái",
+                                            headerAttributes: { style: "text-align:left;" },
+                                            template: "#if(StatusName == null) {#Chưa khảo sát#} else{# #: StatusName # #}#",
+                                            width: 100
+                                        }]
+                                    });
+                                });
+                            </script>
+                            <script type="text/javascript">
+                                var selectedIds = [];
+                                $(document).ready(function () {
+
+                                    //search button
+                                    $('#searchUser').click(function () {
+                                        var userId1 = $("#UserId1").val();
+
+                                        if (userId1 == "0") {
+                                            swal({ title: "Tìm kiếm không thành công", text: "Chọn điện thoại viên cần chuyển trước khi tìm kiếm", type: "error" });
+                                        } else {
+                                            //search
+                                            var grid = $('#grid').data('kendoGrid');
+                                            grid.dataSource.page(1);
+
+                                            $('.checkboxGroups').attr('checked', false).change();
+                                            selectedIds = [];
+                                        }
+                                       
+                                        return false;
+                                    });
+
+                                    $('#mastercheckbox').click(function () {
+                                        $('.checkboxGroups').attr('checked', $(this).is(':checked')).change();
+                                    });
+
+                                    //wire up checkboxes.
+                                    $('#grid').on('change', 'input[type=checkbox][id!=mastercheckbox]', function (e) {
+                                        var $check = $(this);
+                                        if ($check.is(":checked") == true) {
+                                            var checked = jQuery.inArray($check.val(), selectedIds);
+                                            if (checked == -1) {
+                                                //add id to selectedIds.
+                                                selectedIds.push($check.val());
+                                            }
+                                        }
+                                        else {
+                                            var checked = jQuery.inArray($check.val(), selectedIds);
+                                            if (checked > -1) {
+                                                //remove id from selectedIds.
+                                                selectedIds = $.grep(selectedIds, function (item, index) {
+                                                    return item != $check.val();
+                                                });
+                                            }
+                                        }
+                                        updateMasterCheckbox();
+                                    });
+
+                                    $('#btnSave').click(function (e) {
+
+                                        var userId1 = $("#UserId1").val();
+                                        var userId2 = $("#UserId2").val();
+                                        var listCustomerID = selectedIds;
+
+                                        var postData = {
+                                            UserId1: userId1,
+                                            UserId2: userId2,
+                                            ListCustomerID: listCustomerID
+                                        };
+
+                                        if (listCustomerID.length == 0)
+                                        {
+                                            swal({ title: "Lưu không thành công", text: "Chọn khách hàng trước khi lưu", type: "error" });
+                                        }
+                                        else if (userId1 == "0")
+                                        {
+                                            swal({ title: "Lưu không thành công", text: "Chọn điện thoại viên cần chuyển trước khi lưu", type: "error" });
+                                        }
+                                        else if (userId2 == "0")
+                                        {
+                                            swal({ title: "Lưu không thành công", text: "Chọn điện thoại viên được chuyển trước khi lưu", type: "error" });
+                                        }
+                                        else if (userId1 == userId2) {
+                                            swal({ title: "Lưu không thành công", text: "Hai điện thoại viên không được trùng nhau", type: "error" });
+                                        }
+                                        else {
+                                            $.ajax({
+                                                type: "POST",
+                                                url: "@(Url.Action("ForwardCustomerForUser", "Project"))",
+                                                data: postData,
+                                                success: function (data) {
+                                                    if (data.Result == "success")
+                                                    {
+                                                        swal({ title: data.Title, text: data.Message, type: "success" }, function () {
+                                                            if (data.URLEdit != null)
+                                                                window.location.href = data.URLEdit;
+                                                        });
+                                                    }
+                                                },
+                                                error: function(xhr, ajaxOptions, thrownError) {
+                                                    alert(thrownError);
+                                                },
+                                            });
+                                        }
+                                        return false;
+                                    });
+
+                                });                               
+
+                                function additionalData() {
+                                    return {
+                                        UserId1: $("#UserId1").val()
+                                    };
+                                }
+                                function onDataBound(e) {
+                                    $('#grid input[type=checkbox][id!=mastercheckbox]').each(function () {
+                                        var currentId = $(this).val();
+                                        var checked = jQuery.inArray(currentId, selectedIds);
+                                        //set checked based on if current checkbox's value is in selectedIds.
+                                        $(this).attr('checked', checked > -1);
+                                    });
+
+                                    updateMasterCheckbox();
+                                }
+
+                                function updateMasterCheckbox() {
+                                    var numChkBoxes = $('#grid input[type=checkbox][id!=mastercheckbox]').length;
+                                    var numChkBoxesChecked = $('#grid input[type=checkbox][id!=mastercheckbox]:checked').length;
+                                    $('#mastercheckbox').attr('checked', numChkBoxes == numChkBoxesChecked && numChkBoxes > 0);
+                                }
+                            </script>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <hr />
+        <div class="row">
+            <div class="col-md-10 center">
+                <div class="form-group">
+                    @Html.LabelFor(model => model.UserId2, new { @class = "col-sm-3 control-label" })
+                    <div class="col-sm-8">
+                        @Html.DropDownListFor(model => model.UserId2, Model.AvailableUser, new { @class = "form-control", @style = "width:100%;" })
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="box-footer text-center">
+        <div class="col-md-10 center">
+            @Html.MBButton("btnSave", "Chuyển", null, "btn btn-primary")
+            <a href="@Url.Action("ListProjects", "Project")">
+                <input type="button" class="btn btn-danger" value="Hủy" />
+            </a>
+        </div>
+    </div>
+</div>
+
+
+<script>
+    $(document).ready(function () {
+        $("#@Html.IdFor(model => model.UserId1)").select2();
+        $("#@Html.IdFor(model => model.UserId2)").select2();                        
+    });
+</script>

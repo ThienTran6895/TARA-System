@@ -1,0 +1,42 @@
+﻿@using MB.Web.Core.HTMLHelpers;
+@model MB.OMS.Telesale.Domain.Model.SurveyDTO
+
+@Html.HiddenFor(model => model.SurveyID)
+@Html.HiddenFor(model => model.DisplayOrder)
+
+<div class="form-group">
+    @Html.LabelFor(model => model.NextQuestionID, new { @class = "col-sm-2 control-label" })
+    <div class="col-sm-10">
+        @Html.DropDownListFor(model => model.NextQuestionID, Model.AvailableNextQuestion, new { @class = "form-control", @style = "width:100%;" })
+    </div>
+</div>
+
+<script>
+    $(document).ready(function () {
+        $('#modalSave').click(function (e) {
+            var postData = {
+                QuestionID: $('#QuestionID').val(),
+                ProjectID: $('#ProjectID').val(),
+                SurveyID: $('#SurveyID').val(),
+                NextQuestionID: $('#NextQuestionID').val(),
+                DisplayOrder: $('#DisplayOrder').val()
+            };
+
+            $.ajax({
+                type: "POST",
+                url: "@(Url.Action("AddNextQuestion", "Question"))",
+                data: postData,
+                success: function (data) {
+                    $('#myModal1').modal('hide');
+                },
+                error: function(xhr, ajaxOptions, thrownError) {
+                    alert(thrownError);
+                },
+            });
+        });
+
+        $("#@Html.IdFor(model => model.NextQuestionID)").select2({
+            escapeMarkup: function (text) { return text; }
+        });
+    });
+</script>

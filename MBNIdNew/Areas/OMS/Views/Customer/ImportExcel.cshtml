@@ -1,0 +1,102 @@
+﻿@using MB.Web.Core.HTMLHelpers
+@using MB.Common.Helpers
+@model MB.OMS.Telesale.Domain.Model.CustomerDTO
+@{
+    ViewBag.Title = "Import khách hàng";
+    Layout = "~/Views/Shared/_MasterLayout.cshtml";
+}
+
+@using (Html.MBForm("HandlingImportExcel", "Customer", new Dictionary<string, object>() { { "id", "form" }, { "class", "form-horizontal" }, { "enctype", "multipart/form-data" } }))
+{
+    @section Breadcrumb {
+        <h1>
+            Quản lý khách hàng
+            <small>Import khách hàng</small>
+        </h1>
+    }
+    <div class="box box-primary">
+        <div class="box-header with-border">
+            <h3 class="box-title">Import khách hàng</h3>
+        </div>
+        <div class="box-body">
+            <div class="row">
+                <div class="col-md-8 center">
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.SourceName, new { @class = "col-sm-4 control-label" })
+                        <div class="col-sm-8">
+                            @Html.TextBoxFor(model => model.SourceName, new { @class = "form-control", data_placement = "top", data_title = "Tên nguồn", data_toggle = "tooltip", @placeholder = "" })
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label">Excel file</label>
+                        <div class="col-sm-8">
+                            <input type="file" id="FileUpload" name="FileUpload" class="form-control" />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-offset-4">                    
+                            <a href="@Url.Action("DownloadExcel", "Customer")" class="btn btn-link btn-lg">Tải file mẫu tại đây</a>                       
+                        </div>                       
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="box-footer text-center">
+            <div class="col-md-8 center">
+                @Html.MBButton("btnImport", "Import", null, "btn btn-primary")
+                <a href="@Url.Action("ListCustomer", "Customer")">
+                    <input type="button" class="btn btn-danger" value="Hủy" />
+                </a>
+            </div>
+        </div>
+    </div>
+
+}
+<script>
+    $("#btnImport").click(function () {
+        var formData = new FormData();
+        var totalFiles = document.getElementById("FileUpload").files.length;
+        var sourceName = $("#SourceName").val();
+        for (var i = 0; i < totalFiles; i++) {
+            var file = document.getElementById("FileUpload").files[i];
+
+            formData.append("FileUpload", file);
+        }
+        formData.append("SourceName", sourceName);
+        if (totalFiles == 0) {
+            swal({ title: "Import không thành công", text: "Chọn file trước khi import", type: "error" });
+        }
+        else if (sourceName == "") {
+            swal({ title: "Import không thành công", text: "Nhập tên nguồn trước khi import", type: "error" });
+        }
+        else {
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("HandlingImportExcel", "Customer")',
+                data: formData,
+                dataType: 'json',
+                contentType: false,
+                processData: false,
+                beforeSend: function () {
+                    // setting a timeout
+                    swal({ title: "Thông báo", text: "Quá trinh import đang thực hiện, thông tin sẽ được phản hồi đến email của bạn. Cám ơn", type: "success" });
+                    $("#kendoloading").show();
+                },
+                success: function (response) {
+                    $("#kendoloading").hide();
+                    $('#FileUpload')[0].value = null;
+                    if (response.success)
+                    {
+                        swal({ title: "Import thành công", text: response.message, type: "success" });
+                    }                      
+                    else
+                        swal({ title: "Import không thành công", text: response.message, type: "error" });
+                },
+                error: function (error) {
+                    $('#FileUpload')[0].value = null;
+                    swal({ title: "Import không thành công", text: "Có lỗi xảy ra khi import, vui lòng thử lại", type: "error" });
+                }
+            });
+        }
+    });
+</script>

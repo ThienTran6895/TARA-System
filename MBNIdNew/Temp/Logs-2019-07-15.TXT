@@ -1,0 +1,68 @@
+﻿# Main
+# time level ip user class thread message
+
+# Main
+# time level ip user class thread message
+
+# Main
+# time level ip user class thread message
+
+# Main
+# time level ip user class thread message
+15:36:49 INFO  ::1 duong [ReportController] [19] - BEGIN at 15:36:49
+15:38:57 INFO  ::1 duong [ReportController] [19] - Excute store GetCustomerFieldByProject(rows=14), ThongKeBaoCaoChiTietFull(rows=12129))
+15:38:58 INFO  ::1 duong [ReportController] [19] - End prepare template -TotalSecond=15:38:58
+15:38:58 INFO  ::1 duong [ReportController] [19] - Excute GetSurveyByQuestionIdTK
+15:38:58 INFO  ::1 duong [ReportController] [19] - Excute LoadAllSurveyAnswerTK
+15:38:58 INFO  ::1 duong [ReportController] [19] - Load nội dung thống kê có trong store
+16:03:09 INFO  ::1 duong [ReportController] [19] - END at 16:03:09
+
+# Main
+# time level ip user class thread message
+
+# Main
+# time level ip user class thread message
+17:10:01 INFO  ::1 duong [OMS.ReportRepository] [144] - Starting GetReportProjectData
+17:10:01 FATAL ::1 duong [OMS.ReportRepository] [144] - Error spa_Report_GetReportProjectData, Detail: System.Data.SqlClient.SqlException (0x80131904): Could not find stored procedure 'spa_Report_GetReportProjectData'.
+   at System.Data.SqlClient.SqlConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   at System.Data.SqlClient.SqlInternalConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   at System.Data.SqlClient.TdsParser.ThrowExceptionAndWarning(TdsParserStateObject stateObj, Boolean callerHasConnectionLock, Boolean asyncClose)
+   at System.Data.SqlClient.TdsParser.TryRun(RunBehavior runBehavior, SqlCommand cmdHandler, SqlDataReader dataStream, BulkCopySimpleResultSet bulkCopyHandler, TdsParserStateObject stateObj, Boolean& dataReady)
+   at System.Data.SqlClient.SqlDataReader.TryConsumeMetaData()
+   at System.Data.SqlClient.SqlDataReader.get_MetaData()
+   at System.Data.SqlClient.SqlCommand.FinishExecuteReader(SqlDataReader ds, RunBehavior runBehavior, String resetOptionsString, Boolean isInternal, Boolean forDescribeParameterEncryption, Boolean shouldCacheForAlwaysEncrypted)
+   at System.Data.SqlClient.SqlCommand.RunExecuteReaderTds(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, Boolean async, Int32 timeout, Task& task, Boolean asyncWrite, Boolean inRetry, SqlDataReader ds, Boolean describeParameterEncryptionRequest)
+   at System.Data.SqlClient.SqlCommand.RunExecuteReader(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, String method, TaskCompletionSource`1 completion, Int32 timeout, Task& task, Boolean& usedCache, Boolean asyncWrite, Boolean inRetry)
+   at System.Data.SqlClient.SqlCommand.RunExecuteReader(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, String method)
+   at System.Data.SqlClient.SqlCommand.ExecuteReader(CommandBehavior behavior, String method)
+   at System.Data.SqlClient.SqlCommand.ExecuteDbDataReader(CommandBehavior behavior)
+   at System.Data.Common.DbCommand.System.Data.IDbCommand.ExecuteReader(CommandBehavior behavior)
+   at Dapper.SqlMapper.ExecuteReaderWithFlagsFallback(IDbCommand cmd, Boolean wasClosed, CommandBehavior behavior)
+   at Dapper.SqlMapper.<QueryImpl>d__125`1.MoveNext()
+   at System.Collections.Generic.List`1..ctor(IEnumerable`1 collection)
+   at System.Linq.Enumerable.ToList[TSource](IEnumerable`1 source)
+   at Dapper.SqlMapper.Query[T](IDbConnection cnn, String sql, Object param, IDbTransaction transaction, Boolean buffered, Nullable`1 commandTimeout, Nullable`1 commandType)
+   at DAL.Core.DALHelpers.Query[T](String sql, UserLogin userInfo, DynamicParameters param) in D:\Workspace\SVN\BPO_OMS_MVC_AUTOCALL\Infrastructure\DAL\BaseRepository\DALHelpers.cs:line 36
+   at MB.OMS.Telesale.Repository.ReportRepository.GetReportProjectData(Int32 sourceId, Int32 statusId, Int32 projectID, DateTime dateFrom, DateTime dateEnd) in D:\Workspace\SVN\BPO_OMS_MVC_AUTOCALL\Module\OMS\MB.OMS.Telesale.Repository\ReportRepository.cs:line 427
+ClientConnectionId:8de08a05-3e22-4c4a-adec-32c2b91d5248
+Error Number:2812,State:62,Class:16
+17:10:26 INFO  ::1 duong [OMS.CallLogRepository] [144] - GetAllCallHistoryDatasource ,142dc2bd-3ecc-4b36-8dbd-02ceb90c8739
+17:16:03 INFO  ::1 duong [OMS.CallLogRepository] [64] - GetAllCallHistoryDatasource ,5989a56c-83ab-4a0b-8ac6-89c82736d690
+17:21:23 INFO  ::1 duong [OMS.CallLogRepository] [64] - GetAllCallHistoryDatasource ,142dc2bd-3ecc-4b36-8dbd-02ceb90c8739
+17:32:10 INFO  ::1 duong [OMS.CallLogRepository] [64] - GetAllCallHistoryDatasource ,06945a7b-65eb-46b4-92c1-0490dd9c4178
+17:33:21 INFO  ::1 duong [OMS.CallLogRepository] [19] - GetAllCallHistoryDatasource ,5f493495-7638-4823-9252-4d9d31e4c2a8
+17:34:01 INFO  ::1 duong [OMS.CallLogRepository] [19] - GetAllCallHistoryDatasource ,142dc2bd-3ecc-4b36-8dbd-02ceb90c8739
+17:35:54 INFO  ::1 duong [OMS.CallLogRepository] [98] - GetAllCallHistoryDatasource ,88faaba3-7073-41cc-91b6-389dd8bc04ac
+17:35:54 INFO  ::1 duong [OMS.CallLogRepository] [65] - GetAllCallHistoryDatasource ,88faaba3-7073-41cc-91b6-389dd8bc04ac
+17:36:32 INFO  ::1 duong [OMS.CallLogRepository] [19] - GetAllCallHistoryDatasource ,88faaba3-7073-41cc-91b6-389dd8bc04ac
+17:36:51 INFO  ::1 duong [OMS.CallLogRepository] [19] - GetAllCallHistoryDatasource ,eb436568-d182-4551-8706-3d35408e9e86
+17:38:38 INFO  ::1 duong [OMS.CallLogRepository] [51] - GetAllCallHistoryDatasource ,eb436568-d182-4551-8706-3d35408e9e86
+17:43:55 INFO  ::1 duong [OMS.CallLogRepository] [124] - GetAllCallHistoryDatasource ,142dc2bd-3ecc-4b36-8dbd-02ceb90c8739
+
+# Main
+# time level ip user class thread message
+
+# Main
+# time level ip user class thread message
+18:00:35 INFO  ::1 duong [OMS.CallLogRepository] [59] - GetAllCallHistoryDatasource ,142dc2bd-3ecc-4b36-8dbd-02ceb90c8739
+18:01:16 INFO  ::1 duong [OMS.CallLogRepository] [126] - GetAllCallHistoryDatasource ,88faaba3-7073-41cc-91b6-389dd8bc04ac

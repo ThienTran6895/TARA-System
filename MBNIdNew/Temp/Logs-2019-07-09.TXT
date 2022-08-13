@@ -1,0 +1,19 @@
+﻿# Main
+# time level ip user class thread message
+
+# Main
+# time level ip user class thread message
+
+# Main
+# time level ip user class thread message
+
+# Main
+# time level ip user class thread message
+
+# Main
+# time level ip user class thread message
+
+# Main
+# time level ip user class thread message
+15:50:13 INFO  ::1 duong [OMS.CallLogRepository] [11] - GetAllCallHistoryDatasource 109241,
+

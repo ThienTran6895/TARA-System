@@ -1,0 +1,235 @@
+﻿@{
+    ViewBag.Title = "Quản lý PG";
+    Layout = "~/Views/Shared/_MasterLayout.cshtml";
+}
+
+<div class="box box-default">
+    <div class="box-header with-border">
+        <h3 class="box-title">Danh sách PG</h3>
+    </div>
+    <div class="box-body">
+        <div class="row">
+            <div class="col-md-12 box-tools ">
+                <div class="btn-group pull-right">
+                    <button type="button" class="btn btn-primary">Thao tác</button>
+                    <button type="button" class="btn btn-primary dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-expanded="false">
+                        <span class="visually-hidden">Toggle Dropdown</span>
+                    </button>
+                    <ul class="dropdown-menu" role="menu">
+                        <li><a target="_blank" href="@Url.Action("ImportExcel")"><i class="fa fa-cloud-upload"></i> Import excel</a></li>
+                        <li class="divider"></li>
+                        <li><a id="exportCustomer"><i class="fa fa-cloud-upload"></i> Export Excel</a></li>
+                        <li><a id="exportCSVCustomer"><i class="fa fa-cloud-upload"></i> Export CVS</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="col-12">
+            <div id="grid"></div>
+        </div>
+
+    </div>
+</div>
+
+<script type="text/javascript">
+    var array = @Html.Raw(Json.Encode(ViewBag.ListCustomerField))
+    @*array.push({
+        command: [{
+            name: "Cập nhật",
+            text: "",
+            imageClass: "glyphicon glyphicon-edit",
+            //className: "glyphicon glyphicon-edit",
+            click: function (e) {
+                // prevent page scroll position change
+                e.preventDefault();
+                // e.target is the DOM element representing the button
+                var tr = $(e.target).closest("tr"); // get the current table row (tr)
+                // get the data bound to the current table row
+                var data = this.dataItem(tr);
+
+                window.location.href = '@Url.Action("EditCustomer", "Customer")?customerID=' + data[6].Value;
+            }
+        }]
+    });*@
+    array.unshift(
+    {
+        field: "[0].Value",
+        headerTemplate: "<input id='mastercheckbox' type='checkbox'/>",
+        headerAttributes: { style: "text-align:center" },
+        attributes: { style: "text-align:center" },
+        template: "<input type='checkbox' value='#=data[0].Value#' class='checkboxGroups'/>",
+        width: 50,
+        filterable: false,
+        sortable: false
+        }
+    );
+    $(function () {
+        var dataSource = new kendo.data.DataSource({
+            type: "json",
+            transport: {
+                read: {
+                    url: '@Html.Raw(Url.Action("GetListPGEmployee", "Employee"))',
+                    type: "POST",
+                    dataType: "json",
+                    data: additionalData,
+                    success: function (result) {
+                        options.success(result);
+                    }
+                }
+            },
+            schema: {
+                data: "Data",
+                total: "Total",
+                errors: "Errors"
+            },
+            //columns: [{
+            //    field: "[6].Value",
+            //    format: "{0:yyyy-MM-dd hh:MM:ss}"
+            //}],
+            error: function (e) {
+                display_kendoui_grid_error(e);
+                // Cancel the changes
+                this.cancelChanges();
+            },
+            parameterMap: function (options, type) {
+                return JSON.stringify(options);
+            },
+            pageSize: 20,
+            serverPaging: true
+        });
+        $("#grid").kendoGrid({
+            dataSource: dataSource,
+            pageable: {
+                refresh: true,
+                pageSizes: [20, 50, 100, 200, 500],
+                messages: {
+                    display: "Hiển thị {0} - {1} trong {2} dòng",
+                    empty: "Không có dữ liệu",
+                    itemsPerPage: "dòng trên trang. "
+                }
+            },
+            sortable: true,
+            scrollable: true,
+            dataBound: onDataBound,
+
+            height: 800,
+            filterable: {
+                extra: false,
+                operators: {
+                    string: {
+                        contains: "Kết quả chứa"
+                    }
+                },
+                messages: {
+                    info: "Chọn các mục tìm kiếm : ",
+                    clear: "Xóa",
+                    filter: "Tìm kiếm"
+                }
+            },
+            columns: array
+        });
+        //dataSource.fetch(function () {
+        //    var data = this.data();
+        //    console.log(array);
+        //    $("#grid th[data-field='" + array[1] + "'] .k-link").html("Di động");
+        //    for (var i = 2; i <= array.length; i++) {
+        //        $("#grid th[data-field='" + array[i] + "'] .k-link").html(data[0][4 + i].Key);
+        //    }
+        //});
+    });
+</script>
+<script type="text/javascript">
+    var selectedIds = [];
+    $(document).ready(function () {
+        //search button
+        $('#search').click(function () {
+            //search
+            var grid = $('#grid').data('kendoGrid');
+            grid.dataSource.page(1);
+
+            $('.checkboxGroups').attr('checked', false).change();
+            selectedIds = [];
+
+            return false;
+        });
+
+        $('#mastercheckbox').click(function () {
+            $('.checkboxGroups').attr('checked', $(this).is(':checked')).change();
+        });
+
+        //wire up checkboxes.
+        $('#grid').on('change', 'input[type=checkbox][id!=mastercheckbox]', function (e) {
+            var $check = $(this);
+            if ($check.is(":checked") == true) {
+                var checked = jQuery.inArray($check.val(), selectedIds);
+                if (checked == -1) {
+                    //add id to selectedIds.
+                    selectedIds.push($check.val());
+                }
+            }
+            else {
+                var checked = jQuery.inArray($check.val(), selectedIds);
+                if (checked > -1) {
+                    //remove id from selectedIds.
+                    selectedIds = $.grep(selectedIds, function (item, index) {
+                        return item != $check.val();
+                    });
+                }
+            }
+            updateMasterCheckbox();
+        });
+
+        //Export
+        $('#exportCustomer').click(function () {
+            window.location.href = '@Url.Action("ExportExcel","Customer")?SourceID=' + SourceID + '&DateFrom=' + DateFrom+ '&DateEnd=' + DateEnd;
+
+        });
+
+        $('#exportCSVCustomer').click(function () {
+            window.location.href = '@Url.Action("ExportCSV", "Customer")?SourceID=' + SourceID + '&DateFrom=' + DateFrom + '&DateEnd=' + DateEnd;
+
+        });
+
+    });
+
+    function additionalData() {
+        return {
+        };
+    }
+    function onDataBound(e) {
+        $('#grid input[type=checkbox][id!=mastercheckbox]').each(function () {
+            var currentId = $(this).val();
+            var checked = jQuery.inArray(currentId, selectedIds);
+            //set checked based on if current checkbox's value is in selectedIds.
+            $(this).attr('checked', checked > -1);
+        });
+
+        updateMasterCheckbox();
+        $('#grid tbody tr td:nth-child(2)').css('cursor', 'pointer');
+        $('#grid tbody tr td:nth-child(2)').bind('click', function () {
+            //alert($(this).text());
+            alert('12');
+            $.ajax({
+                type: "GET",
+                dataType: 'json',
+                url: '@Url.Action("ShowDetailCustomer", "Customer")?mobilePhone=' + $(this).text(),
+                success: function (result) {
+                    if (result.success) {
+                        var mymodal = $('#modalDetailCustomer');
+                        mymodal.find('.modal-body').html(result.html);
+                        mymodal.modal('show');
+                    }
+                    else {
+                        swal({ title: result.message, confirmButtonText: "Đóng" });
+                    }
+                }
+            });
+        });
+    }
+
+    function updateMasterCheckbox() {
+        var numChkBoxes = $('#grid input[type=checkbox][id!=mastercheckbox]').length;
+        var numChkBoxesChecked = $('#grid input[type=checkbox][id!=mastercheckbox]:checked').length;
+        $('#mastercheckbox').attr('checked', numChkBoxes == numChkBoxesChecked && numChkBoxes > 0);
+    }
+</script>

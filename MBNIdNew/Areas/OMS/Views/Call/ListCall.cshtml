@@ -1,0 +1,220 @@
+﻿@using MB.Common
+@model MB.OMS.Telesale.Domain.Model.Call
+
+@{
+    ViewBag.Title = "Quản lý cuộc gọi";
+    Layout = "~/Views/Shared/_MasterLayout.cshtml";
+}
+
+@section Breadcrumb {
+    <h1>
+        Quản lý cuộc gọi
+        <small>Danh sách cuộc gọi thành công</small>
+    </h1>
+}
+
+<div class="box box-default">
+    <div class="box-header with-border">
+        <h3 class="box-title">Danh sách cuộc gọi thành công</h3>
+    </div>
+    <div class="box-body">
+        @if (ViewBag.RoleName == Role.Administrator.ToString())
+        {
+            <div class="form-group">
+                <div class="col-md-12">
+                    <div class="form-group col-md-3">
+                        @Html.DropDownListFor(model => model.UserId, Model.AvailableUser, new { @class = "form-control", @style = "width:100%;" })
+                    </div>
+                    <div class="form-group col-md-4 ">
+                        <button type="button" id="search" class="btn btn-default" style="margin-right: 5px;"><i class="fa fa-fw fa-search"></i>Tìm kiếm</button>
+                    </div>
+                </div>
+            </div>
+            <div class="clearfix"></div>
+
+            <script type="text/javascript">
+                $(document).ready(function () {
+                    $('#UserId').select2();
+                });
+            </script>
+        }
+        else
+        {
+            @Html.HiddenFor(model => model.UserId)
+        }
+        <div id="grid" class="box-body table-responsive no-padding k-grid k-widget">
+        </div>
+        <script type="text/javascript">
+            $(document).ready(function () {
+
+                $("#grid").kendoGrid({
+                    dataSource: {
+                        type: "json",
+                        transport: {
+                            read: {
+                                url: "@Html.Raw(Url.Action("GetListCallSuccess", "Call"))",
+                                type: "POST",
+                                dataType: "json",
+                                data: additionalData,
+                                success: function (result) {
+                                    debugger;
+                                    options.success(result);
+                                    console.log(result);
+                                },
+                                error: function (err) {
+                                    alert(err);
+                                }
+                            }
+                        },
+                        schema: {
+                            data: "Data",
+                            total: "Total",
+                            errors: "Errors"
+                        },
+                        error: function (e) {
+                            display_kendoui_grid_error(e);
+                            // Cancel the changes
+                            this.cancelChanges();
+                        },
+                        parameterMap: function (options, type) {
+                            return JSON.stringify(options);
+                        },
+                        pageSize: 20,
+                        serverPaging: true
+                    },
+                    pageable: {
+                        refresh: true,
+                        pageSizes: [20, 50, 100, 200, 500],
+                        messages: {
+                            display: "Hiển thị {0} - {1} trong {2} dòng",
+                            empty: "Không có dữ liệu",
+                            itemsPerPage: "dòng trên trang. "
+                        }
+                    },
+                    sortable: true,
+                    filterable: {
+                        extra: false,
+                        operators: {
+                            string: {
+                                contains: "Kết quả chứa"
+                            }
+                        },
+                        messages: {
+                            info: "Chọn các mục tìm kiếm : ",
+                            clear: "Xóa",
+                            filter: "Tìm kiếm"
+                        }
+                    },
+                    scrollable: false,
+                    dataBound: onDataBound,
+                    columns: [{
+                        field: "FullName",
+                        title: "Họ tên",
+                        headerAttributes: { style: "text-align:left;" },
+                        width: 150
+                    }, {
+                        field: "MobilePhone",
+                        title: "Số điện thoại",
+                        headerAttributes: { style: "text-align:left;" },
+                        template: function (dataItem) {
+                            return "<span onclick='showDetail(\"" + dataItem.CustomerID + "\",\""+dataItem.MobilePhone+"\")' style=\"cursor:pointer;display:block\">" + dataItem.MobilePhone + "</span>";
+                        },
+                        width: 150
+                    }, {
+                        field: "Name",
+                        title: "Trạng thái cuộc gọi",
+                        attributes: { style: "text-align:center;" },
+                        width: 150
+                    }, {
+                        field: "NumCall",
+                        title: "Số lần gọi",
+                        attributes: { style: "text-align:center;" },
+                        width: 50
+                    }, {
+                        field: "CallBy",
+                        title: "Người gọi",
+                        attributes: { style: "text-align:center;" },
+                        width: 150
+                    },
+                    {
+                        field: "UpdateDate",
+                        title: "Ngày gọi",
+                        headerAttributes: { style: "text-align:left;" },
+                        template: "#= (UpdateDate == null)? '' : kendo.toString(kendo.parseDate(UpdateDate, 'yyyy-MM-dd'), 'dd/MM/yyyy') #",
+                        width: 200
+                    }]
+                });
+            });
+        </script>
+        <script type="text/javascript">
+
+            $(document).ready(function () {
+                //search button
+                $('#search').click(function () {
+                    //search
+                    var grid = $('#grid').data('kendoGrid');
+                    grid.dataSource.page(1);
+
+                    return false;
+                });
+
+                $('#UserId').keydown(function (even) {
+                    if (even.keyCode == 13) {
+                        var grid = $('#grid').data('kendoGrid');
+                        grid.dataSource.page(1);
+                        return false;
+                    }
+                });
+            });
+
+            function additionalData() {
+                return {
+                    UserId: $('#UserId').val()
+                };
+            }
+
+            function showDetail(cid, phone) {
+                $.ajax({
+                    type: "GET",
+                    dataType: 'json',
+                    url: '@Url.Action("ShowDetailCustomer", "Customer")?mobilePhone=' + phone + '&cid=' + cid,
+                    beforeSend: function () {
+                        swal({ title: "", text: "Đang tải dữ liệu, vui lòng đợi!" });
+                    },
+                    success: function (result) {
+                        if (result.success) {
+                            var mymodal = $('#modalDetailCustomer');
+                            mymodal.find('.modal-body').html(result.html);
+                            mymodal.modal('show');
+                            swal.close();
+                        }
+                        else {
+                            swal({ title: result.message, confirmButtonText: "Đóng" });
+                        }
+                    }
+                });
+            }
+            function onDataBound(e) {
+               // $('#grid tbody tr td:nth-child(2)').css('cursor', 'pointer');
+
+            }
+        </script>
+
+    </div>
+</div>
+
+<div class="modal fade" id="modalDetailCustomer" role="dialog">
+    <div class="modal-dialog  modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">Thông tin khách hàng</h4>
+            </div>
+            <div class="modal-body">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal"><i class="fa fa-remove"></i> Đóng</button>
+            </div>
+        </div>
+    </div>
+</div>

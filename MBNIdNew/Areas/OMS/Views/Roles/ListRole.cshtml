@@ -1,0 +1,131 @@
+﻿@using MB.Web.Core
+@using MB.Common.Helpers
+@model MB.OMS.Telesale.Domain.Model.Roles
+
+@{
+    ViewBag.Title = "Quản lý quyền";
+    Layout = "~/Views/Shared/_MasterLayout.cshtml";
+}
+
+@section Breadcrumb {
+    <h1>
+        Quản lý quyền
+        <small>Danh sách quyền</small>
+    </h1>
+}
+<div class="box box-default">
+    <div class="box-header with-border">
+        <h3 class="box-title">Danh sách quyền</h3>
+        <div class="box-tools pull-right">
+            @if (CommonHelper.CheckPermisionExist(Permissions.ThemQuyen.ToString()))
+            {
+                <a href="@Url.Action("AddRole")" class="btn btn-primary">Thêm mới</a>
+            }          
+        </div>
+    </div>
+    <div class="box-body">
+        <div id="grid" class="box-body table-responsive no-padding k-grid k-widget">
+            <script type="text/javascript">
+
+                $(document).ready(function () {
+                    $("#grid").kendoGrid({
+                        dataSource: {
+                            type: "json",
+                            transport: {
+                                read: {
+                                    url: "@Html.Raw(Url.Action("GetListRole", "Roles"))",
+                                    type: "POST",
+                                    dataType: "json",
+                                    success: function (result) {
+                                        options.success(result);
+                                    }
+                                }
+                            },
+                            schema: {
+                                data: "Data",
+                                total: "Total",
+                                errors: "Errors"
+                            },
+                            error: function (e) {
+                                display_kendoui_grid_error(e);
+                                // Cancel the changes
+                                this.cancelChanges();
+                            },
+                            parameterMap: function (options, type) {
+                                return JSON.stringify(options);
+                            },
+                            pageSize: 20,
+                            serverPaging: true
+                        },
+                        pageable: {
+                            refresh: true,
+                            pageSizes: [20, 50, 100, 200, 500],
+                            messages: {
+                                display: "Hiển thị {0} - {1} trong {2} dòng",
+                                empty: "Không có dữ liệu",
+                                itemsPerPage: "dòng trên trang. "
+                            }
+                        },
+                        sortable: true,
+                        filterable: true,
+                        editable: {
+                            confirmation: false,
+                            mode: "inline"
+                        },
+                        sortable: true,
+                        filterable: {
+                            extra: false,
+                            operators: {
+                                string: {
+                                    contains: "Kết quả chứa"
+                                }
+                            },
+                            messages: {
+                                info: "Chọn các mục tìm kiếm : ",
+                                clear: "Xóa",
+                                filter: "Tìm kiếm"
+                            }
+                        },
+                        scrollable: false,
+                        columns: [{
+                            field: "RoleName",
+                            title: "Tên quyền",
+                            headerAttributes: { style: "text-align:left;" },
+                            width: 200
+                        }, {
+                            field: "IsVisible",
+                            title: "Trạng thái",
+                            attributes: { style: "text-align:center; width:50px;" },
+                            template: "#if(IsVisible) {#<div class='text-center'><span class='label label-primary'>Kích hoạt</span></div>#} else{#<div class='text-center'><span class='label label-danger'>Chưa kích hoạt</span></div>#}#",
+                            width: 50
+                        }, {
+                            field: "",
+                            title: "Cài đặt quyền",
+                            attributes: { style: "text-align:center; width:30px;" },
+                            template: '<a title="Cài đặt quyền" href="@Url.Action("Permissions", "Roles")/#=Id#"><span class="fa fa-cog"></span></a>',
+                            width: 30
+                        }, {
+                            field: "",
+                            title: "Phân chia trang",
+                            attributes: { style: "text-align:center; width:30px;" },
+                            template: '<a title="Phân chia trang" href="@Url.Action("SharePageForRole", "Roles")/#=Id#"><span class="fa fa-cog"></span></a>',
+                            width: 30
+                        }, {
+                            @if (CommonHelper.CheckPermisionExist(Permissions.SuaQuyen.ToString()))
+                            {
+                                <text>
+                                    field: "",
+                                    title: "Cập nhật",
+                                    attributes: { style: "text-align:center; width:30px;" },
+                                    template: '<a title="Cập nhật" href="@Url.Action("EditRole", "Roles")/#=Id#"><span class="glyphicon glyphicon-edit"></span></a>',
+                                    width: 30
+                                </text>
+                            }                           
+                        }]
+                    });
+                });
+            </script>
+        </div>
+    </div>
+</div>
+

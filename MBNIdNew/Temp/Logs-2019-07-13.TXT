@@ -1,0 +1,41 @@
+﻿# Main
+# time level ip user class thread message
+
+# Main
+# time level ip user class thread message
+13:25:55 INFO  ::1 duong [ReportController] [68] - BEGIN at 13:25:55
+13:28:20 INFO  ::1 duong [ReportController] [68] - Excute store GetCustomerFieldByProject(rows=10), ThongKeBaoCaoChiTietFull(rows=13229))
+13:28:21 INFO  ::1 duong [ReportController] [68] - End prepare template -TotalSecond=13:28:21
+13:28:21 INFO  ::1 duong [ReportController] [68] - Excute GetSurveyByQuestionIdTK
+13:28:21 INFO  ::1 duong [ReportController] [68] - Excute LoadAllSurveyAnswerTK
+13:28:21 INFO  ::1 duong [ReportController] [68] - Load nội dung thống kê có trong store
+13:52:57 INFO  ::1 duong [ReportController] [68] - END at 13:52:57
+
+# Main
+# time level ip user class thread message
+
+# Main
+# time level ip user class thread message
+
+# Main
+# time level ip user class thread message
+
+# Main
+# time level ip user class thread message
+
+# Main
+# time level ip user class thread message
+
+# Main
+# time level ip user class thread message
+14:51:34 INFO  ::1 duong [OMS.ReportRepository] [61] - Starting GetReportProjectData
+14:51:35 INFO  ::1 duong [OMS.ReportRepository] [61] - Completed
+
+# Main
+# time level ip user class thread message
+
+# Main
+# time level ip user class thread message
+14:56:14 INFO  ::1 duong [OMS.ReportRepository] [62] - Starting GetReportProjectData
+14:56:14 INFO  ::1 duong [OMS.ReportRepository] [62] - Completed
+

@@ -1,0 +1,456 @@
+﻿@using System.Text.RegularExpressions;
+@using MB.Web.Core.HTMLHelpers;
+@using MB.Common.Helpers;
+@using MB.Common;
+@using MB.Web.Core;
+@model MB.OMS.Telesale.Domain.Model.CallSurvey
+
+@Html.HiddenFor(model => model.CustomerID)
+@Html.HiddenFor(model => model.SourceID)
+@Html.HiddenFor(model => model.CallID)
+
+<div class="box box-default box-solid">
+    <div class="box-header with-border">
+        <h3 class="box-title">Thông tin khách hàng</h3>
+        <div class="box-tools pull-right">
+            <button type="button" class="btn btn-box-tool" data-widget="collapse">
+                <i class="fa fa-minus"></i>
+            </button>
+        </div>
+    </div>
+    <div class="box-body">
+        <div class="row form-horizontal f-custom">
+            <div class="col-md-12 center f-container">
+                <div class="form-group col-md-6">
+                    <label class="col-sm-4 control-label" for="MobilePhone">Điện thoại di động </label>
+                    <div class="col-sm-8">
+                        <span data_title="Số điện thoại" data_toggle="tooltip">
+                            <a href="cisp:action=click2call&phoneNumber=@Model.MobilePhone&appId=@Model.CustomerID">
+                                @Model.MobilePhone &nbsp; <i class="fa fa-phone-square" aria-hidden="true"></i>
+                            </a>
+                        </span>
+                    </div>
+                </div>
+                @for (int i = 0; i < Model.AvailableCustomerFieldValue.Count; i++)
+                {
+                    <div class="form-group col-md-6">
+                        <label class="col-sm-4 control-label">@Html.DisplayFor(model => model.AvailableCustomerFieldValue[i].FieldName)</label>
+                        <div class="col-sm-8">
+                                @Html.TextBox(Model.AvailableCustomerFieldValue[i].FieldCode, Model.AvailableCustomerFieldValue[i].FieldValue, new { @class = "form-control", data_placement = "top", data_title = Model.AvailableCustomerFieldValue[i].FieldValue, data_toggle = "tooltip", @placeholder = "" })
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+<div class="box box-default box-solid">
+    <div class="box-header with-border">
+        <h3 class="box-title">Kịch bản khảo sát</h3>
+        <div class="box-tools pull-right">
+            <button type="button" class="btn btn-box-tool" data-widget="collapse">
+                <i class="fa fa-minus"></i>
+            </button>
+        </div>
+    </div>
+    <div class="box-body">
+        <div class="form-horizontal">
+            <div class="form-group">
+                @Html.LabelFor(model => model.CampaignGreeting, new { @class = "col-sm-2 control-label" })
+                <div class="col-sm-10">
+                    @Html.Raw(HttpUtility.HtmlDecode(Model.CampaignGreeting))
+                </div>
+            </div>
+            <div class="form-group">
+                @Html.Label("Kịch bản khảo sát", new { @class = "col-sm-2 control-label" })
+                <div class="col-sm-10">
+                    <div id="slider">
+                        @{
+                            if (Model.AvailableQuestions != null && Model.AvailableQuestions.Count > 0)
+                            {
+                                int i = 0;
+                                foreach (var question in Model.AvailableQuestions)
+                                {
+                                    <div data-id="@question.QuestionID" data-index="@i">
+                                        <label>@Html.Raw(HttpUtility.HtmlDecode(@question.Name))</label>
+                                        @{
+                                            int j = 0;
+                                            foreach (var survey in question.AvailableSurveys)
+                                            {
+                                                <p>
+                                                    @if (survey.SurveyType == (int)TypeSurvey.CHECKBOX)
+                                                    {
+                                                        <span data-index="@j" data-id="@survey.SurveyID" data-question="@question.QuestionID" data-code="@survey.Code" data-next="@survey.NextQuestionID" data-control="checkbox" class="chkSurvey">
+                                                            <input type="checkbox" value="@survey.SurveyID" name="@string.Concat("Question_",question.QuestionID,"[]")" /> @Regex.Replace(survey.SurveyContent, "<[^>]*(>|$)", string.Empty)
+                                                        </span>
+                                                    }
+                                                    else if (survey.SurveyType == (int)TypeSurvey.RADIOBUTTON)
+                                                    {
+                                                        <span data-index="@j" data-id="@survey.SurveyID" data-question="@question.QuestionID" data-code="@survey.Code" data-next="@survey.NextQuestionID" data-control="radio" class="rdbSurvey">
+                                                            <input type="radio" value="@survey.SurveyID" name="@string.Concat("Question_",question.QuestionID,"[]")" /> @Regex.Replace(survey.SurveyContent, "<[^>]*(>|$)", string.Empty)
+                                                        </span>
+                                                    }
+                                                    else if (survey.SurveyType == (int)TypeSurvey.TEXTBOX)
+                                                    {
+                                                        <textarea class="aTextbox" placeholder="@Regex.Replace(survey.SurveyContent, "<[^>]*(>|$)", string.Empty)" name="@string.Concat("Question_",question.QuestionID,"[]")" rows="3" cols="50" data-index="@j" data-id="@survey.SurveyID" data-question="@question.QuestionID" data-code="@survey.Code" data-next="@survey.NextQuestionID" data-control="textbox" data-content="@survey.SurveyContent"></textarea>
+                                                    }
+                                                </p>
+                                                    j++;
+                                            }
+                                        }
+                                        <div class="control-slide">
+                                            <div id="btnPre" class="btnPre"></div>
+                                            <div id="btnNext" class="btnNext"></div>
+                                        </div>
+                                    </div>
+                                    i++;
+                                }
+                            }
+                            else
+                            {
+                                <label class="label label-danger">Chưa có câu hỏi nào để khảo sát</label>
+                            }
+                        }
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                @Html.LabelFor(model => model.CampaignConclusion, new { @class = "col-sm-2 control-label" })
+                <div class="col-sm-10">
+                    @Html.Raw(HttpUtility.HtmlDecode(Model.CampaignConclusion))
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="box box-default box-solid">
+    <div class="box-header with-border">
+        <h3 class="box-title">Thông tin cuộc gọi</h3>
+        <div class="box-tools pull-right">
+            <button type="button" class="btn btn-box-tool" data-widget="collapse">
+                <i class="fa fa-minus"></i>
+            </button>
+        </div>
+    </div>
+    <div class="box-body">
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.LabelFor(model => model.StatusID)
+                    @Html.DropDownListFor(model => model.StatusID, Model.AvailableStatus, new { @class = "form-control", @style = "width:100%;" })
+
+                    @Html.LabelFor(model => model.StatusCallID)
+                    @Html.DropDownListFor(model => model.StatusCallID, Model.AvailableStatusCall, new { @class = "form-control", @style = "width:100%;" })
+                </div>
+                <div class="form-group">
+                    @Html.LabelFor(model => model.RecallDate)
+                    <div class="input-group date">
+                        <div class="input-group-addon">
+                            <i class="fa fa-calendar"></i>
+                        </div>
+                        @Html.TextBoxFor(model => model.RecallDate, new { @class = "form-control", data_placement = "top", disabled = "disabled" })
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Note)
+                    @Html.TextAreaFor(model => model.Note, new { @class = "form-control", data_placement = "top", data_title = "Ý kiến khách hàng", data_toggle = "tooltip", @rows = "4" })
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="box box-default box-solid">
+    <div class="box-header with-border">
+        <h3 class="box-title">Lịch sử cuộc gọi</h3>
+        <div class="box-tools pull-right">
+            <button type="button" class="btn btn-box-tool" data-widget="collapse">
+                <i class="fa fa-minus"></i>
+            </button>
+        </div>
+    </div>
+    <div class="box-body">
+        <div class="form-horizontal">
+            <div id="gridCallHistory" class="box-body table-responsive no-padding k-grid k-widget">
+                <script type="text/javascript">
+
+                $(document).ready(function () {
+                    $("#gridCallHistory").kendoGrid({
+                        dataSource: {
+                            type: "json",
+                            transport: {
+                                read: {
+                                    url: "@Html.Raw(Url.Action("GetListCallHistory", "Customer"))",
+                                    type: "POST",
+                                    dataType: "json",
+                                    data: additionalData,
+                                    success: function (result) {
+                                        debugger;
+                                        options.success(result);
+                                    }
+                                }
+                            },
+                            schema: {
+                                data: "Data",
+                                total: "Total",
+                                errors: "Errors"
+                            },
+                            error: function (e) {
+                                display_kendoui_grid_error(e);
+                                // Cancel the changes
+                                this.cancelChanges();
+                            },
+                            parameterMap: function (options, type) {
+                                return JSON.stringify(options);
+                            },
+                            pageSize: 20,
+                            serverPaging: true
+                        },
+                        pageable: {
+                            refresh: true,
+                            pageSizes: [20, 50, 100, 200, 500],
+                            messages: {
+                                display: "Hiển thị {0} - {1} trong {2} dòng",
+                                empty: "Không có dữ liệu",
+                                itemsPerPage: "dòng trên trang. "
+                            }
+                        },
+                        sortable: true,
+                        filterable: {
+                            extra: false,
+                            operators: {
+                                string: {
+                                    contains: "Kết quả chứa"
+                                }
+                            },
+                            messages: {
+                                info: "Chọn các mục tìm kiếm : ",
+                                clear: "Xóa",
+                                filter: "Tìm kiếm"
+                            }
+                        },
+                        scrollable: false,
+                        columns: [{
+                            field: "MobilePhone",
+                            title: "Số điện thoại",
+                            headerAttributes: { style: "text-align:left;" },
+                            width: 100
+                        }, {
+                            field: "StatusName",
+                            title: "Tên trạng thái",
+                            headerAttributes: { style: "text-align:left;" },
+                            width: 100
+                        }, {
+                            field: "CreatedDate",
+                            title: "Ngày gọi",
+                            headerAttributes: { style: "text-align:left;" },
+                            template: "#= (CreatedDate == null)? '' : kendo.toString(kendo.parseDate(CreatedDate, 'yyyy-MM-dd HH:mm'), 'dd/MM/yyyy HH:mm') #",
+                            width: 100
+                        }, {
+                            field: "RecallDate",
+                            title: "Ngày gọi lại",
+                            headerAttributes: { style: "text-align:left;" },
+                            template: "#= (RecallDate == null)? '' : kendo.toString(kendo.parseDate(RecallDate, 'yyyy-MM-dd HH:mm'), 'dd/MM/yyyy HH:mm') #",
+                            width: 100
+                        }, {
+                            field: "UserName",
+                            title: "Người gọi",
+                            headerAttributes: { style: "text-align:left;" },                           
+                            width: 100
+                        }]
+                    });
+                });
+
+                    function additionalData() {
+                        return {
+                            callID: $('#CallID').val(),
+                        };
+                    }
+                </script>
+            </div>
+        </div>
+    </div>
+    
+</div>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+
+        //$('#myModalCall').modal({ backdrop: 'static', keyboard: false });
+        $("#@Html.IdFor(model => model.RecallDate)").datetimepicker();
+        //ChangeStatusCall();
+
+        $('#slider > div[data-index]').css('display', 'none');
+        $('#slider > div[data-index]:first').css('display', 'block');
+
+        $('.chkSurvey').click(function () {
+            var data_question = $(this).attr('data-question');
+            var allUnCheck = true;
+            $(".chkSurvey[data-question=" + data_question + "]").each(function () {
+                if ($(this).children('input[type=checkbox]').is(":checked")) {
+                    allUnCheck = false;
+                    return;;
+                }
+            });
+            if (allUnCheck == true) {
+                $(this).parent().parent().find('.control-slide').find('.btnNext').html('');
+            }
+            else {
+                var question_next_id = $(this).attr('data-next');
+                if (question_next_id == "0") {
+                    $(this).parent().parent().find('.control-slide').find('.btnNext').html('<a class="btn btn-danger">Kết thúc khảo sát</a>');
+                }
+                else {
+                    var question_next_index = $("div[data-id=" + question_next_id + "]").attr("data-index");
+                    $(this).parent().parent().find('.control-slide').find('.btnNext').html('<a href="#' + question_next_index + '" class="btn btn-danger" >Tiếp</a>');
+
+                    var question_pre_index = $(this).parent().parent().attr('data-index');
+                    $("div[data-id=" + question_next_id + "]").find('.control-slide').find('.btnPre').html('<a href="#' + question_pre_index + '" class="btn btn-danger">Trở về</a>');
+                }
+            }
+        });
+        $('.rdbSurvey').click(function () {
+            $(this).parent().parent().find('input[type=radio]').removeAttr("checked");
+            $(this).children('input[type=radio]').prop('checked', true);
+            var question_next_id = $(this).attr('data-next');
+            if (question_next_id == "0") {
+                $(this).parent().parent().find('.control-slide').find('.btnNext').html('<a class="btn btn-danger">Kết thúc khảo sát</a>');
+            }
+            else {
+                var question_next_index = $("div[data-id=" + question_next_id + "]").attr("data-index");
+                $(this).parent().parent().find('.control-slide').find('.btnNext').html('<a href="#' + question_next_index + '" class="btn btn-danger" >Tiếp</a>');
+
+                var question_pre_index = $(this).parent().parent().attr('data-index');
+                $("div[data-id=" + question_next_id + "]").find('.control-slide').find('.btnPre').html('<a href="#' + question_pre_index + '" class="btn btn-danger" >Trở về</a>');
+            }
+        });
+        $('.aTextbox').keyup(function () {
+            if ($(this).val() != "") {
+                var question_next_id = $(this).attr('data-next');
+                if (question_next_id == "0") {
+                    $(this).parent().parent().find('.control-slide').find('.btnNext').html('<a class="btn btn-danger">Kết thúc khảo sát</a>');
+                }
+                else {
+                    var question_next_index = $("div[data-id=" + question_next_id + "]").attr("data-index");
+                    $(this).parent().parent().find('.control-slide').find('.btnNext').html('<a href="#' + question_next_index + '" class="btn btn-danger" >Tiếp</a>');
+
+                    var question_pre_index = $(this).parent().parent().attr('data-index');
+                    $("div[data-id=" + question_next_id + "]").find('.control-slide').find('.btnPre').html('<a href="#' + question_pre_index + '" class="btn btn-danger" >Trở về</a>');
+                }
+            }
+            else {
+                $(this).parent().parent().find('.control-slide').find('.btnNext').html('');
+            }
+        });
+        $('.btnPre').live('click', function () {
+            $(this).parent().parent().find("input[type=radio]").prop('checked', false);
+            $(this).parent().parent().find("input[type=checkbox]").prop('checked', false);
+            $(this).parent().parent().find("textarea").val('');
+            $(this).next().html('');
+
+            var dataPrevID = $(this).children('a').attr('href');
+            if (dataPrevID != null && dataPrevID.indexOf('#') != -1) {
+                dataPrevID = dataPrevID.replace('#', '');
+                $(this).parent().parent().css('display', 'none');
+            }
+            $(this).parent().parent().parent().find('div[data-index=' + dataPrevID + ']').css('display', 'block');
+        });
+        $('.btnNext').live('click', function () {
+            var dataNextID = $(this).children('a').attr('href');
+            if (dataNextID != null && dataNextID.indexOf('#') != -1) {
+                dataNextID = dataNextID.replace('#', '');
+                $(this).parent().parent().css('display', 'none');
+            }
+            $(this).parent().parent().parent().find('div[data-index=' + dataNextID + ']').css('display', 'block');
+        });
+
+        $('.btnNext a').each(function () {
+            var dataNextID = $(this).attr('data-nextid');
+            if (dataNextID != 0) {
+                $(this).attr('href', '#' + $('div[data-id="' + dataNextID + '"]').attr('data-index'));
+            }
+        });
+
+        $("#@Html.IdFor(model => model.StatusCallID)").change(function () {
+            ChangeStatusCall();
+        });
+
+        $("#@Html.IdFor(model => model.StatusID)").change(function () {
+            ChangeStatus();
+        });
+    });
+
+   function ChangeStatus(ctr)
+   {
+       var statusID = $('#StatusID').val();
+       if (statusID == 0)
+       {
+           var tmp = '<option value="0">-- Chọn tình trạng --</option>';
+           $('select[name=StatusCallID]').html(tmp);
+           return;
+       }
+       // khong phai hen goi lai
+       if (statusID != 5 && statusID != 1002) {
+           $("#RecallDate").val("");
+           $(".input-group :input").prop("disabled", true);
+       }
+       else {
+           if ($("#RecallDate").val() == null || $("#RecallDate").val() === '') {
+               $("#RecallDate").val(moment().add(1, 'hours').format("L LT"));
+               $(".input-group :input").prop("disabled", false);
+           }
+           else {
+               $(".input-group :input").prop("disabled", false);
+           }
+       }
+
+       $.ajax({
+           type: "POST",
+           url: '/Customer/GetStatusCallByStatusId?st=' + statusID,
+           dataType: 'json',
+           contentType: "application/json; charset=utf-8",
+           success: function (response) {
+               $('select[name=StatusCallID]').html('');
+               if (response.success) {
+                   var opHtml = '';
+                   for(i=0;i<response.data.length;i++)
+                   {
+                       opHtml += '<option value="' + response.data[i].StatusCallID + '">' + response.data[i].Name + '</option>';
+                   }
+                   $('select[name=StatusCallID]').html(opHtml);
+
+                   
+               }
+           }
+       });
+   }
+
+    function ChangeStatusCall() {
+
+        var statusID = $("#StatusCallID");
+        console.log(statusID.val());
+        $.ajax({
+            type: "POST",
+            url: '/Customer/ChangeStatusCall?statusID=' + statusID.val(),
+            dataType: 'json',
+            contentType: "application/json; charset=utf-8",
+            success: function (response) {
+                if (response.success) {
+                    if ($("#RecallDate").val() == null && $("#RecallDate").val() === '')
+                    {
+                        $("#RecallDate").val(moment().add(1, 'hours').format("L LT"));
+                        $(".input-group :input").prop("disabled", false);
+                    }
+                    else {
+                        $(".input-group :input").prop("disabled", false);
+                    }
+                }
+                else {
+                    $("#RecallDate").val("");
+                    $(".input-group :input").prop("disabled", true);
+                }
+            }
+        });
+    }
+</script>

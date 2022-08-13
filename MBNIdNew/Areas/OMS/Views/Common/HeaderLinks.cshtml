@@ -1,0 +1,81 @@
+﻿@using MB.Web.Core.HTMLHelpers
+@using Microsoft.AspNet.Identity
+@model MB.OMS.Telesale.Domain.Model.UserDTO
+@{
+    var email = Model.Email == null ? "" : Model.Email;
+    var fullName = Model.FullName == null ? "" : Model.FullName;
+}
+
+<li class="nav-item navbar-dropdown dropdown-user dropdown">
+    <a href="javascript:void(0)" class="nav-link dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
+        <div class="avatar avatar-online">
+            @if (Model.ImageUrl != null)
+            {
+                <img src="@Model.ImageUrl" alt class="w-px-40 h-auto rounded-circle">
+            }
+            else if (Model.Gender == true)
+            {
+                <img src="~/Content/AdminLTE/img/avatar2.png" alt class="w-px-40 h-auto rounded-circle">
+            }
+            else if (Model.Gender == false)
+            {
+                <img src="~/Content/AdminLTE/img/avatar.png" alt class="w-px-40 h-auto rounded-circle">
+            }
+        </div>
+    </a>
+    <ul class="dropdown-menu dropdown-menu-end">
+        <!-- User image -->
+        <li>
+            <a class="dropdown-item" href="#">
+                <div class="d-flex">
+                    <div class="flex-shrink-0 me-3">
+                        <div class="avatar avatar-online">
+                            @if (Model.ImageUrl != null)
+                            {
+                                <img src="@Model.ImageUrl" alt class="w-px-40 h-auto rounded-circle">
+                            }
+                            else if (Model.Gender == true)
+                            {
+                                <img src="~/Content/AdminLTE/img/avatar2.png" alt class="w-px-40 h-auto rounded-circle">
+                            }
+                            else if (Model.Gender == false)
+                            {
+                                <img src="~/Content/AdminLTE/img/avatar.png" alt class="w-px-40 h-auto rounded-circle">
+                            }
+                        </div>
+                    </div>
+                    <div class="flex-grow-1">
+                        <span class="fw-semibold d-block">@fullName</span>
+                        <small class="text-muted">@email</small>
+                    </div>
+                </div>
+            </a>
+        </li>
+        <!-- Menu Footer-->
+        <li>
+            <div class="dropdown-divider"></div>
+        </li>
+        <li>
+            <a href="@Url.Action("ChangePassword", "Common")" class="dropdown-item">
+                <i class="bx bx-user me-2"></i>
+                <span class="align-middle">Đổi mật khẩu</span>
+            </a>
+        </li>
+        <li>
+            <div class="dropdown-divider"></div>
+        </li>
+        <li>
+            @if (Request.IsAuthenticated)
+            {
+                using (Html.BeginForm("LogOff", "User", new { area = "Account" }, FormMethod.Post, new { id = "logoutForm" }))
+                {
+                    @Html.AntiForgeryToken()
+                    <a href="javascript:document.getElementById('logoutForm').submit()" class="dropdown-item">
+                        <i class="bx bx-power-off me-2"></i>
+                        <span class="align-middle">Đăng xuất</span>
+                    </a>
+                }
+            }
+        </li>
+    </ul>
+</li>

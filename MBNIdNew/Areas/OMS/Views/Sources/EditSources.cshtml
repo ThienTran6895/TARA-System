@@ -1,0 +1,69 @@
+﻿@using MB.Web.Core.HTMLHelpers
+@using MB.Common.Helpers
+@model MB.OMS.Telesale.Domain.Model.Sources
+@{
+    ViewBag.Title = "Cập nhật nguồn";
+    Layout = "~/Views/Shared/_MasterLayout.cshtml";
+}
+
+@using (Html.MBForm("EditSources", "Sources", new Dictionary<string, object>() { { "id", "form" }, { "class", "form-horizontal" } }))
+{
+    @Html.HiddenFor(model => model.SourceID)
+    @section Breadcrumb {
+        <h1>
+            Quản lý nguồn
+            <small>Cập nhật nguồn</small>
+        </h1>
+        @*<ol class="breadcrumb">
+            <li><a href="@Url.Action("ListCampaigns")"><i class="fa fa-dashboard"></i> Quản lý nguồn</a></li>
+            <li class="active">Cập nhật nguồn</li>
+        </ol>*@
+    }
+    <div class="box box-primary">
+        <div class="box-header with-border">
+            <h3 class="box-title">Cập nhật nguồn</h3>
+        </div>
+        <div class="box-body">
+            <div class="row">
+                <div class="col-md-8 center">                   
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.Link, new { @class = "col-sm-4 control-label" })
+                        <div class="col-sm-8">
+                            @Html.TextBoxFor(model => model.Link, new { @class = "form-control", data_placement = "top", data_title = "Link", data_toggle = "tooltip", @placeholder = "", @readonly = "readonly" })
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.Name, new { @class = "col-sm-4 control-label" })
+                        <div class="col-sm-8">
+                            @Html.TextBoxFor(model => model.Name, new { @class = "form-control", data_placement = "top", data_title = "Tên chiến dịch", data_toggle = "tooltip", @placeholder = "" })
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.Visiable, new { @class = "col-sm-4 control-label" })
+                        <div class="col-sm-4">
+                            @Html.CheckBoxFor(model => model.Visiable)
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="row">
+                        @if(Model.Link != null)
+                        {
+                            <a target="_blank" href="@Url.Action("DownloadExcel", "Sources", new { id = Model.SourceID })" class="btn btn-primary"><i class="fa fa-cloud-download"></i> Tải về</a>
+                        }                       
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="box-footer text-center">
+            <div class="col-md-8 center">
+                @Html.MBButton("btnSave", "Lưu", null, "btn btn-primary")
+                <a href="@Url.Action("ListSources", "Sources")">
+                    <input type="button" class="btn btn-danger" value="Hủy" />
+                </a>
+            </div>
+        </div>
+    </div>
+
+}
+<script src="~/Areas/OMS/Scripts/sources.js"></script>

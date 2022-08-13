@@ -1,0 +1,271 @@
+﻿@using MB.Web.Core
+@using MB.Common.Helpers
+@model MB.OMS.Telesale.Domain.Model.Report
+
+@{
+    ViewBag.Title = "Thống kê báo cáo chi tiết";
+    Layout = "~/Views/Shared/_MasterLayout.cshtml";
+}
+
+@section Breadcrumb {
+    <h1>
+       Thống kê chi tiết
+    </h1>
+<ol class="breadcrumb">
+    <li><i class="fa fa-dashboard"></i>Thống kê</li>
+    <li>Thống kê chi tiết</li>
+</ol>
+}
+
+<div class="box box-success">
+    <div class="box-header with-border">
+        <h3 class="box-title">Danh sách thống kê chi </h3>
+        <div class="box-tools pull-right">
+            @*<a target="_blank" href="@Url.Action("ExportThongKeNangSuat")" class="btn btn-primary">Export</a>*@
+            @if (CommonHelper.CheckPermisionExist(Permissions.XuatThongKeBaoCaoChiTiet.ToString()))
+            {
+                <button class="btn btn-primary" id="btnExport"><i class="fa fa-cloud-download"></i> Export</button>
+                <button class="btn btn-success" id="btnExportSuccess"><i class="fa fa-cloud-download"></i> Export Success</button>
+                <button class="btn btn-primary" id="btnExportFull"><i class="fa fa-cloud-download"></i> Export (FULL)</button>
+                <button class="btn btn-success" id="btnExportSuccessFull"><i class="fa fa-cloud-download"></i> Export Success (FULL)</button>
+            }
+        </div>
+    </div>
+    <div class="box-body">
+        <div class="row form-horizontal">
+            <div class="col-md-5">
+                <div class="form-group">
+                    @Html.Label("Từ ngày", new { @class = "col-sm-4 control-label" })
+                    <div class="col-md-8">
+                        <div class="input-group">
+                            <div class="input-group-addon">
+                                <i class="fa fa-calendar"></i>
+                            </div>
+                            <input type="text" class="form-control pull-right" id="DateFrom">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-5">
+                <div class="form-group">
+                    @Html.Label("Đến ngày", new { @class = "col-sm-4 control-label" })
+                    <div class="col-md-8">
+                        <div class="input-group">
+                            <div class="input-group-addon">
+                                <i class="fa fa-calendar"></i>
+                            </div>
+                            <input type="text" class="form-control pull-right" id="DateEnd">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-2">
+                <button type="button" id="search" class="btn btn-default"><i class="fa fa-fw fa-search"></i>Tìm kiếm</button>
+            </div>
+        </div>
+        <div id="grid" class="box-body table-responsive no-padding k-grid k-widget">
+            <script type="text/javascript">
+                var array = @Html.Raw(Json.Encode(ViewBag.ListCustomerField1))
+                    
+                $(document).ready(function () {
+                    var dataSource = new kendo.data.DataSource({
+                        type: "json",
+                        transport: {
+                            read: {
+                                url: "@Html.Raw(Url.Action("GetListThongKeBaoCaoChiTiet", "Report"))",
+                                type: "POST",
+                                data: additionalData,
+                                dataType: "json",
+                                success: function (result) {
+                                    
+                                    options.success(result);
+                                   
+                                }
+                            }
+                        },
+                        schema: {
+                            data: "Data",
+                            total: "Total",
+                            errors: "Errors"
+                        },
+                        change: function (e) {
+
+                            var data = this.data();
+
+                            
+
+                            for (var row = 0; row < data.length; row++) {
+
+                                var tmpData = data[row];
+
+                                var strDate = new Date(parseInt(tmpData[17].Value.substring(6, tmpData[17].Value.length - 2)));
+
+                                
+
+                                var newStrDate = kendo.toString(strDate, 'dd/MM/yyyy hh:mm:ss tt')
+
+                                tmpData[17].Value = newStrDate;
+
+
+                            }
+
+                           
+
+                        },
+                        error: function (e) {
+                            display_kendoui_grid_error(e);
+                            // Cancel the changes
+                            this.cancelChanges();
+                        },
+                        parameterMap: function (options, type) {
+                            return JSON.stringify(options);
+                        },
+                        pageSize: 20,
+                        serverPaging: true
+                    });
+                    $("#grid").kendoGrid({
+                        dataSource: dataSource,
+                        pageable: {
+                            refresh: true,
+                            pageSizes: [20, 50, 100, 200, 500],
+                            messages: {
+                                display: "Hiển thị {0} - {1} trong {2} dòng",
+                                empty: "Không có dữ liệu",
+                                itemsPerPage: "dòng trên trang. "
+                            }
+                        },
+                        sortable: true,
+                        scrollable: false,
+                        height: 550,
+                        filterable: {
+                            extra: false,
+                            operators: {
+                                string: {
+                                    contains: "Kết quả chứa"
+                                }
+                            },
+                            messages: {
+                                info: "Chọn các mục tìm kiếm : ",
+                                clear: "Xóa",
+                                filter: "Tìm kiếm"
+                            }
+                        },
+                        columns: array,
+                    });
+                    dataSource.fetch(function () {
+                        var data = this.data();
+                        
+                        debugger;
+                        console.log(data[0]);
+                        $("#grid th[data-field='" + array[0] + "'] .k-link").html("STT");
+                        $("#grid th[data-field='" + array[1] + "'] .k-link").html("Di động");
+                        $("#grid th[data-field='" + array[array.length - 5] + "'] .k-link").html("Ngày gọi");
+                        $("#grid th[data-field='" + array[array.length - 4] + "'] .k-link").html("Tình trạng cuộc gọi");
+                        $("#grid th[data-field='" + array[array.length - 3] + "'] .k-link").html("Người gọi");
+                        $("#grid th[data-field='" + array[array.length - 2] + "'] .k-link").html("Ghi chú");
+                        $("#grid th[data-field='" + array[array.length - 1] + "'] .k-link").html("Tổng số lần gọi");
+                        for (var i = 2; i <= array.length; i++) {
+                            $("#grid th[data-field='" + array[i] + "'] .k-link").html(data[0][i + 22].Key);
+                        }
+                        
+                        console.log(data[0]);
+                        
+                    });
+                });
+            </script>
+            <script type="text/javascript">
+
+                $(document).ready(function () {
+                    $("#DateFrom").datepicker({
+                        autoclose: true
+                    });
+                    $("#DateEnd").datepicker({
+                        autoclose: true
+                    });
+                    //search button
+                    $('#search').click(function () {
+                        //search
+                        var grid = $('#grid').data('kendoGrid');
+                        grid.dataSource.page(1);
+
+                        return false;
+                    });
+                    //export
+                    $('#btnExport').click(function () {
+                        var DateFrom = $('#DateFrom').val();
+                        //if (DateFrom == null)
+                        //    DateFrom = "";
+                        var DateEnd = $('#DateEnd').val();
+                        //if (DateEnd == null)
+                        //    DateEnd = "";
+                        window.location.href = '@Url.Action("ExportThongKeChiTietSimple")?DateFrom=' + DateFrom + '&EndDate=' + DateEnd;
+
+                        return false;
+                    });
+
+                    //export
+                    $('#btnExportSuccess').click(function () {
+                        var DateFrom = $('#DateFrom').val();
+                        //if (DateFrom == null)
+                        //    DateFrom = "";
+                        var DateEnd = $('#DateEnd').val();
+                        //if (DateEnd == null)
+                        //    DateEnd = "";
+                        window.location.href = '@Url.Action("ExportThongKeChiTietSimple")?DateFrom=' + DateFrom + '&EndDate=' + DateEnd + "&IsSuccess=true";
+
+                        return false;
+                    });
+
+                    //export full
+                    $('#btnExportFull').click(function () {
+                        var DateFrom = $('#DateFrom').val();
+                        //if (DateFrom == null)
+                        //    DateFrom = "";
+                        var DateEnd = $('#DateEnd').val();
+                        //if (DateEnd == null)
+                        //    DateEnd = "";
+                        window.location.href = '@Url.Action("ExportThongKeChiTietFull")?DateFrom=' + DateFrom + '&EndDate=' + DateEnd;
+
+                        return false;
+                    });
+
+                    //export success full
+                    $('#btnExportSuccessFull').click(function () {
+                        var DateFrom = $('#DateFrom').val();
+                        //if (DateFrom == null)
+                        //    DateFrom = "";
+                        var DateEnd = $('#DateEnd').val();
+                        //if (DateEnd == null)
+                        //    DateEnd = "";
+                        window.location.href = '@Url.Action("ExportThongKeChiTietFull")?DateFrom=' + DateFrom + '&EndDate=' + DateEnd + "&IsSuccess=true";
+
+                        return false;
+                    });
+
+                    $('#DateFrom').keydown(function (even) {
+                        if (even.keyCode == 13) {
+                            var grid = $('#grid').data('kendoGrid');
+                            grid.dataSource.page(1);
+                            return false;
+                        }
+                    });
+                    $('#DateEnd').keydown(function (even) {
+                        if (even.keyCode == 13) {
+                            var grid = $('#grid').data('kendoGrid');
+                            grid.dataSource.page(1);
+                            return false;
+                        }
+                    });
+                });
+
+                function additionalData() {
+                    return {
+                        DateFrom: $('#DateFrom').val(),
+                        DateEnd: $('#DateEnd').val()
+                    };
+                }
+            </script>
+        </div>
+
+    </div>
+</div>

@@ -1,0 +1,75 @@
+﻿@using MB.Web.Core.HTMLHelpers
+@using MB.Common.Helpers
+@using MB.Web.Core
+@model MB.OMS.Telesale.Domain.Model.CustomerDTO
+@{
+    ViewBag.Title = "Quản lý khách hàng";
+    Layout = "~/Views/Shared/_MasterLayout.cshtml";
+}
+
+@using (Html.MBForm("AddCustomer", "Customer", new Dictionary<string, object>() { { "id", "form" }, { "class", "form-horizontal" } }))
+{
+    @section Breadcrumb {
+        <h1>
+            Quản lý khách hàng
+            <small>Thêm mới khách hàng</small>
+        </h1>
+    }
+    @Html.HiddenFor(model => model.ProjectID)
+    <div class="box box-primary">
+        <div class="box-header with-border">
+            <h3 class="box-title">Thêm mới khách hàng</h3>
+        </div>
+        <div class="box-body">
+            <div class="row">
+                <div class="col-md-8 center">
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.MobilePhone, new { @class = "col-sm-4 control-label" })
+                        <div class="col-sm-8">
+                            @Html.TextBoxFor(model => model.MobilePhone, new { @class = "form-control", data_placement = "top", data_title = "Số điện thoại", data_toggle = "tooltip", @placeholder = "" })
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.SourceID, new { @class = "col-sm-4 control-label" })
+                        <div class="col-sm-8">
+                            @Html.DropDownListFor(model => model.SourceID, Model.AvailableSource, new { @class = "form-control", @style = "width:100%;" })
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.Visiable, new { @class = "col-sm-4 control-label" })
+                        <div class="col-sm-4">
+                            @Html.CheckBoxFor(model => model.Visiable)
+                        </div>
+                    </div>
+                    @for(int i = 0; i < Model.AvailableCustomerFieldValue.Count; i++)
+                    {
+                        <div class="form-group">
+                            <label class="col-sm-4 control-label">@Html.DisplayFor(model => model.AvailableCustomerFieldValue[i].FieldName)</label>
+                            <div class="col-sm-8">
+                                @Html.TextBox(Model.AvailableCustomerFieldValue[i].FieldCode, null, new { @class = "form-control", data_placement = "top", data_title = Model.AvailableCustomerFieldValue[i].FieldName, data_toggle = "tooltip", @placeholder = "" })
+                            </div>
+                        </div>    
+                    }             
+                </div>
+            </div>
+        </div>
+        <div class="box-footer text-center">
+            <div class="col-md-8 center">
+                @if (CommonHelper.CheckPermisionExist(Permissions.ThemKhachHangMoi.ToString()))
+                {
+                    @Html.MBButton("btnSave", "Lưu", null, "btn btn-primary")
+                }                
+                <a href="@Url.Action("ListCustomer", "Customer")">
+                    <input type="button" class="btn btn-danger" value="Hủy" />
+                </a>
+            </div>
+        </div>
+    </div>
+
+}
+<script src="~/Areas/OMS/Scripts/customer.js"></script>
+<script>
+    $(document).ready(function () {
+        $("#@Html.IdFor(model => model.SourceID)").select2();
+    });
+</script>

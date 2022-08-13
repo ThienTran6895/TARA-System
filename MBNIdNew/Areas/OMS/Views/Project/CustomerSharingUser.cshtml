@@ -1,0 +1,164 @@
+﻿@using MB.Web.Core.HTMLHelpers
+@model MB.OMS.Telesale.Domain.Model.CustomerDTO
+
+@{
+    ViewBag.Title = "Quản lý dự án";
+    Layout = "~/Views/Shared/_MasterLayout.cshtml";
+}
+
+@section Breadcrumb {
+    <h1>
+        Quản lý dự án
+        <small>Chia KH cho ĐTV</small>
+    </h1>
+}
+@Html.Hidden("CustomerTotal")
+
+<div class="box box-primary">
+    <div class="box-header with-border">
+        <h3 class="box-title">Chia KH cho ĐTV</h3>
+    </div>
+    <div class="box-body form-horizontal">
+        <div class="row">
+            <div class="col-md-10 center">
+                <div class="form-group">
+                    @Html.LabelFor(model => model.SourceID, new { @class = "col-sm-3 control-label" })
+                    <div class="col-sm-8">
+                        @Html.DropDownListFor(model => model.SourceID, Model.AvailableSource, new { @class = "form-control", @style = "width:100%;" })
+                    </div>
+                    <div class="col-md-1"><button type="button" id="searchSource" class="btn btn-primary">Tìm kiếm</button></div>
+                </div>
+                <div class="form-group">
+                    @Html.Label("Tổng số khách hàng", new { @class = "col-sm-3 control-label" })
+                    <div class="col-sm-8">
+                        <h5><span id="TotalCustomer" class="label label-danger">0</span> </h5>
+                    </div>
+                </div>
+                <div class="form-group">
+                    @Html.LabelFor(model => model.CountCustomer, new { @class = "col-sm-3 control-label" })
+                    <div class="col-sm-8">
+                        @Html.TextBoxFor(model => model.CountCustomer, new { @class = "numeric" })
+                    </div>
+                </div>
+            </div>
+        </div>
+        <hr />
+        <div class="row">
+            <div class="col-md-12 center">
+                <div class="form-group">
+                    @Html.LabelFor(model => model.UserId, new { @class = "col-sm-2 control-label" })
+                    <div class="col-sm-10">
+                        @Html.ListBoxFor(model => model.UserId, Model.AvailableUser, new { @class = "form-control", @multiple = "multiple", @style = "width:100%;" })
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="box-footer text-center">
+        <div class="col-md-10 center">
+            @Html.MBButton("btnSave", "Lưu", null, "btn btn-primary")
+            <a href="@Url.Action("ListProjects", "Project")">
+                <input type="button" class="btn btn-danger" value="Hủy" />
+            </a>
+        </div>
+    </div>
+</div>
+
+
+<script>
+
+    $(document).ready(function () {
+        $("#@Html.IdFor(model => model.SourceID)").select2();
+        $("#@Html.IdFor(model => model.UserId)").select2({
+            placeholder: "Chọn điện thoại viên"
+        });
+        $(".numeric").kendoNumericTextBox({
+            format: "n0"
+        });
+
+        $('#searchSource').click(function (e) {
+
+            var sourceId = $("#SourceID").val();
+
+            var postData = {
+                sourceId: sourceId
+            };
+
+            if (sourceId == 0)
+            {
+                swal({ title: "Tìm kiếm không thành công", text: "Chọn nguồn trước khi tìm kiếm", type: "error" });
+            }
+            else {              
+                $.ajax({
+                    type: "POST",
+                    url: "@(Url.Action("SearchSource", "Project"))",
+                    data: postData,
+                    success: function (data) {
+                        $("#TotalCustomer").html(data.TotalCustomer);
+                        $("#CustomerTotal").val(data.TotalCustomer);
+                    },
+                    error: function(xhr, ajaxOptions, thrownError) {
+                        alert(thrownError);
+                    },
+                });                                              
+            }                      
+            return false;
+        });
+
+        $('#btnSave').click(function (e) {
+
+            var sourceId = $("#SourceID").val();
+            var countCustomer = $("#CountCustomer").val();
+            var userId = $("#UserId").val();
+            var customerTotal = $("#CustomerTotal").val();
+
+            var postData = {
+                SourceID: sourceId,
+                CountCustomer: countCustomer,
+                UserId: userId
+            };
+
+            if (userId == null)
+            {
+                swal({ title: "Lưu không thành công", text: "Chọn điện thoại viên trước khi lưu", type: "error" });
+            }
+            else if (countCustomer == "0")
+            {
+                swal({ title: "Lưu không thành công", text: "Chọn số lượng khách hàng trước khi lưu", type: "error" });
+            }
+            else if (parseInt(countCustomer) > parseInt(customerTotal))
+            {
+                swal({ title: "Lưu không thành công", text: "Số lượng KH của nguồn phải lớn hơn hoặc bằng số lượng KH muốn phân công !", type: "error" });
+            }
+            else if (parseInt(countCustomer) < userId.length) {
+                swal({ title: "Lưu không thành công", text: "Số lượng KH phải lớn hơn số lượng ĐTV !", type: "error" });
+            }
+            else {              
+                $.ajax({
+                    type: "POST",
+                    url: "@(Url.Action("CustomerSharingUser", "Project"))",
+                    data: postData,
+                    beforeSend: function () {
+                        // setting a timeout
+                        swal({ title: "Thông báo", text: "Quá trình phân chia đang thực hiện. Cám ơn", type: "success" });
+                        $("#kendoloading").show();
+                    },
+                    success: function (data) {
+                        $("#kendoloading").hide();
+                        if (data.Result == "success")
+                        {
+                            swal({ title: data.Title, text: data.Message, type: "success" }, function () {
+                                if (data.URLEdit != null)
+                                    window.location.href = data.URLEdit;
+                            });
+                        }                          
+                    },
+                    error: function(xhr, ajaxOptions, thrownError) {
+                        alert(thrownError);
+                    },
+                });                                              
+            }                      
+            return false;
+        });
+    });
+</script>

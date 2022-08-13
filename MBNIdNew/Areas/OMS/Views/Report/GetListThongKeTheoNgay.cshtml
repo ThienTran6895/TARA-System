@@ -1,0 +1,212 @@
+﻿@using MB.Web.Core
+@using MB.Common.Helpers
+@model MB.OMS.Telesale.Domain.Model.Report
+
+@{
+    ViewBag.Title = "Thống kê theo ngày";
+    Layout = "~/Views/Shared/_MasterLayout.cshtml";
+}
+
+@section Breadcrumb {
+    <h1>
+        Quản lý thống kê
+        <small>Danh sách thống kê theo ngày</small>
+    </h1>
+}
+
+<div class="box box-success">
+    <div class="box-header with-border">
+        <h3 class="box-title">Danh sách thống kê theo ngày</h3>
+        <div class="box-tools pull-right">
+            @if (CommonHelper.CheckPermisionExist(Permissions.XuatThongKeTheoNgay.ToString()))
+            {
+                <button class="btn btn-primary" id="btnExport"><i class="fa fa-cloud-download"></i> Export</button>
+            }
+        </div>
+    </div>
+    <div class="box-body">
+        <div class="row form-horizontal">
+            <div class="col-md-5">
+                <div class="form-group">
+                    @Html.Label("Từ ngày", new { @class = "col-sm-4 control-label" })
+                    <div class="col-md-8">
+                        <div class="input-group">
+                            <div class="input-group-addon">
+                                <i class="fa fa-calendar"></i>
+                            </div>
+                            <input type="text" class="form-control pull-right" id="DateFrom" value="@Model.DateFrom" data-date="@Model.DateFrom">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-5">
+                <div class="form-group">
+                    @Html.Label("Đến ngày", new { @class = "col-sm-4 control-label" })
+                    <div class="col-md-8">
+                        <div class="input-group">
+                            <div class="input-group-addon">
+                                <i class="fa fa-calendar"></i>
+                            </div>
+                            <input type="text" class="form-control pull-right" id="DateEnd" value="@Model.DateEnd" data-date="@Model.DateEnd">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-2">
+                <button type="button" id="search" class="btn btn-default"><i class="fa fa-fw fa-search"></i>Tìm kiếm</button>
+            </div>
+        </div>
+        <div id="grid" class="box-body table-responsive no-padding k-grid k-widget">
+            <script type="text/javascript">
+
+                $(document).ready(function () {
+                    $("#DateFrom").datepicker({
+                        autoclose: true
+                    });
+                    $("#DateEnd").datepicker({
+                        autoclose: true
+                    });
+                    
+                    //$("#DateFrom").datepicker("setDate", new Date("@Model.DateFrom"));
+                    //$("#DateEnd").datepicker("setDate", new Date("@Model.DateEnd"));
+
+                    $("#grid").kendoGrid({
+                        dataSource: {
+                            type: "json",
+                            transport: {
+                                read: {
+                                    url: "@Html.Raw(Url.Action("GetListThongKeTheoNgay", "Report"))",
+                                    type: "POST",
+                                    data:additionalData,
+                                    dataType: "json",
+                                    success: function (result) {
+                                        options.success(result);
+                                    }
+                                }
+                            },
+                            schema: {
+                                data: "Data",
+                                total: "Total",
+                                errors: "Errors"
+                            },
+                            error: function (e) {
+                                display_kendoui_grid_error(e);
+                                // Cancel the changes
+                                this.cancelChanges();
+                            },
+                            parameterMap: function (options, type) {
+                                return JSON.stringify(options);
+                            },
+                            pageSize: 20,
+                            serverPaging: true
+                        },
+                        pageable: {
+                            refresh: true,
+                            pageSizes: [20, 50, 100, 200, 500],
+                            messages: {
+                                display: "Hiển thị {0} - {1} trong {2} dòng",
+                                empty: "Không có dữ liệu",
+                                itemsPerPage: "dòng trên trang. "
+                            }
+                        },
+                        sortable: true,
+                        scrollable: false,
+                        height: 800,
+                        filterable: {
+                            extra: false,
+                            operators: {
+                                string: {
+                                    contains: "Kết quả chứa"
+                                }
+                            },
+                            messages: {
+                                info: "Chọn các mục tìm kiếm : ",
+                                clear: "Xóa",
+                                filter: "Tìm kiếm"
+                            }
+                        },
+                        columns: [
+                            {
+                                field: "StatusName",
+                                title: "Status Call",
+                                headerAttributes: { style: "text-align:left;" }
+                            }, {
+                                title: "Total data",
+                                headerAttributes: { style: "text-align:center" },
+                                columns: [
+                                    { field: "SL", title: "#" },
+                                    { field: "Vol", title: "%" }
+                                ]
+                            },
+                            @{
+                                var startDate = DateTime.Parse(Model.DateFrom); // DateTime.Parse("11/15/2017");
+                                var endDate = DateTime.Parse(Model.DateEnd); // DateTime.Parse("01/15/2018");
+                                int count = 1;
+                                foreach (DateTime day in CommonHelper.EachDay(startDate, endDate))
+                                {
+                                            @Html.Raw("{title: \""+ day.ToString("dd/MM/yy") + "\",headerAttributes: { style: \"text-align:center\" },columns: [{ field: \"SL"+ count + "\", title: \"SL\" },{ field: \"Vol"+ count + "\", title: \"%\" }]}");
+                                            if (day.Date != endDate.Date)
+                                            {
+                                                @Html.Raw(",");
+                                            }
+                                            count++;
+                                        }
+                                    }
+                        ]
+                    });
+                });
+            </script>
+            <script type="text/javascript">
+
+                $(document).ready(function () {
+
+                    //search button
+                    $('#search').click(function () {
+                        //search
+                        var DateFrom = $('#DateFrom').val();
+                        var DateEnd = $('#DateEnd').val();
+                        window.location.href = '@Url.Action("GetListThongKeTheoNgay")?DateFrom=' + DateFrom + '&EndDate=' + DateEnd;
+
+                        return false;
+                    });
+
+                    //export
+                    $('#btnExport').click(function () {
+                        var DateFrom = $('#DateFrom').val();
+                        //if (DateFrom == null)
+                        //    DateFrom = "";
+                        var DateEnd = $('#DateEnd').val();
+                        //if (DateEnd == null)
+                        //    DateEnd = "";
+                        window.location.href = '@Url.Action("ExportThongKeTheoNgay")?DateFrom=' + DateFrom + '&EndDate=' + DateEnd;
+
+                        return false;
+                    });
+
+                    $('#DateFrom').keydown(function (even) {
+                        if (even.keyCode == 13) {
+                            var grid = $('#grid').data('kendoGrid');
+                            grid.dataSource.page(1);
+                            return false;
+                        }
+                    });
+                    $('#DateEnd').keydown(function (even) {
+                        if (even.keyCode == 13) {
+                            var grid = $('#grid').data('kendoGrid');
+                            grid.dataSource.page(1);
+                            return false;
+                        }
+                    });
+                });
+
+                function additionalData() {
+                    return {
+                        DateFrom: $('#DateFrom').val(),
+                        DateEnd: $('#DateEnd').val()
+                    };
+                }
+            </script>
+        </div>
+
+    </div>
+</div>

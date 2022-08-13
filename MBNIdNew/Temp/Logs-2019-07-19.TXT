@@ -1,0 +1,24 @@
+﻿# Main
+# time level ip user class thread message
+
+# Main
+# time level ip user class thread message
+12:08:50 INFO  ::1 duong [OMS.CallLogRepository] [10] - GetAllCallHistoryDatasource ,87a448f7-4c7a-4f31-b005-0250da652eb8
+12:08:55 INFO  ::1 duong [OMS.CallLogRepository] [10] - GetAllCallHistoryDatasource ,0de88625-ff58-485e-a28c-01e354e62e25
+12:09:08 INFO  ::1 duong [OMS.CallLogRepository] [9] - GetAllCallHistoryDatasource 103345,
+12:12:50 INFO  ::1 duong [OMS.CallLogRepository] [10] - GetAllCallHistoryDatasource 103342,
+12:13:17 FATAL ::1 duong [OMS.StatusCallRepository] [15] - Error GetStatusCall, Detail: System.InvalidOperationException: Sequence contains no elements
+   at System.Linq.Enumerable.First[TSource](IEnumerable`1 source)
+   at MB.OMS.Telesale.Repository.StatusCallRepository.GetStatusCall(Int32 id) in D:\Workspace\SVN\BPO_OMS_MVC_AUTOCALL\Module\OMS\MB.OMS.Telesale.Repository\StatusCallRepository.cs:line 119
+12:13:48 INFO  ::1 duong [OMS.CallLogRepository] [15] - GetAllCallHistoryDatasource 103343,
+12:14:03 FATAL ::1 duong [OMS.StatusCallRepository] [18] - Error GetStatusCall, Detail: System.InvalidOperationException: Sequence contains no elements
+   at System.Linq.Enumerable.First[TSource](IEnumerable`1 source)
+   at MB.OMS.Telesale.Repository.StatusCallRepository.GetStatusCall(Int32 id) in D:\Workspace\SVN\BPO_OMS_MVC_AUTOCALL\Module\OMS\MB.OMS.Telesale.Repository\StatusCallRepository.cs:line 119
+12:16:00 INFO  ::1 duong [OMS.CallLogRepository] [18] - GetAllCallHistoryDatasource 103342,
+
+# Main
+# time level ip user class thread message
+
+# Main
+# time level ip user class thread message
+

@@ -1,0 +1,121 @@
+﻿@using MB.Web.Core
+@using MB.Common.Helpers
+@model MB.OMS.Telesale.Domain.Model.Campaigns
+
+@{
+    ViewBag.Title = "Quản lý chiến dịch";
+    Layout = "~/Views/Shared/_MasterLayout.cshtml";
+}
+
+@section Breadcrumb {
+    <h1>
+        Quản lý chiến dịch
+        <small>Danh sách chiến dịch</small>
+    </h1>
+}
+
+<div class="box box-default">
+    <div class="box-header with-border">
+        <h3 class="box-title">Danh sách chiến dịch</h3>
+        <div class="box-tools pull-right">
+            @if (CommonHelper.CheckPermisionExist(Permissions.ThemChienDich.ToString()))
+            {
+                <a href="@Url.Action("AddCampaigns")" class="btn btn-primary">Thêm mới</a>
+            }
+        </div>
+    </div>
+    <div class="box-body">
+        <div id="grid" class="box-body table-responsive no-padding k-grid k-widget">
+            <script type="text/javascript">
+
+                $(document).ready(function () {
+                    $("#grid").kendoGrid({
+                        dataSource: {
+                            type: "json",
+                            transport: {
+                                read: {
+                                    url: "@Html.Raw(Url.Action("GetListCampaigns", "Campaign"))",
+                                    type: "POST",
+                                    dataType: "json",
+                                    contentType: "application/json"
+                                },
+                                parameterMap: function (data, operation) {
+                                    if (operation != "read") {
+                                        return data;
+                                    } else {
+                                        //for some reasons only such "Filter" data be parsed
+                                        return JSON.stringify(data);
+                                    }
+                                }
+                            },
+                            schema: {
+                                data: "Data",
+                                total: "Total",
+                                errors: "Errors"
+                            },
+                            error: function (e) {
+                                display_kendoui_grid_error(e);
+                                // Cancel the changes
+                                this.cancelChanges();
+                            },
+                            pageSize: 20,
+                            serverPaging: true,
+                            serverFiltering: true,
+                            serverSorting: true
+                        },
+                        pageable: {
+                            refresh: true,
+                            pageSizes: [20, 50, 100, 200, 500],
+                            messages: {
+                                display: "Hiển thị {0} - {1} trong {2} dòng",
+                                empty: "Không có dữ liệu",
+                                itemsPerPage: "dòng trên trang. "
+                            }
+                        },
+                        sortable: true,
+                        filterable: {
+                            extra: false,
+                            operators: {
+                                string: {
+                                    contains: "Kết quả chứa"
+                                }
+                            },
+                            messages: {
+                                info: "Chọn các mục tìm kiếm : ",
+                                clear: "Xóa",
+                                filter: "Tìm kiếm"
+                            }
+                        },
+                        scrollable: false,
+                        columns: [{
+                            field: "Name",
+                            title: "Tên chiến dịch",
+                            headerAttributes: { style: "text-align:left;" },
+                            width: 200
+                        }, {
+                            field: "Visiable",
+                            title: "Trạng thái",
+                            attributes: { style: "text-align:center; width:50px;" },
+                            template: "#if(Visiable) {#<div class='text-center'><span class='label label-primary'>Kích hoạt</span></div>#} else{#<div class='text-center'><span class='label label-danger'>Chưa kích hoạt</span></div>#}#",
+                            width: 50,
+                            filterable: false,
+                            sortable: false,
+                        }, {
+                            @if (CommonHelper.CheckPermisionExist(Permissions.SuaChienDich.ToString()))
+                            {
+                                <text>
+                                    field: "",
+                                    title: "Cập nhật",
+                                    attributes: { style: "text-align:center; width:30px;" },
+                                    template: '<a title="Cập nhật" href="@Url.Action("EditCampaigns", "Campaign")/#=CampaignID#"><span class="glyphicon glyphicon-edit"></span></a>',
+                                    width: 30
+                                </text>
+                            }
+                        }
+                        ]
+                    });
+                });
+            </script>
+        </div>
+    </div>
+</div>

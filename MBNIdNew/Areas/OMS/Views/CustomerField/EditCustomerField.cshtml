@@ -1,0 +1,73 @@
+﻿@using MB.Web.Core.HTMLHelpers
+@using MB.Common.Helpers
+@using MB.Web.Core
+@model MB.OMS.Telesale.Domain.Model.CustomerFieldDTO
+@{
+    ViewBag.Title = "Cập nhật thuộc tính khách hàng";
+    Layout = "~/Views/Shared/_MasterLayout.cshtml";
+}
+
+@using (Html.MBForm("EditCustomerField", "CustomerField", new Dictionary<string, object>() { { "id", "form" }, { "class", "form-horizontal" } }))
+{
+    @Html.HiddenFor(model => model.CustomerFieldID)
+    @section Breadcrumb {
+        <h1>
+            Quản lý thuộc tính khách hàng
+            <small>Cập nhật thuộc tính khách hàng</small>
+        </h1>
+        @*<ol class="breadcrumb">
+            <li><a href="@Url.Action("ListCustomerField")"><i class="fa fa-dashboard"></i> Quản lý thuộc tính khách hàng</a></li>
+            <li class="active">Cập nhật thuộc tính khách hàng</li>
+        </ol>*@
+    }
+
+    <div class="box box-primary">
+        <div class="box-header with-border">
+            <h3 class="box-title">Cập nhật thuộc tính khách hàng</h3>
+        </div>
+        <div class="box-body">
+            <div class="row">
+                <div class="col-md-8 center">
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.FieldCode, new { @class = "col-sm-4 control-label" })
+                        <div class="col-sm-8">
+                            @Html.TextBoxFor(model => model.FieldCode, new { @class = "form-control", data_placement = "top", data_title = "Mã thuộc tính", data_toggle = "tooltip", @placeholder = "" })
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.FieldName, new { @class = "col-sm-4 control-label" })
+                        <div class="col-sm-8">
+                            @Html.TextBoxFor(model => model.FieldName, new { @class = "form-control", data_placement = "top", data_title = "Tên thuộc tính", data_toggle = "tooltip", @placeholder = "" })
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.Order, new { @class = "col-sm-4 control-label" })
+                        <div class="col-sm-8">
+                            @Html.TextBoxFor(model => model.Order, new { @class = "numeric" })
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="box-footer text-center">
+            <div class="col-md-8 center">
+                @Html.MBButton("btnSave", "Lưu", null, "btn btn-primary")                             
+                @if (CommonHelper.CheckPermisionExist(Permissions.XoaThuocTinhKH.ToString()))
+                {
+                    @Html.MBButton("btnDelete", "Xóa", null, "btn btn-warning")
+                }                               
+                <a href="@Url.Action("ListCustomerField", "CustomerField")">
+                    <input type="button" class="btn btn-danger" value="Hủy" />
+                </a>
+            </div>
+        </div>
+    </div>
+}
+<script src="~/Areas/OMS/Scripts/customerfield.js"></script>
+<script>
+    $(document).ready(function () {
+        $(".numeric").kendoNumericTextBox({
+            format: "n0"
+        });
+    });
+</script>

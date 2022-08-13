@@ -1,0 +1,107 @@
+﻿@using MB.Web.Core.HTMLHelpers
+@using MB.Web.Core
+@using MB.Common.Helpers
+@using System.Globalization
+@model IEnumerable<MB.OMS.Telesale.Domain.Model.CallLog>
+
+<li class="dropdown notifications-menu">
+    <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+        <i class="fa fa-bell-o"></i>
+        <span class="label label-warning">@Model.Count()</span>
+    </a>
+    <ul class="dropdown-menu">
+        <li class="header">Bạn có @Model.Count() khách hàng cần gọi lại</li>
+        <li>
+            <!-- inner menu: contains the actual data -->
+            <ul class="menu">
+                @foreach (var item in Model)
+                {
+                    <li onclick="showPopup('@item.CustomerID','@item.CallLogID')">
+                        <a href="#">
+                            <i class="fa fa-phone text-aqua"></i> @item.MobilePhone - @String.Format("{0:dd/MM/yyyy HH:mm:ss}", @item.RecallDate.Value)
+                        </a>
+                    </li>
+                }
+            </ul>
+        </li>
+    </ul>
+</li>
+
+<div class="modal fade" id="myModalCall" role="dialog">
+    <div class="modal-dialog modal-lg" role="document">
+        @using (Html.MBForm("CallSurvey", "Customer", new Dictionary<string, object>() { { "id", "form" } }))
+        {
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">Khảo sát</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="form-group">
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    @Html.MBButton("btnSaveCall", "Lưu", null, "btn btn-primary")
+                    <button type="button" class="btn btn-default" data-dismiss="modal"><i class="fa fa-remove"></i> Đóng</button>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('#btnSaveCall').click(function (e) {
+            e.preventDefault();
+            var statusCallId = $('select[name=StatusCallID] option:selected').val();
+            if (statusCallId == 0 || statusCallId=='') {
+                swal({ title: "Thông báo", text: "Vui lòng chọn tình trạng cuộc gọi.", type: "error", confirmButtonText: "Đóng" });
+            }
+            else {
+                var form = $("#form").serialize();
+
+                $.ajax({
+                    type: "POST",
+                    url: "@(Url.Action("CallSurvey", "Customer"))",
+                    data: form,
+                    dataType: 'json',
+                    success: function (data) {
+                        if (data.Result) {
+                            $('#myModalCall').modal('toggle');
+                            window.location.href = "/OMS/Customer/ListCustomerInitial";
+                        }
+                        else {
+                            swal({ title: "Lỗi", text: data.Message, type: "error", confirmButtonText: "Đóng" });
+                        }
+                    },
+                    error: function (xhr, ajaxOptions, thrownError) {
+                        alert(thrownError);
+                    }
+                });
+            }
+            return false;
+        });
+    });
+    function showPopup(customerID, callLogID) {
+        
+        $.ajax({
+            type: "GET",
+            dataType: 'json',
+            url: '@Url.Action("CallSurvey", "Customer")?customerID=' + customerID + '&callLogID=' + callLogID,
+            success: function (result) {
+                debugger;
+                if (result.success) {
+                    var mymodal = $('#myModalCall');
+                    mymodal.find('.modal-body').html(result.html);
+                    mymodal.modal('show');
+                }
+                else {
+                    
+                    swal({ title: result.message, confirmButtonText: "Đóng" });
+                }
+            }
+        });
+    }
+</script>

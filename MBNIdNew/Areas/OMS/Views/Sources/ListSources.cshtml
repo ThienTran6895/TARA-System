@@ -1,0 +1,245 @@
+﻿@using MB.Web.Core
+@using MB.Common.Helpers
+@model MB.OMS.Telesale.Domain.Model.Sources
+
+@{
+    ViewBag.Title = "Quản lý nguồn";
+    Layout = "~/Views/Shared/_MasterLayout.cshtml";
+}
+
+@section Breadcrumb {
+    <h1>
+        Quản lý nguồn
+        <small>Danh sách nguồn</small>
+    </h1>
+}
+
+<div class="box box-default">
+    <div class="box-header with-border">
+        <h3 class="box-title">Danh sách nguồn</h3>
+        <div class="box-tools pull-right">
+            @if (CommonHelper.CheckPermisionExist(Permissions.ThemNguon.ToString()))
+            {
+                <a href="@Url.Action("AddSources")" class="btn btn-primary"><i class="fa fa-plus-square"></i> Thêm mới</a>
+            }
+            @if (CommonHelper.CheckPermisionExist(Permissions.XoaNguon.ToString()))
+            {
+                <a id="deleteSource" class="btn btn-primary"><i class="fa fa-remove"></i> Xóa</a>
+            }
+        </div>
+
+    </div>
+
+
+    <div class="box-body">
+        <div id="grid" class="box-body table-responsive no-padding k-grid k-widget">
+            <script type="text/javascript">
+
+                $(document).ready(function () {
+                    $("#grid").kendoGrid({
+                        dataSource: {
+                            type: "json",
+                            transport: {
+                                read: {
+                                    url: "@Html.Raw(Url.Action("GetListSources", "Sources"))",
+                                    type: "POST",
+                                    dataType: "json",
+                                    success: function (result) {
+                                        options.success(result);
+                                    }
+                                }
+                            },
+                            schema: {
+                                data: "Data",
+                                total: "Total",
+                                errors: "Errors"
+                            },
+                            error: function (e) {
+                                display_kendoui_grid_error(e);
+                                // Cancel the changes
+                                this.cancelChanges();
+                            },
+                            parameterMap: function (options, type) {
+                                return JSON.stringify(options);
+                            },
+                            pageSize: 20,
+                            serverPaging: true,
+                            serverFiltering: true,
+                            serverSorting: true
+                        },
+                        pageable: {
+                            refresh: true,
+                            pageSizes: [20, 50, 100, 200, 500],
+                            messages: {
+                                display: "Hiển thị {0} - {1} trong {2} dòng",
+                                empty: "Không có dữ liệu",
+                                itemsPerPage: "dòng trên trang. "
+                            }
+                        },
+                        sortable: true,
+                        filterable: {
+                            extra: false,
+                            operators: {
+                                string: {
+                                    contains: "Kết quả chứa"
+                                }
+                            },
+                            messages: {
+                                info: "Chọn các mục tìm kiếm : ",
+                                clear: "Xóa",
+                                filter: "Tìm kiếm"
+                            }
+                        },
+                        scrollable: true,
+                        dataBound: onDataBound,
+                        columns: [{
+                            field: "SourceID",
+                            headerTemplate: "<input id='mastercheckbox' type='checkbox'/>",
+                            headerAttributes: { style: "text-align:center" },
+                            attributes: { style: "text-align:center" },
+                            template: "<input type='checkbox' value='#=SourceID#' class='checkboxGroups'/>",
+                            width: 30,
+                            filterable: false,
+                            sortable: false
+                        }, {
+                            field: "Name",
+                            title: "Tên nguồn",
+                            headerAttributes: { style: "text-align:left;" },
+                            width: 150
+                        }, {
+                            field: "Link",
+                            title: "Link",
+                            headerAttributes: { style: "text-align:left;" },
+                            width: 250,
+                            filterable: false,
+                            sortable: false
+                        }, {
+                            field: "Visiable",
+                            title: "Trạng thái",
+                            attributes: { style: "text-align:center; width:50px;" },
+                            template: "#if(Visiable) {#<div class='text-center'><span class='badge rounded-pill bg-primary'>Kích hoạt</span></div>#} else{#<div class='text-center'><span class='badge rounded-pill bg-danger'>Chưa kích hoạt</span></div>#}#",
+                            width: 50,
+                            filterable: false,
+                            sortable: false
+                        }, {
+                            @if (CommonHelper.CheckPermisionExist(Permissions.SuaNguon.ToString()))
+                            {
+                                <text>
+
+                                    field: "",
+                                    title: "Cập nhật",
+                                    attributes: { style: "text-align:center; width:30px;" },
+                            template: '<a title="Cập nhật" href="@Url.Action("EditSources", "Sources")/#=SourceID#"><span class="bx bxs-edit"></span></a>',
+                                    width: 30
+                                </text>
+                            }                         
+                        }
+                        ]
+                    });
+                });
+            </script>
+            <script type="text/javascript">
+                var selectedIds = [];
+                $(document).ready(function () {
+                    
+                    $('#mastercheckbox').click(function () {
+                        $('.checkboxGroups').attr('checked', $(this).is(':checked')).change();
+                    });
+                    //wire up checkboxes.
+                    $('#grid').on('change', 'input[type=checkbox][id!=mastercheckbox]', function (e) {
+                        var $check = $(this);
+                        if ($check.is(":checked") == true) {
+                            var checked = jQuery.inArray($check.val(), selectedIds);
+                            if (checked == -1) {
+                                //add id to selectedIds.
+                                selectedIds.push($check.val());
+                            }
+                        }
+                        else {
+                            var checked = jQuery.inArray($check.val(), selectedIds);
+                            if (checked > -1) {
+                                //remove id from selectedIds.
+                                selectedIds = $.grep(selectedIds, function (item, index) {
+                                    return item != $check.val();
+                                });
+                            }
+                        }
+                        updateMasterCheckbox();
+                    });
+                    //Delete Source
+                    $('#deleteSource').click(function (e) {
+                        e.preventDefault();
+
+                        var postData = {
+                            selectedIds: selectedIds
+                        };
+
+                        if (selectedIds.length <= 0)
+                        {
+                            swal({ title: "Xóa dự án không thành công", text: "Chọn dự án trước khi xóa", type: "error" });
+                        }
+                        else {
+
+                            swal({
+                                title: "Xác nhận xóa!",
+                                text: "Bạn có chắc chắn xóa không?",
+                                type: "warning",
+                                showCancelButton: true,
+                                cancelButtonText: "Hủy",
+                                confirmButtonColor: "#DD6B55",
+                                confirmButtonText: "Xác nhận!",
+                                closeOnConfirm: false,
+                                showLoaderOnConfirm: true,
+                            }, function (isConfirm) {
+                                if (isConfirm) {
+                                    $.ajax({
+                                        cache: false,
+                                        type: "POST",
+                                        url: "@(Url.Action("DeleteSources", "Sources"))",
+                                        data: postData,
+                                    success: function (data) {
+                                        //reload grid
+                                        var grid = $('#grid').data('kendoGrid');
+                                        grid.dataSource.read();
+
+                                        swal({title: data.Title, text: data.Message, type: "success"});
+
+                                        selectedIds = [];
+                                    },
+                                    error: function(xhr, ajaxOptions, thrownError) {
+                                        alert(thrownError);
+                                    },
+                                    traditional: true
+                                });
+                            }
+                            });                            
+                    }
+                       
+                            return false;
+                });
+                });
+                
+
+                function onDataBound(e) {
+                    $('#grid input[type=checkbox][id!=mastercheckbox]').each(function () {
+                        var currentId = $(this).val();
+                        var checked = jQuery.inArray(currentId, selectedIds);
+                        //set checked based on if current checkbox's value is in selectedIds.
+                        $(this).attr('checked', checked > -1);
+                    });
+
+                    updateMasterCheckbox();
+                }
+
+                function updateMasterCheckbox() {
+                    var numChkBoxes = $('#grid input[type=checkbox][id!=mastercheckbox]').length;
+                    var numChkBoxesChecked = $('#grid input[type=checkbox][id!=mastercheckbox]:checked').length;
+                    $('#mastercheckbox').attr('checked', numChkBoxes == numChkBoxesChecked && numChkBoxes > 0);
+                }
+
+            </script>
+        </div>
+
+    </div>
+</div>
+

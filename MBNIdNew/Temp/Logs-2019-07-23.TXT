@@ -1,0 +1,116 @@
+﻿# Main
+# time level ip user class thread message
+
+# Main
+# time level ip user class thread message
+09:22:12 INFO  ::1 duong [OMS.CustomerRepository] [4] - Page:1|PageSize:20|projectID:3033|sourceID:|phone:|visiable:
+09:22:16 FATAL ::1 duong [OMS.CustomerRepository] [4] - Error CustomerGetAllFieldValueNotInProjectDatasource, Detail: System.Data.SqlClient.SqlException (0x80131904): Execution Timeout Expired.  The timeout period elapsed prior to completion of the operation or the server is not responding. ---> System.ComponentModel.Win32Exception (0x80004005): The wait operation timed out
+   at System.Data.SqlClient.SqlConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   at System.Data.SqlClient.SqlInternalConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   at System.Data.SqlClient.TdsParser.ThrowExceptionAndWarning(TdsParserStateObject stateObj, Boolean callerHasConnectionLock, Boolean asyncClose)
+   at System.Data.SqlClient.TdsParser.TryRun(RunBehavior runBehavior, SqlCommand cmdHandler, SqlDataReader dataStream, BulkCopySimpleResultSet bulkCopyHandler, TdsParserStateObject stateObj, Boolean& dataReady)
+   at System.Data.SqlClient.SqlDataReader.TryConsumeMetaData()
+   at System.Data.SqlClient.SqlDataReader.get_MetaData()
+   at System.Data.SqlClient.SqlCommand.FinishExecuteReader(SqlDataReader ds, RunBehavior runBehavior, String resetOptionsString, Boolean isInternal, Boolean forDescribeParameterEncryption, Boolean shouldCacheForAlwaysEncrypted)
+   at System.Data.SqlClient.SqlCommand.RunExecuteReaderTds(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, Boolean async, Int32 timeout, Task& task, Boolean asyncWrite, Boolean inRetry, SqlDataReader ds, Boolean describeParameterEncryptionRequest)
+   at System.Data.SqlClient.SqlCommand.RunExecuteReader(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, String method, TaskCompletionSource`1 completion, Int32 timeout, Task& task, Boolean& usedCache, Boolean asyncWrite, Boolean inRetry)
+   at System.Data.SqlClient.SqlCommand.RunExecuteReader(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, String method)
+   at System.Data.SqlClient.SqlCommand.ExecuteReader(CommandBehavior behavior, String method)
+   at System.Data.SqlClient.SqlCommand.ExecuteDbDataReader(CommandBehavior behavior)
+   at System.Data.Common.DbCommand.System.Data.IDbCommand.ExecuteReader(CommandBehavior behavior)
+   at Dapper.SqlMapper.ExecuteReaderWithFlagsFallback(IDbCommand cmd, Boolean wasClosed, CommandBehavior behavior)
+   at Dapper.SqlMapper.<QueryImpl>d__125`1.MoveNext()
+   at System.Collections.Generic.List`1..ctor(IEnumerable`1 collection)
+   at System.Linq.Enumerable.ToList[TSource](IEnumerable`1 source)
+   at Dapper.SqlMapper.Query[T](IDbConnection cnn, String sql, Object param, IDbTransaction transaction, Boolean buffered, Nullable`1 commandTimeout, Nullable`1 commandType)
+   at DAL.Core.DALHelpers.Query[T](String sql, UserLogin userInfo, DynamicParameters param) in D:\Dev\BPO_OMS_MVC_AUTOCALL\Infrastructure\DAL\BaseRepository\DALHelpers.cs:line 36
+   at MB.OMS.Telesale.Repository.CustomerRepository.CustomerGetAllFieldValueNotInProjectDatasource(DataSourceRequest dsRequest, Int32 projectID, Nullable`1 sourceID, String phone, Nullable`1 visiable) in D:\Dev\BPO_OMS_MVC_AUTOCALL\Module\OMS\MB.OMS.Telesale.Repository\CustomerRepository.cs:line 482
+ClientConnectionId:5aa69e70-693c-4ee6-bba9-0ca071efaa2c
+Error Number:-2,State:0,Class:11
+09:23:44 INFO  ::1 duong [OMS.CustomerController] [30] - iRow:2-SourceId:12383
+09:23:44 INFO  ::1 duong [OMS.CustomerController] [30] - NumberPhone:933716809
+09:23:44 INFO  ::1 duong [OMS.CustomerController] [30] - iRow:3-SourceId:12383
+09:23:44 INFO  ::1 duong [OMS.CustomerController] [30] - NumberPhone:908503919
+09:23:45 INFO  ::1 duong [OMS.CustomerController] [30] - iRow:4-SourceId:12383
+09:23:45 INFO  ::1 duong [OMS.CustomerController] [30] - NumberPhone:933456789
+09:23:45 INFO  ::1 duong [OMS.CustomerController] [30] - iRow:5-SourceId:12383
+09:23:45 INFO  ::1 duong [OMS.CustomerController] [30] - Gửi mail import
+09:23:47 FATAL ::1 duong [OMS.CustomerController] [30] - Error: Gửi mail, Detail:System.Net.Mail.SmtpException: Transaction failed. The server response was: 5.7.1 Permission denied
+   at System.Net.Mail.SmtpConnection.GetConnection(ServicePoint servicePoint)
+   at System.Net.Mail.SmtpTransport.GetConnection(ServicePoint servicePoint)
+   at System.Net.Mail.SmtpClient.GetConnection()
+   at System.Net.Mail.SmtpClient.Send(MailMessage message)
+   at MB.Common.Helpers.CommonHelper.SendEmail(String subject, String body, String toAddress, String toName, IEnumerable`1 bcc, IEnumerable`1 cc) in D:\Dev\BPO_OMS_MVC_AUTOCALL\Infrastructure\MB.Common\Helpers\CommonHelper.cs:line 164
+   at MB.OMS.Telesale.Controller.CustomerController.HandlingImportExcel(CustomerDTO model) in D:\Dev\BPO_OMS_MVC_AUTOCALL\Module\OMS\MB.OMS.Telesale.Controller\CustomerController.cs:line 1261
+09:24:18 INFO  ::1 duong [OMS.CustomerRepository] [20] - Page:1|PageSize:20|projectID:3033|sourceID:|phone:|visiable:
+09:24:18 FATAL ::1 duong [OMS.CustomerRepository] [20] - Error CustomerGetAllFieldValueNotInProjectDatasource, Detail: System.Data.SqlClient.SqlException (0x80131904): Execution Timeout Expired.  The timeout period elapsed prior to completion of the operation or the server is not responding. ---> System.ComponentModel.Win32Exception (0x80004005): The wait operation timed out
+   at System.Data.SqlClient.SqlConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   at System.Data.SqlClient.SqlInternalConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   at System.Data.SqlClient.TdsParser.ThrowExceptionAndWarning(TdsParserStateObject stateObj, Boolean callerHasConnectionLock, Boolean asyncClose)
+   at System.Data.SqlClient.TdsParser.TryRun(RunBehavior runBehavior, SqlCommand cmdHandler, SqlDataReader dataStream, BulkCopySimpleResultSet bulkCopyHandler, TdsParserStateObject stateObj, Boolean& dataReady)
+   at System.Data.SqlClient.SqlDataReader.TryConsumeMetaData()
+   at System.Data.SqlClient.SqlDataReader.get_MetaData()
+   at System.Data.SqlClient.SqlCommand.FinishExecuteReader(SqlDataReader ds, RunBehavior runBehavior, String resetOptionsString, Boolean isInternal, Boolean forDescribeParameterEncryption, Boolean shouldCacheForAlwaysEncrypted)
+   at System.Data.SqlClient.SqlCommand.RunExecuteReaderTds(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, Boolean async, Int32 timeout, Task& task, Boolean asyncWrite, Boolean inRetry, SqlDataReader ds, Boolean describeParameterEncryptionRequest)
+   at System.Data.SqlClient.SqlCommand.RunExecuteReader(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, String method, TaskCompletionSource`1 completion, Int32 timeout, Task& task, Boolean& usedCache, Boolean asyncWrite, Boolean inRetry)
+   at System.Data.SqlClient.SqlCommand.RunExecuteReader(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, String method)
+   at System.Data.SqlClient.SqlCommand.ExecuteReader(CommandBehavior behavior, String method)
+   at System.Data.SqlClient.SqlCommand.ExecuteDbDataReader(CommandBehavior behavior)
+   at System.Data.Common.DbCommand.System.Data.IDbCommand.ExecuteReader(CommandBehavior behavior)
+   at Dapper.SqlMapper.ExecuteReaderWithFlagsFallback(IDbCommand cmd, Boolean wasClosed, CommandBehavior behavior)
+   at Dapper.SqlMapper.<QueryImpl>d__125`1.MoveNext()
+   at System.Collections.Generic.List`1..ctor(IEnumerable`1 collection)
+   at System.Linq.Enumerable.ToList[TSource](IEnumerable`1 source)
+   at Dapper.SqlMapper.Query[T](IDbConnection cnn, String sql, Object param, IDbTransaction transaction, Boolean buffered, Nullable`1 commandTimeout, Nullable`1 commandType)
+   at DAL.Core.DALHelpers.Query[T](String sql, UserLogin userInfo, DynamicParameters param) in D:\Dev\BPO_OMS_MVC_AUTOCALL\Infrastructure\DAL\BaseRepository\DALHelpers.cs:line 36
+   at MB.OMS.Telesale.Repository.CustomerRepository.CustomerGetAllFieldValueNotInProjectDatasource(DataSourceRequest dsRequest, Int32 projectID, Nullable`1 sourceID, String phone, Nullable`1 visiable) in D:\Dev\BPO_OMS_MVC_AUTOCALL\Module\OMS\MB.OMS.Telesale.Repository\CustomerRepository.cs:line 482
+ClientConnectionId:2ce4584a-3eea-40dd-a9fe-241df5bf9ddd
+Error Number:-2,State:0,Class:11
+# Main
+# time level ip user class thread message
+
+# Main
+# time level ip user class thread message
+
+# Main
+# time level ip user class thread message
+
+# Main
+# time level ip user class thread message
+
+# Main
+# time level ip user class thread message
+
+# Main
+# time level ip user class thread message
+
+# Main
+# time level ip user class thread message
+
+# Main
+# time level ip user class thread message
+
+# Main
+# time level ip user class thread message
+
+# Main
+# time level ip user class thread message
+
+# Main
+# time level ip user class thread message
+
+# Main
+# time level ip user class thread message
+
+# Main
+# time level ip user class thread message
+
+# Main
+# time level ip user class thread message
+
+# Main
+# time level ip user class thread message
+
+# Main
+# time level ip user class thread message
+

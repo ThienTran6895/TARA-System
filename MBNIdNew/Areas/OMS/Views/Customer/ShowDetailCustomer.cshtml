@@ -1,0 +1,388 @@
+﻿@using MB.OMS.Telesale.Domain.Model
+@model CustomerDTO
+
+@Html.HiddenFor(model => model.MobilePhone)
+@Html.HiddenFor(model => model.CustomerID)
+
+<div class="box box-default box-solid">
+    <div class="box-header with-border">
+        <h3 class="box-title">Thông tin khách hàng</h3>
+        <div class="box-tools pull-right">
+            <button type="button" class="btn btn-box-tool" data-widget="collapse">
+                <i class="fa fa-minus"></i>
+            </button>
+        </div>
+    </div>
+    <div class="box-body">
+        <div class="row form-horizontal f-custom">
+            <div class="col-md-12 center f-container" id="frmCustomerInfo">
+                
+                <div class="form-group col-md-6">
+                    @Html.LabelFor(model => model.MobilePhone, new { @class = "col-sm-4 control-label" })
+                    <div class="col-sm-8">
+                        @Html.TextBoxFor(model => model.MobilePhone, new { @class = "form-control", data_placement = "top", data_title = "Số điện thoại", data_toggle = "tooltip", @placeholder = "", @readonly = "readonly" })
+                    </div>
+                </div>
+                <div class="form-group col-md-6">
+                    @Html.LabelFor(model => model.SourceID, new { @class = "col-sm-4 control-label" })
+                    <div class="col-sm-8">
+                        @Html.DropDownListFor(model => model.SourceID, Model.AvailableSource, new { @class = "form-control disableSelect2", @style = "width:100%;", @readonly = "readonly", @disable = "disable" })
+                    </div>
+                </div>
+                @for (int i = 0; i < Model.AvailableCustomerFieldValue.Count; i++)
+                {
+                    <div class="form-group col-md-6">
+                        <label class="col-sm-4 control-label">@Html.DisplayFor(model => model.AvailableCustomerFieldValue[i].FieldName)</label>
+                        <div class="col-sm-8">
+                            @Html.TextBox(Model.AvailableCustomerFieldValue[i].FieldCode, Model.AvailableCustomerFieldValue[i].FieldValue, new { @class = "form-control", data_placement = "top", data_title = Model.AvailableCustomerFieldValue[i].FieldName, data_toggle = "tooltip", @placeholder = "" })
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+<div class="alert alert-success alert-dismissible fade in" role="alert" id="msgCallLog">
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button>
+    Cập nhật cuộc gọi thành công
+</div>
+
+<div class="box box-default box-solid" id="pnlUpdateCall">
+    <div class="box-header with-border">
+        <h3 class="box-title">Chỉnh sửa cuộc gọi</h3>
+        <div class="box-tools pull-right">
+            <button type="button" class="btn btn-box-tool" data-widget="collapse">
+                <i class="fa fa-minus"></i>
+            </button>
+        </div>
+    </div>
+    <div class="box-body">
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label for="">Tình trạng cuộc gọi</label>
+                    <select class="form-control" name="ddl_status">
+                        @{ 
+                            IEnumerable<Status> listStatus = (IEnumerable<Status>)ViewBag.ListStatus;
+                            foreach(var st in listStatus)
+                            {
+                                <option value="@st.StatusID">@st.Name</option>
+                            }
+                        }
+                    </select>
+                    <label for="">Tình trạng chi tiết</label>
+                    <select class="form-control" name="ddl_statuscall">
+                        @{
+                            IEnumerable<StatusCall> listStatusCall = (IEnumerable<StatusCall>)ViewBag.ListStatusCall;
+                            foreach (var st in listStatusCall)
+                            {
+                                <option value="@st.StatusCallID">@st.Name</option>
+                            }
+                        }
+                    </select>
+                    <label for="">Ngày gọi lại</label>
+                    <div class="input-group date">
+                        <div class="input-group-addon">
+                            <i class="fa fa-calendar"></i>
+                        </div>
+                        <input class="form-control" data_placement="top" disabled="disabled" id="recalldate" />
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label for="">Ghi chú</label>
+                    <textarea class="form-control" id="call_note" data_placement="top" data_title="Ý kiến khách hàng" data_toggle="tooltip" rows="4"></textarea>
+                </div>
+            </div>
+            <div class="col-md-6">
+            </div>
+            <div class="col-md-6">
+                <button class="btn btn-primary" id="btnSaveCall" name="btnSaveCall" value="Lưu cuộc gọi" onclick="saveCall();">Lưu cuộc gọi</button>
+                <button class="btn btn-default" id="btnHideCall" name="btnHideCall">Đóng</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="box box-default box-solid">
+    <div class="box-header with-border">
+        <h3 class="box-title">Lịch sử cuộc gọi</h3>
+        <div class="box-tools pull-right">
+            <button type="button" class="btn btn-box-tool" data-widget="collapse">
+                <i class="fa fa-minus"></i>
+            </button>
+        </div>
+    </div>
+    <div class="box-body">
+        <div class="form-horizontal">
+            <div id="gridCallHistory" class="box-body table-responsive no-padding k-grid k-widget">
+                <script type="text/javascript">
+
+                $(document).ready(function () {
+                    $("#gridCallHistory").kendoGrid({
+                        dataSource: {
+                            type: "json",
+                            transport: {
+                                read: {
+                                    url: "@Html.Raw(Url.Action("GetListShowCallHistory", "Customer"))",
+                                    type: "POST",
+                                    dataType: "json",
+                                    data: additionalData,
+                                    success: function (result) {
+                                        options.success(result);
+                                    }
+                                }
+                            },
+                            schema: {
+                                data: "Data",
+                                total: "Total",
+                                errors: "Errors"
+                            },
+                            error: function (e) {
+                                display_kendoui_grid_error(e);
+                                // Cancel the changes
+                                this.cancelChanges();
+                            },
+                            parameterMap: function (options, type) {
+                                return JSON.stringify(options);
+                            },
+                            pageSize: 20,
+                            serverPaging: true
+                        },
+                        pageable: {
+                            refresh: true,
+                            pageSizes: [20, 50, 100, 200, 500],
+                            messages: {
+                                display: "Hiển thị {0} - {1} trong {2} dòng",
+                                empty: "Không có dữ liệu",
+                                itemsPerPage: "dòng trên trang. "
+                            }
+                        },
+                        sortable: true,
+                        filterable: {
+                            extra: false,
+                            operators: {
+                                string: {
+                                    contains: "Kết quả chứa"
+                                }
+                            },
+                            messages: {
+                                info: "Chọn các mục tìm kiếm : ",
+                                clear: "Xóa",
+                                filter: "Tìm kiếm"
+                            }
+                        },
+                        scrollable: false,
+                        columns: [{
+                            field: "MobilePhone",
+                            title: "Số điện thoại",
+                            headerAttributes: { style: "text-align:left;" }
+                        }, {
+                            field: "StatusName",
+                            title: "Tên trạng thái",
+                            headerAttributes: { style: "text-align:left;" }
+                        }, {
+                            field: "CreatedDate",
+                            title: "Ngày gọi",
+                            headerAttributes: { style: "text-align:left;" },
+                            template: "#= (CreatedDate == null)? '' : kendo.toString(kendo.parseDate(CreatedDate, 'yyyy-MM-dd HH:mm'), 'dd/MM/yyyy HH:mm') #",
+                            width: 100
+                        }, {
+                            field: "RecallDate",
+                            title: "Ngày gọi lại",
+                            headerAttributes: { style: "text-align:left;" },
+                            template: "#= (RecallDate == null)? '' : kendo.toString(kendo.parseDate(RecallDate, 'yyyy-MM-dd HH:mm'), 'dd/MM/yyyy HH:mm') #",
+                            width: 100
+                        }, {
+                            field: "UserName",
+                            title: "Người gọi",
+                            headerAttributes: { style: "text-align:left;" },
+                            width: 100
+                        }, {
+                            field: "CallLogId",
+                            title: "",
+                            width: 50,
+                            template: function (dataItem) {
+                                return "<span onclick='EditCallLog(" + dataItem.CallLogID + ");' style=\"cursor:pointer;display:inline-block\"><i class=\"fa fa-edit\"></i></span>";
+                            },
+                        }
+                        ]
+                    });
+                });
+
+                    function additionalData() {
+                        console.log($('#CustomerID').val());
+                        return {
+                            customerId: "" + $('#CustomerID').val() + ""
+                        };
+                    }
+                </script>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $("#@Html.IdFor(model => model.SourceID)").select2();
+        $(".disableSelect2").prop("disabled", true);
+        $('#pnlUpdateCall').hide();
+        $('#msgCallLog').hide();
+
+        $("select[name=ddl_statuscall]").change(function () {
+            ChangeStatusCall();
+        });
+
+        $("select[name=ddl_status]").change(function () {
+            ChangeStatus();
+        });
+
+        
+    })
+    function EditCallLog(callLogID)
+    {
+        $('#pnlUpdateCall').show();
+        $('#btnSaveCall').attr('data-val', callLogID);
+
+        $.ajax({
+            type: "GET",
+            dataType: 'json',
+            url: '@Url.Action("ShowCallLogDetail", "Customer")?callLogId=' + callLogID,
+            success: function (result) {
+                if (result.success) {
+                    var call = result.data;
+                    console.log(call);
+                    $('select[name=ddl_status]').val(call.StatusID);
+                    $('select[name=ddl_statuscall]').val(call.StatusCallID);
+                    $('#call_note').html(call.Note);
+                    ChangeStatus();
+                }
+                else {
+                    swal({ title: result.message, confirmButtonText: "Đóng" });
+                }
+            }
+        });
+
+    }
+
+    $('#btnHideCall').click(function () {
+        $('#pnlUpdateCall').hide();
+        $('#btnSaveCall').attr('data-val', 0);
+    });
+
+    function saveCall()
+    {
+        var cusInfo = '';
+        $('#frmCustomerInfo input').each(function (index, value) {
+            if(cusInfo =='')
+                cusInfo += '{"FieldName":"' + $(this).attr('name') + '","FieldValue":"' + $(this).val() + '","CustomerID":"'+$('#CustomerID').val()+'"}';
+            else
+                cusInfo += ',{"FieldName":"' + $(this).attr('name') + '","FieldValue":"' + $(this).val() + '","CustomerID":"' + $('#CustomerID').val() + '"}';
+        });
+        console.log(cusInfo);
+        var cusObj = JSON.parse('[' + cusInfo + ']');
+        console.log(cusObj);
+        //return;
+
+
+        var callLogModel = {
+            'CallLogID': $('#btnSaveCall').attr('data-val'),
+            'StatusID': $('select[name=ddl_status] option:selected').val(),
+            'StatusCallID': $('select[name=ddl_statuscall] option:selected').val(),
+            'RecallDate': $('#recalldate').val(),
+            'Note': $('#call_note').val()
+        };
+
+        var formModel = {
+            'CallLog': callLogModel,
+            'CustomerInfo': cusObj
+        }
+        console.log(callLogModel);
+        $.ajax({
+            type: "POST",
+            dataType: 'json',
+            data: formModel,
+            url: '@Url.Action("SaveCallLog", "Customer")', //?model=' + callLogModel,
+            beforeSend: function () {
+                swal({ title: "Thông báo", text: "Đang cập nhật thông tin cuộc gọi. Vui lòng đợi!", type: "success" });
+            },
+            success: function (result) {
+                if (result.success) {
+                    $('#pnlUpdateCall').hide();
+                    $('#btnSaveCall').attr('data-val', 0);
+                    //$('#msgCallLog').show();
+                    swal({ title: result.message, confirmButtonText: "Đóng" });
+                }
+                else {
+                    swal({ title: result.message, confirmButtonText: "Đóng", type:"error" });
+                }
+            }
+        });
+    }
+
+    function ChangeStatus() {
+        var statusID = $('select[name=ddl_status] option:selected').val();
+
+        $('#btnSaveCall').addClass('disabled');
+        // khong phai hen goi lai
+        if (statusID != 5 && statusID != 1002) {
+            $("#recalldate").val("");
+            $(".input-group :input").prop("disabled", true);
+        }
+        else {
+            if ($("#recalldate").val() == null || $("#recalldate").val() === '') {
+                $("#recalldate").val(moment().add(1, 'hours').format("L LT"));
+                $(".input-group :input").prop("disabled", false);
+            }
+            else {
+                $(".input-group :input").prop("disabled", false);
+            }
+        }
+
+        $.ajax({
+            type: "POST",
+            url: '/Customer/GetStatusCallByStatusId?st=' + statusID,
+            dataType: 'json',
+            contentType: "application/json; charset=utf-8",
+            success: function (response) {
+                $('select[name=ddl_statuscall]').html('');
+                if (response.success) {
+                    var opHtml = '';
+                    for (i = 0; i < response.data.length; i++) {
+                        opHtml += '<option value="' + response.data[i].StatusCallID + '">' + response.data[i].Name + '</option>';
+                    }
+                    $('select[name=ddl_statuscall]').html(opHtml);
+                    $('#btnSaveCall').removeClass('disabled');
+                }
+            }
+        });
+    }
+
+    function ChangeStatusCall() {
+
+        var statusID = $("#ddl_statuscall");
+        $.ajax({
+            type: "POST",
+            url: '/Customer/ChangeStatusCall?statusID=' + statusID.val(),
+            dataType: 'json',
+            contentType: "application/json; charset=utf-8",
+            success: function (response) {
+                if (response.success) {
+                    if ($("#recalldate").val() == null && $("#recalldate").val() === '') {
+                        $("#recalldate").val(moment().add(1, 'hours').format("L LT"));
+                        $(".input-group :input").prop("disabled", false);
+                    }
+                    else {
+                        $(".input-group :input").prop("disabled", false);
+                    }
+                }
+                else {
+                    $("#recalldate").val("");
+                    $(".input-group :input").prop("disabled", true);
+                }
+            }
+        });
+    }
+
+</script>

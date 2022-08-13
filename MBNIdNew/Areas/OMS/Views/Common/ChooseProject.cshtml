@@ -1,0 +1,42 @@
+﻿@using MB.Web.Core.HTMLHelpers
+@using MB.Common.Helpers
+@model MB.OMS.Telesale.Domain.Model.ChooseProjectDTO
+
+@{
+    ViewBag.Title = "Chọn dự án";
+    Layout = "~/Views/Shared/_Login.cshtml";
+}
+
+<div class="login-box">
+    <div class="login-logo">
+        <a href="#" style="font-family:'MV Boli';">Telesale</a>
+    </div>
+    <div class="login-box-body">
+        <p class="login-box-msg">Chọn dự án</p>
+        @using (Html.BeginForm("ChooseProject", "Common", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+        {           
+            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+             <div class="form-group">
+                @Html.LabelFor(model => model.ProjectID, new { @class = "col-sm-3 control-label" })
+                <div class="col-sm-9">
+                    @Html.DropDownListFor(model => model.ProjectID, Model.AvailableProject, new { @class = "form-control", @style = "width:100%;" })
+                    @Html.ValidationMessageFor(model => model.ProjectID, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xs-7">
+                </div>
+                <div class="col-xs-5">
+                    <button type="submit" class="btn btn-primary btn-block btn-flat btnSave"> Vào hệ thống</button>
+                    @*@Html.MBButton("btnSave", "Vào hệ thống", null, "btn btn-primary")*@
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+<script>
+    $(document).ready(function () {
+        $("#@Html.IdFor(model => model.ProjectID)").select2()
+    });
+</script>

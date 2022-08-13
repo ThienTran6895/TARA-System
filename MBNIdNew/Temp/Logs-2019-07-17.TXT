@@ -1,0 +1,90 @@
+﻿# Main
+# time level ip user class thread message
+
+# Main
+# time level ip user class thread message
+09:06:01 INFO  ::1 duong [OMS.ReportRepository] [73] - Starting GetReportProjectData
+09:06:02 INFO  ::1 duong [OMS.ReportRepository] [73] - Completed
+10:57:25 INFO  ::1 duong [OMS.CallLogRepository] [92] - GetAllCallHistoryDatasource ,bec52fbc-3721-4726-a3ab-3a3099b561ed
+11:08:35 INFO  ::1 duong [OMS.CallLogRepository] [64] - GetAllCallHistoryDatasource ,06945a7b-65eb-46b4-92c1-0490dd9c4178
+11:49:23 INFO  ::1 duong [OMS.CallLogRepository] [56] - GetAllCallHistoryDatasource ,eb436568-d182-4551-8706-3d35408e9e86
+11:49:56 INFO  ::1 duong [OMS.CallLogRepository] [36] - GetAllCallHistoryDatasource ,06945a7b-65eb-46b4-92c1-0490dd9c4178
+11:51:41 INFO  ::1 duong [OMS.CallLogRepository] [48] - GetAllCallHistoryDatasource ,b4b8cd08-c897-47f9-919e-8a68d7d757d2
+11:52:21 INFO  ::1 duong [OMS.CallLogRepository] [36] - GetAllCallHistoryDatasource ,7e31617c-bb0b-461d-8a61-a671fc61d8ee
+11:53:03 INFO  ::1 duong [OMS.CallLogRepository] [53] - GetAllCallHistoryDatasource ,5989a56c-83ab-4a0b-8ac6-89c82736d690
+11:53:56 INFO  ::1 duong [OMS.CallLogRepository] [36] - GetAllCallHistoryDatasource ,b4b8cd08-c897-47f9-919e-8a68d7d757d2
+11:56:40 INFO  ::1 duong [OMS.CallLogRepository] [46] - GetAllCallHistoryDatasource ,b4b8cd08-c897-47f9-919e-8a68d7d757d2
+
+# Main
+# time level ip user class thread message
+
+# Main
+# time level ip user class thread message
+14:44:08 INFO  ::1 duong [OMS.CallLogRepository] [45] - GetAllCallHistoryDatasource ,87a448f7-4c7a-4f31-b005-0250da652eb8
+14:44:50 INFO  ::1 duong [OMS.CallLogRepository] [50] - GetAllCallHistoryDatasource ,87a448f7-4c7a-4f31-b005-0250da652eb8
+# Main
+# time level ip user class thread message
+
+# Main
+# time level ip user class thread message
+15:00:10 INFO  ::1 duong [OMS.CallLogRepository] [6] - GetAllCallHistoryDatasource ,5989a56c-83ab-4a0b-8ac6-89c82736d690
+15:01:10 INFO  ::1 duong [OMS.CallLogRepository] [8] - GetAllCallHistoryDatasource ,eb436568-d182-4551-8706-3d35408e9e86
+# Main
+# time level ip user class thread message
+
+# Main
+# time level ip user class thread message
+15:03:12 INFO  ::1 duong [OMS.CallLogRepository] [8] - GetAllCallHistoryDatasource ,2d3cd446-33aa-4a4e-a8f7-2e62ff5cf19f
+15:04:48 INFO  ::1 duong [OMS.CallLogRepository] [7] - GetAllCallHistoryDatasource ,3958d24f-f8ab-4690-bb3d-000196d1e5dc
+# Main
+# time level ip user class thread message
+
+# Main
+# time level ip user class thread message
+15:11:17 INFO  ::1 duong [OMS.CallLogRepository] [6] - GetAllCallHistoryDatasource ,0de88625-ff58-485e-a28c-01e354e62e25
+# Main
+# time level ip user class thread message
+
+# Main
+# time level ip user class thread message
+15:21:34 INFO  ::1 duong [OMS.CallLogRepository] [5] - GetAllCallHistoryDatasource ,5f493495-7638-4823-9252-4d9d31e4c2a8
+# Main
+# time level ip user class thread message
+
+# Main
+# time level ip user class thread message
+15:43:24 INFO  ::1 duong [OMS.CallLogRepository] [12] - GetAllCallHistoryDatasource ,eb436568-d182-4551-8706-3d35408e9e86
+15:44:13 INFO  ::1 duong [OMS.CallLogRepository] [8] - GetAllCallHistoryDatasource ,5f493495-7638-4823-9252-4d9d31e4c2a8
+15:44:17 INFO  ::1 duong [OMS.CallLogRepository] [8] - GetAllCallHistoryDatasource ,54e06838-36fa-4fe6-b41a-4e0481e070de
+15:45:32 INFO  ::1 duong [OMS.CallLogRepository] [9] - GetAllCallHistoryDatasource ,7e31617c-bb0b-461d-8a61-a671fc61d8ee
+15:45:57 INFO  ::1 duong [OMS.CallLogRepository] [9] - GetAllCallHistoryDatasource ,5f493495-7638-4823-9252-4d9d31e4c2a8
+# Main
+# time level ip user class thread message
+
+# Main
+# time level ip user class thread message
+15:52:31 INFO  ::1 duong [OMS.CallLogRepository] [7] - GetAllCallHistoryDatasource ,0de88625-ff58-485e-a28c-01e354e62e25
+15:52:33 INFO  ::1 duong [OMS.CallLogRepository] [8] - GetAllCallHistoryDatasource ,4f95dfc6-6a8b-43a4-9328-00e336e20ed4
+15:52:36 INFO  ::1 duong [OMS.CallLogRepository] [7] - GetAllCallHistoryDatasource ,b5591636-c306-4038-ad8e-010c2c4a47ef
+# Main
+# time level ip user class thread message
+
+# Main
+# time level ip user class thread message
+15:58:49 INFO  ::1 duong [OMS.CallLogRepository] [9] - GetAllCallHistoryDatasource ,b4b8cd08-c897-47f9-919e-8a68d7d757d2
+15:58:56 INFO  ::1 duong [OMS.CallLogRepository] [7] - GetAllCallHistoryDatasource ,2d3cd446-33aa-4a4e-a8f7-2e62ff5cf19f
+15:59:00 INFO  ::1 duong [OMS.CallLogRepository] [8] - GetAllCallHistoryDatasource ,5f493495-7638-4823-9252-4d9d31e4c2a8
+# Main
+# time level ip user class thread message
+
+# Main
+# time level ip user class thread message
+16:03:06 INFO  ::1 duong [OMS.CallLogRepository] [8] - GetAllCallHistoryDatasource ,5f493495-7638-4823-9252-4d9d31e4c2a8
+# Main
+# time level ip user class thread message
+
+# Main
+# time level ip user class thread message
+16:09:22 INFO  ::1 duong [OMS.CallLogRepository] [5] - GetAllCallHistoryDatasource ,06945a7b-65eb-46b4-92c1-0490dd9c4178
+16:10:00 INFO  ::1 duong [OMS.CallLogRepository] [15] - UpdateCallLog
+

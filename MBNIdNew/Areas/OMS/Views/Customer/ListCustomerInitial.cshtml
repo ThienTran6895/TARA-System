@@ -1,0 +1,169 @@
+﻿@using MB.Web.Core.HTMLHelpers
+@model MB.OMS.Telesale.Domain.Model.CustomerDTO
+
+@{
+    ViewBag.Title = "Khảo sát";
+    Layout = "~/Views/Shared/_MasterLayout.cshtml";
+}
+
+@section Breadcrumb {
+    <h1>
+        Khảo sát
+        <small>Danh sách khách hàng khảo sát</small>
+    </h1>
+}
+
+<div class="box box-default">
+    <div class="box-header with-border">
+        <h3 class="box-title">Danh sách khách hàng khảo sát</h3>
+    </div>
+    <div class="box-body">
+        <div class="row">
+            <div class="col-md-8">
+                <div class="form-group col-md-5">
+                    @Html.DropDownListFor(model => model.SourceID, Model.AvailableSource, new { @class = "form-control", @style = "width:100%;" })
+                </div>
+                <div class="form-group col-md-2">
+                    <div class="col-sm-12">
+                        <button type="button" id="search" class="btn btn-default" style="margin-right: 5px;"><i class="fa fa-fw fa-search"></i>Tìm kiếm</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="grid" class="box-body table-responsive no-padding k-grid k-widget">
+            <script type="text/javascript">
+                var array = @Html.Raw(Json.Encode(ViewBag.ListCustomerField))
+                    array.unshift({
+                        command: [{
+                            name: "Khảo sát",
+                            click: function (e) {
+                                // prevent page scroll position change
+                                e.preventDefault();
+                                // e.target is the DOM element representing the button
+                                var tr = $(e.target).closest("tr"); // get the current table row (tr)
+                                // get the data bound to the current table row
+                                var data = this.dataItem(tr);
+
+                                $.ajax({
+                                    type: "GET",
+                                    dataType: 'json',
+                                    url: '@Url.Action("CallSurvey", "Customer")?customerID=' + data[6].Value,
+                                    success: function (result) {
+                                        if (result.success) {
+                                            var mymodal = $('#myModalCall');
+                                            mymodal.find('.modal-body').html(result.html);
+                                            mymodal.modal('show');
+                                        }
+                                        else {
+                                            swal({ title: result.message, confirmButtonText: "Đóng" });
+                                        }
+                                    }
+                                });
+                            }
+                        }]
+                    });
+                $(document).ready(function () {
+                    var dataSource = new kendo.data.DataSource({
+                        type: "json",
+                        transport: {
+                            read: {
+                                url: "@Html.Raw(Url.Action("GetListCustomerInitial", "Customer"))",
+                                type: "POST",
+                                dataType: "json",
+                                data: additionalData,
+                                success: function (result) {
+                                    options.success(result);
+                                }
+                            }
+                        },
+                        schema: {
+                            data: "Data",
+                            total: "Total",
+                            errors: "Errors"
+                        },
+                        error: function (e) {
+                            display_kendoui_grid_error(e);
+                            // Cancel the changes
+                            this.cancelChanges();
+                        },
+                        parameterMap: function (options, type) {
+                            return JSON.stringify(options);
+                        },
+                        pageSize: 20,
+                        serverPaging: true
+                    });
+
+                    $("#grid").kendoGrid({
+                        dataSource: dataSource,
+                        pageable: {
+                            refresh: true,
+                            pageSizes: [20, 50, 100, 200, 500],
+                            messages: {
+                                display: "Hiển thị {0} - {1} trong {2} dòng",
+                                empty: "Không có dữ liệu",
+                                itemsPerPage: "dòng trên trang. "
+                            }
+                        },
+                        sortable: true,
+                        filterable: {
+                            extra: false,
+                            operators: {
+                                string: {
+                                    contains: "Kết quả chứa"
+                                }
+                            },
+                            messages: {
+                                info: "Chọn các mục tìm kiếm : ",
+                                clear: "Xóa",
+                                filter: "Tìm kiếm"
+                            }
+                        },
+                        scrollable: true,
+                        columns: array
+                    });
+
+                    dataSource.fetch(function () {
+                        var data = this.data();
+                        $("#grid th[data-field='" + array[1] + "'] .k-link").html("Di động");
+                        for (var i = 2; i <= array.length; i++) {
+                            $("#grid th[data-field='" + array[i] + "'] .k-link").html(data[0][5 + i].Key);
+                        }
+                    });
+                });
+            </script>
+
+            <script type="text/javascript">
+
+                $(document).ready(function () {
+
+                    $("#@Html.IdFor(model => model.SourceID)").select2();
+
+                    //search button
+                    $('#search').click(function () {
+                        //search
+                        var grid = $('#grid').data('kendoGrid');
+                        grid.dataSource.page(1);
+
+                        return false;
+                    });
+
+                    $('#SourceID').keydown(function (even) {
+                        if (even.keyCode == 13) {
+                            var grid = $('#grid').data('kendoGrid');
+                            grid.dataSource.page(1);
+                            return false;
+                        }
+                    });                   
+
+                });
+
+                function additionalData() {
+                    return {
+                        SourceID: $('#SourceID').val()
+                    };
+                }
+            </script>
+        </div>
+
+    </div>
+</div>

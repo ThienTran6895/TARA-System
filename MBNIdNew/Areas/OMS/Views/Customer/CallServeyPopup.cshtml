@@ -1,0 +1,44 @@
+﻿@using MB.Web.Core.HTMLHelpers
+@model MB.OMS.Telesale.Domain.Model.CustomerDTO
+
+@{
+    ViewBag.Title = "Khảo sát";
+    Layout = "~/Views/Shared/_MasterLayout.cshtml";
+}
+
+@section Breadcrumb {
+    <h1>
+        Khảo sát
+        <small>Khảo sát khách hàng</small>
+    </h1>
+}
+
+<div class="box box-default">
+    <div class="box-header with-border">
+        <h3 class="box-title">Khảo sát khách hàng</h3>
+    </div>
+    <div class="box-body">
+        <div id="grid" class="box-body table-responsive no-padding k-grid k-widget">
+            <script type="text/javascript">
+                $(document).ready(function () {
+                        $.ajax({
+                                type: "GET",
+                                dataType: 'json',
+                                url: '@Url.Action("CallSurvey", "Customer")?customerID=@Model.CustomerID',
+                                success: function (result) {
+                                    if (result.success) {
+                                        var mymodal = $('#myModalCall');
+                                        mymodal.find('.modal-body').html(result.html);
+                                        mymodal.modal('show');
+                                    }
+                                    else {
+                                        swal({ title: result.message, confirmButtonText: "Đóng" });
+                                    }
+                                }
+                        });
+                });
+            </script>
+        </div>
+
+    </div>
+</div>

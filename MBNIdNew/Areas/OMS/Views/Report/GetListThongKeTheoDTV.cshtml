@@ -1,0 +1,227 @@
+﻿@using MB.Web.Core
+@using MB.Common.Helpers
+@model MB.OMS.Telesale.Domain.Model.Report
+
+@{
+    ViewBag.Title = "Thống kê theo điện thoại viên";
+    Layout = "~/Views/Shared/_MasterLayout.cshtml";
+}
+
+@section Breadcrumb {
+    <h1>
+        Quản lý thống kê
+        <small>Danh sách thống kê theo điện thoại viên</small>
+    </h1>
+}
+
+<div class="box box-success">
+    <div class="box-header with-border">
+        <h3 class="box-title">Danh sách thống kê theo điện thoại viên</h3>
+        <div class="box-tools pull-right">
+            @*<a target="_blank" href="@Url.Action("ExportThongKeTheoDTV")" class="btn btn-primary">Export</a>*@
+            @if (CommonHelper.CheckPermisionExist(Permissions.XuatThongKeTheoDTV.ToString()))
+            {
+                <button class="btn btn-primary" id="btnExport"><i class="fa fa-cloud-download"></i> Export</button>
+            }
+        </div>
+    </div>
+    <div class="box-body">
+        <div class="row form-horizontal">
+            <div class="col-md-5">
+                <div class="form-group">
+                    @Html.Label("Từ ngày", new { @class = "col-sm-4 control-label" })
+                    <div class="col-md-8">
+                        <div class="input-group">
+                            <div class="input-group-addon">
+                                <i class="fa fa-calendar"></i>
+                            </div>
+                            <input type="text" class="form-control pull-right" id="DateFrom">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-5">
+                <div class="form-group">
+                    @Html.Label("Đến ngày", new { @class = "col-sm-4 control-label" })
+                    <div class="col-md-8">
+                        <div class="input-group">
+                            <div class="input-group-addon">
+                                <i class="fa fa-calendar"></i>
+                            </div>
+                            <input type="text" class="form-control pull-right" id="DateEnd">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-2">
+                <button type="button" id="search" class="btn btn-default"><i class="fa fa-fw fa-search"></i>Tìm kiếm</button>
+            </div>
+        </div>       
+        <div id="grid" class="box-body table-responsive no-padding k-grid k-widget">
+            <script type="text/javascript">
+
+                $(document).ready(function () {
+                    $("#DateFrom").datepicker({
+                        autoclose: true
+                    });
+                    $("#DateEnd").datepicker({
+                        autoclose: true
+                    });
+                    $("#grid").kendoGrid({
+                        dataSource: {
+                            type: "json",
+                            transport: {
+                                read: {
+                                    url: "@Html.Raw(Url.Action("GetListThongKeTheoDTV", "Report"))",
+                                    type: "POST",
+                                    data: additionalData,
+                                    dataType: "json",
+                                    success: function (result) {
+                                        options.success(result);
+                                    }
+                                }
+                            },
+                            schema: {
+                                data: "Data",
+                                total: "Total",
+                                errors: "Errors"
+                            },
+                            error: function (e) {
+                                display_kendoui_grid_error(e);
+                                // Cancel the changes
+                                this.cancelChanges();
+                            },
+                            parameterMap: function (options, type) {
+                                return JSON.stringify(options);
+                            },
+                            pageSize: 20,
+                            serverPaging: true
+                        },
+                        pageable: {
+                            refresh: true,
+                            pageSizes: [20, 50, 100, 200, 500],
+                            messages: {
+                                display: "Hiển thị {0} - {1} trong {2} dòng",
+                                empty: "Không có dữ liệu",
+                                itemsPerPage: "dòng trên trang. "
+                            }
+                        },
+                        sortable: true,
+                        scrollable: false,
+                        height: 550,
+                        filterable: {
+                            extra: false,
+                            operators: {
+                                string: {
+                                    contains: "Kết quả chứa"
+                                }
+                            },
+                            messages: {
+                                info: "Chọn các mục tìm kiếm : ",
+                                clear: "Xóa",
+                                filter: "Tìm kiếm"
+                            }
+                        },
+                        columns: [
+                            {
+                                field: "STT",
+                                title: "STT",
+                                headerAttributes: { style: "text-align:left;" }
+                            }, {
+                                field: "HoTen",
+                                title: "Tên ĐTV",
+                                headerAttributes: { style: "text-align:left;" }
+                            }, {
+                                field: "UserName",
+                                title: "Tên đăng nhập",
+                                headerAttributes: { style: "text-align:left;" },
+                                //template: "#=FirstName# #=LastName#",
+                            }, {
+                                field: "DaNhan",
+                                title: "Đã nhận",
+                                headerAttributes: { style: "text-align:left;" },
+                                //template: "#=FirstName# #=LastName#",
+                            }, {
+                                field: "DaXuLy",
+                                title: "Đã xử lý",
+                                headerAttributes: { style: "text-align:left;" },
+                                //template: "#=FirstName# #=LastName#",
+                            }, {
+                                field: "ChuaGoi",
+                                title: "Chưa gọi",
+                                headerAttributes: { style: "text-align:left;" },
+                                //template: "#=FirstName# #=LastName#",
+                            }, {
+                                field: "DangHenGoiLai",
+                                title: "Đang hẹn gọi lại",
+                                headerAttributes: { style: "text-align:left;" },
+                                //template: "#=FirstName# #=LastName#",
+                            },
+                            {
+
+                                field: "",
+                                title: "Trả KH về nguồn",
+                                attributes: { style: "text-align:center; width:30px;" },
+                                //template: '<a title="Cập nhật" href="@Url.Action("ReturnCustomerForSourceID", "Report")/#=SourceID#"><span class="glyphicon glyphicon-arrow-left"></span></a>',
+                                template: "#if(DaNhan > DaXuLy) {#<a title='Cập nhật' href='@Url.Action("ReturnCustomerForSourceID", "Report")/#=Id#'><span class='glyphicon glyphicon-arrow-left'></span></a>#}#",
+                            width: 30,
+
+                            }
+
+                        ]
+                    });
+                });
+            </script>
+            <script type="text/javascript">
+
+                $(document).ready(function () {
+
+                    //search button
+                    $('#search').click(function () {
+                        //search
+                        var grid = $('#grid').data('kendoGrid');
+                        grid.dataSource.page(1);
+
+                        return false;
+                    });
+
+                    //export
+                    $('#btnExport').click(function () {
+                        var DateFrom = $('#DateFrom').val();
+                        //if (DateFrom == null)
+                        //    DateFrom = "";
+                        var DateEnd = $('#DateEnd').val();
+                        //if (DateEnd == null)
+                        //    DateEnd = "";
+                        window.location.href = '@Url.Action("ExportThongKeTheoDTV")?DateFrom=' + DateFrom + '&EndDate=' + DateEnd;
+
+                        return false;
+                    });
+
+                    $('#DateFrom').keydown(function (even) {
+                        if (even.keyCode == 13) {
+                            var grid = $('#grid').data('kendoGrid');
+                            grid.dataSource.page(1);
+                            return false;
+                        }
+                    });
+                    $('#DateEnd').keydown(function (even) {
+                        if (even.keyCode == 13) {
+                            var grid = $('#grid').data('kendoGrid');
+                            grid.dataSource.page(1);
+                            return false;
+                        }
+                    });
+                });
+
+                function additionalData() {
+                    return {
+                        DateFrom: $('#DateFrom').val(),
+                        DateEnd: $('#DateEnd').val()
+                    };
+                }
+            </script>
+        </div>
+
+    </div>
+</div>

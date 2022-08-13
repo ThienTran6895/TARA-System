@@ -1,0 +1,345 @@
+﻿@model MB.OMS.Telesale.Domain.Model.RoleDTO
+
+@{
+    ViewBag.Title = "Quản lý quyền";
+    Layout = "~/Views/Shared/_MasterLayout.cshtml";
+}
+
+@section Breadcrumb {
+    <h1>
+        Quản lý quyền
+        <small>Phân chia trang cho role</small>
+    </h1>
+}
+@Html.HiddenFor(model => model.Id)
+<div class="box box-default">
+    <div class="box-header with-border">
+        <h3 class="box-title">Phân chia trang cho role - @Model.RoleName</h3>
+    </div>
+    <div class="box-body">
+        <div class="row">
+            <div class="col-md-5">
+                <h3 class="page-header text-info">Trang</h3>
+                <div id="grid6" class="box-body table-responsive no-padding k-grid k-widget">
+                    <script type="text/javascript">
+                        $(document).ready(function () {
+                            $("#grid6").kendoGrid({
+                                dataSource: {
+                                    type: "json",
+                                    transport: {
+                                        read: {
+                                            url: "@Html.Raw(Url.Action("GetListPermisionsNotInRoles", "Roles"))",
+                                            type: "POST",
+                                            dataType: "json",
+                                            data: additionalData6,
+                                            success: function (result) {
+                                                options.success(result);
+                                            }
+                                        }
+                                    },
+                                    schema: {
+                                        data: "Data",
+                                        total: "Total",
+                                        errors: "Errors"
+                                    },
+                                    error: function (e) {
+                                        display_kendoui_grid_error(e);
+                                        // Cancel the changes
+                                        this.cancelChanges();
+                                    },
+                                    parameterMap: function (options, type) {
+                                        return JSON.stringify(options);
+                                    },
+                                    pageSize: 20,
+                                    serverPaging: true
+                                },
+                                pageable: {
+                                    refresh: true,
+                                    pageSizes: [20, 50, 100, 200, 500],
+                                    messages: {
+                                        display: "Hiển thị {0} - {1} trong {2} dòng",
+                                        empty: "Không có dữ liệu",
+                                        itemsPerPage: "dòng trên trang. "
+                                    }
+                                },
+                                sortable: true,
+                                filterable: true,
+                                editable: {
+                                    confirmation: false,
+                                    mode: "inline"
+                                },
+                                scrollable: false,
+                                dataBound: onDataBound6,
+                                columns: [{
+                                    field: "Id",
+                                    headerTemplate: "<input id='mastercheckbox6' type='checkbox'/>",
+                                    headerAttributes: { style: "text-align:center" },
+                                    attributes: { style: "text-align:center" },
+                                    template: "<input type='checkbox' value='#=Id#' class='checkboxGroups6'/>",
+                                    width: 30,
+                                    filterable: false,
+                                    sortable: false,
+                                }, {
+                                    field: "PermisionName",
+                                    title: "Tên trang",
+                                    headerAttributes: { style: "text-align:left;" },
+                                    width: 100
+                                }]
+                            });
+                        });
+                    </script>
+                    <script type="text/javascript">
+                        var selectedIds6 = [];
+                        $(document).ready(function () {
+
+                            //Share Permision
+                            $('#sharePermision-selected').click(function (e) {
+                                e.preventDefault();
+
+                                var postData = {
+                                    selectedIds: selectedIds6,
+                                    roleId: $('#Id').val()
+                                };
+
+                                $.ajax({
+                                    cache: false,
+                                    type: "POST",
+                                    url: "@(Url.Action("SharePermisionSelected", "Roles"))",
+                                    data: postData,
+                                    complete: function (data) {
+                                        //reload grid
+                                        var grid6 = $('#grid6').data('kendoGrid');
+                                        grid6.dataSource.read();
+
+                                        var grid7 = $('#grid7').data('kendoGrid');
+                                        grid7.dataSource.read();
+
+                                        selectedIds6 = [];
+                                    },
+                                    error: function (xhr, ajaxOptions, thrownError) {
+                                        alert(thrownError);
+                                    },
+                                    traditional: true
+                                });
+                                return false;
+                            });
+
+                            $('#mastercheckbox6').click(function () {
+                                $('.checkboxGroups6').attr('checked', $(this).is(':checked')).change();
+                            });
+
+                            //wire up checkboxes.
+                            $('#grid6').on('change', 'input[type=checkbox][id!=mastercheckbox6]', function (e) {
+                                var $check = $(this);
+                                if ($check.is(":checked") == true) {
+                                    var checked = jQuery.inArray($check.val(), selectedIds6);
+                                    if (checked == -1) {
+                                        //add id to selectedIds6.
+                                        selectedIds6.push($check.val());
+                                    }
+                                }
+                                else {
+                                    var checked = jQuery.inArray($check.val(), selectedIds6);
+                                    if (checked > -1) {
+                                        //remove id from selectedIds6.
+                                        selectedIds6 = $.grep(selectedIds6, function (item, index) {
+                                            return item != $check.val();
+                                        });
+                                    }
+                                }
+                                updateMasterCheckbox6();
+                            });
+                        });
+
+                        function additionalData6() {
+                            return {
+                                Id: $('#Id').val()
+                            };
+                        }
+                        function onDataBound6(e) {
+                            $('#grid6 input[type=checkbox][id!=mastercheckbox6]').each(function () {
+                                var currentId = $(this).val();
+                                var checked = jQuery.inArray(currentId, selectedIds6);
+                                //set checked based on if current checkbox's value is in selectedIds6.
+                                $(this).attr('checked', checked > -1);
+                            });
+
+                            updateMasterCheckbox6();
+                        }
+
+                        function updateMasterCheckbox6() {
+                            var numChkBoxes = $('#grid6 input[type=checkbox][id!=mastercheckbox6]').length;
+                            var numChkBoxesChecked = $('#grid6 input[type=checkbox][id!=mastercheckbox6]:checked').length;
+                            $('#mastercheckbox6').attr('checked', numChkBoxes == numChkBoxesChecked && numChkBoxes > 0);
+                        }
+                    </script>
+                </div>
+            </div>
+            <div class="col-md-1 text-center">
+                <br /><br /><br />
+                <div class="row"><button type="button" class="btn btn-primary" id="sharePermision-selected"> > </button></div>
+                <br />
+                <div class="row"><button type="button" class="btn btn-primary" id="destroyPermision-selected"> < </button></div>
+            </div>
+            <div class="col-md-6">
+                <h3 class="page-header text-info">Trang đã phân</h3>
+                <div id="grid7" class="box-body table-responsive no-padding k-grid k-widget">
+                    <script type="text/javascript">
+                        $(document).ready(function () {
+                            $("#grid7").kendoGrid({
+                                dataSource: {
+                                    type: "json",
+                                    transport: {
+                                        read: {
+                                            url: "@Html.Raw(Url.Action("GetListPermisionsInRoles", "Roles"))",
+                                            type: "POST",
+                                            dataType: "json",
+                                            data: additionalData7,
+                                            success: function (result) {
+                                                options.success(result);
+                                            }
+                                        }
+                                    },
+                                    schema: {
+                                        data: "Data",
+                                        total: "Total",
+                                        errors: "Errors"
+                                    },
+                                    error: function (e) {
+                                        display_kendoui_grid_error(e);
+                                        // Cancel the changes
+                                        this.cancelChanges();
+                                    },
+                                    parameterMap: function (options, type) {
+                                        return JSON.stringify(options);
+                                    },
+                                    pageSize: 20,
+                                    serverPaging: true
+                                },
+                                pageable: {
+                                    refresh: true,
+                                    pageSizes: [20, 50, 100, 200, 500],
+                                    messages: {
+                                        display: "Hiển thị {0} - {1} trong {2} dòng",
+                                        empty: "Không có dữ liệu",
+                                        itemsPerPage: "dòng trên trang. "
+                                    }
+                                },
+                                sortable: true,
+                                filterable: true,
+                                editable: {
+                                    confirmation: false,
+                                    mode: "inline"
+                                },
+                                scrollable: false,
+                                dataBound: onDataBound7,
+                                columns: [{
+                                    field: "Id",
+                                    headerTemplate: "<input id='mastercheckbox7' type='checkbox'/>",
+                                    headerAttributes: { style: "text-align:center" },
+                                    attributes: { style: "text-align:center" },
+                                    template: "<input type='checkbox' value='#=Id#' class='checkboxGroups7'/>",
+                                    width: 30,
+                                    filterable: false,
+                                    sortable: false,
+                                }, {
+                                    field: "PermisionName",
+                                    title: "Tên trang",
+                                    headerAttributes: { style: "text-align:left;" },
+                                    width: 100
+                                }]
+                            });
+                        });
+                    </script>
+                    <script type="text/javascript">
+                        var selectedIds7 = [];
+                        $(document).ready(function () {
+
+                            //Destroy Permision
+                            $('#destroyPermision-selected').click(function (e) {
+                                e.preventDefault();
+
+                                var postData = {
+                                    selectedIds: selectedIds7,
+                                    roleId: $('#Id').val()
+                                };
+
+                                $.ajax({
+                                    cache: false,
+                                    type: "POST",
+                                    url: "@(Url.Action("DestroyPermisionSelected", "Roles"))",
+                                    data: postData,
+                                    complete: function (data) {
+                                        //reload grid
+                                        var grid6 = $('#grid6').data('kendoGrid');
+                                        grid6.dataSource.read();
+
+                                        var grid7 = $('#grid7').data('kendoGrid');
+                                        grid7.dataSource.read();
+
+                                        selectedIds7 = [];
+                                    },
+                                    error: function (xhr, ajaxOptions, thrownError) {
+                                        alert(thrownError);
+                                    },
+                                    traditional: true
+                                });
+                                return false;
+                            });
+
+                            $('#mastercheckbox7').click(function () {
+                                $('.checkboxGroups7').attr('checked', $(this).is(':checked')).change();
+                            });
+
+                            //wire up checkboxes.
+                            $('#grid7').on('change', 'input[type=checkbox][id!=mastercheckbox7]', function (e) {
+                                var $check = $(this);
+                                if ($check.is(":checked") == true) {
+                                    var checked = jQuery.inArray($check.val(), selectedIds7);
+                                    if (checked == -1) {
+                                        //add id to selectedIds7.
+                                        selectedIds7.push($check.val());
+                                    }
+                                }
+                                else {
+                                    var checked = jQuery.inArray($check.val(), selectedIds7);
+                                    if (checked > -1) {
+                                        //remove id from selectedIds7.
+                                        selectedIds7 = $.grep(selectedIds7, function (item, index) {
+                                            return item != $check.val();
+                                        });
+                                    }
+                                }
+                                updateMasterCheckbox7();
+                            });
+
+                        });
+
+                        function additionalData7() {
+                            return {
+                                Id: $('#Id').val()
+                            };
+                        }
+                        function onDataBound7(e) {
+                            $('#grid7 input[type=checkbox][id!=mastercheckbox7]').each(function () {
+                                var currentId = $(this).val();
+                                var checked = jQuery.inArray(currentId, selectedIds7);
+                                //set checked based on if current checkbox's value is in selectedIds7.
+                                $(this).attr('checked', checked > -1);
+                            });
+
+                            updateMasterCheckbox7();
+                        }
+
+                        function updateMasterCheckbox7() {
+                            var numChkBoxes = $('#grid7 input[type=checkbox][id!=mastercheckbox7]').length;
+                            var numChkBoxesChecked = $('#grid7 input[type=checkbox][id!=mastercheckbox7]:checked').length;
+                            $('#mastercheckbox7').attr('checked', numChkBoxes == numChkBoxesChecked && numChkBoxes > 0);
+                        }
+                    </script>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+

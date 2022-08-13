@@ -1,0 +1,105 @@
+﻿@using MB.Web.Core
+@using MB.Common.Helpers
+@using MB.OMS.Telesale.Domain.Model
+@model ReportTotalCallByDaily
+
+@{
+    ViewBag.Title = "<small>Báo cáo số lượng cuộc gọi hàng ngày</small>";
+    Layout = "~/Views/Shared/_MasterLayout.cshtml";
+}
+
+@section Breadcrumb {
+    <h1>
+        Báo cáo số lượng cuộc gọi hàng ngày
+    </h1>
+}
+
+<div class="box box-success">
+    <div class="box-header with-border">
+        <h3 class="box-title">Báo cáo số lượng cuộc gọi hàng ngày</h3>
+    </div>
+    <div class="box-body">
+        <div class="row form-horizontal">
+                <div class="form-group">
+                    @Html.Label("Chọn ngày", new { @class = "col-sm-2 control-label" })
+                    <div class="col-sm-3">
+                        <div class="input-group">
+                            <input type="text" class="form-control pull-right" id="DateStart"  value="@Model.DateStart.ToString("MM/dd/yyyy")">
+                            <div class="input-group-addon">
+                                <i class="fa fa-calendar"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-3">
+                        <div class="input-group">
+                            <input type="text" class="form-control pull-right" id="DateEnd"  value="@Model.DateEnd.ToString("MM/dd/yyyy")">
+                            <div class="input-group-addon">
+                                <i class="fa fa-calendar"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    @Html.Label("Chọn nguồn", new { @class = "col-sm-2 control-label" })
+                    <div class="col-sm-6">
+                        <div class="input-group">
+                            <select class="form-control" id="ddlsource">
+                                <option value="0">-- Tất cả --</option>
+                                @{
+                                    foreach (var it in Model.AvaiableSources)
+                                    {
+                                <option value="@it.Value" @(it.Selected ? "selected" : "")>@it.Text</option>
+                                    }
+                                }
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-2">
+                    </div>
+                    <div class="col-md-3">
+                        <button type="button" id="search" class="btn btn-default"><i class="fa fa-fw fa-search"></i>Tìm kiếm</button>
+                        <button type="button" id="export" class="btn btn-default"><i class="fa fa-fw fa-download"></i>Export Excel</button>
+                    </div>
+                </div>
+        </div>
+        <table class="table table-bordered c-bdr" id="tbReport" width="100%">
+        </table>
+    </div>
+</div>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $("#DateStart").datepicker({
+            autoclose: true
+        });
+        $("#DateEnd").datepicker({
+            autoclose: true
+        });
+    });
+
+    $('#search').click(function () {
+        var sourceId = $('select[id=ddlsource] option:selected').val();
+        var DateFrom = $('#DateStart').val();
+        var DateEnd = $('#DateEnd').val();
+
+        $.ajax({
+            type: "POST", 
+            url: '/Report/RenderTotalCallByDaily?sourceId=' + sourceId + '&ds=' + DateFrom + '&de=' + DateEnd,
+            dataType: 'json',
+            contentType: "application/json; charset=utf-8",
+            success: function (response) {
+                if (response.success) {
+                    $("#tbReport").html(response.ReportData);
+                }
+                else {
+                    $("#tbReport").html("Có lỗi xảy ra khi tổng hợp dữ liệu. Vui lòng liên hệ IT để được hỗ trợ.");
+                }
+            }
+        });
+    });
+
+    $('#export').click(function () {
+        swal({ title: "Tính năng đang được cập nhật.Xin lỗi bạn vì sự bất tiện này!", confirmButtonText: "Đóng" });
+    });
+</script>

@@ -1,0 +1,2597 @@
+﻿@using System.Text.RegularExpressions;
+@using MB.Web.Core.HTMLHelpers;
+@using MB.Web.Core;
+@using MB.Common.Helpers;
+@using MB.Common;
+@model MB.OMS.Telesale.Domain.Model.ProjectsDTO
+@{
+    ViewBag.Title = "Cập nhật dự án";
+    Layout = "~/Views/Shared/_MasterLayout.cshtml";
+}
+
+
+@section Breadcrumb {
+    <h1>
+        Quản lý dự án
+        <small>Cập nhật dự án - @Model.Name</small>
+    </h1>
+}
+@using (Html.MBForm("EditProjects", "Project", new Dictionary<string, object>() { { "id", "form" }, { "class", "form-horizontal" } }))
+{
+    <div class="nav-tabs-custom">
+        <ul class="nav nav-tabs">
+            <li class="active"><a href="#tab_1" data-toggle="tab">THÔNG TIN DỰ ÁN</a></li>
+            <li><a href="#tab_2" data-toggle="tab">PHÂN KH</a></li>
+            <li><a href="#tab_3" data-toggle="tab">PHÂN ĐTV</a></li>
+            <li><a href="#tab_4" data-toggle="tab">PHÂN TRẠNG THÁI</a></li>
+            <li><a href="#tab_5" data-toggle="tab">PHÂN THUỘC TÍNH KH</a></li>
+            <li><a href="#tab_6" data-toggle="tab">PHÂN CÂU HỎI</a></li>
+            <li><a href="#tab_7" data-toggle="tab">KỊCH BẢN</a></li>
+        </ul>
+        <div class="tab-content">
+            @Html.HiddenFor(model => model.ProjectID)
+            <div class="tab-pane fade in active" id="tab_1">
+                <div class="box box-default">
+                    <div class="box-body">
+                        <div class="row">
+                            <div class="col-md-8 center">
+                                <div class="form-group">
+                                    @Html.LabelFor(model => model.Name, new { @class = "col-sm-4 control-label" })
+                                    <div class="col-sm-8">
+                                        @Html.TextBoxFor(model => model.Name, new { @class = "form-control", data_placement = "top", data_title = "Tên dự án", data_toggle = "tooltip", @placeholder = "" })
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    @Html.LabelFor(model => model.Code, new { @class = "col-sm-4 control-label" })
+                                    <div class="col-sm-8">
+                                        @Html.TextBoxFor(model => model.Code, new { @class = "form-control", data_placement = "top", data_title = "Mã dự án", data_toggle = "tooltip", @placeholder = "" })
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    @Html.LabelFor(model => model.Greeting, new { @class = "col-sm-4 control-label" })
+                                    <div class="col-sm-8">
+                                        @Html.TextAreaFor(model => model.Greeting, new { style = "width: 100%; height: 200px; font-size: 14px; line-height: 18px; border: 1px solid #dddddd; padding: 10px;" })
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    @Html.LabelFor(model => model.Conclusion, new { @class = "col-sm-4 control-label" })
+                                    <div class="col-sm-8">
+                                        @Html.TextAreaFor(model => model.Conclusion, new { style = "width: 100%; height: 200px; font-size: 14px; line-height: 18px; border: 1px solid #dddddd; padding: 10px;" })
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    @Html.LabelFor(model => model.CampaignID, new { @class = "col-sm-4 control-label" })
+                                    <div class="col-sm-8">
+                                        @Html.DropDownListFor(model => model.CampaignID, Model.AvailableCampaign, new { @class = "form-control", @style = "width:100%;" })
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    @Html.LabelFor(model => model.Visiable, new { @class = "col-sm-4 control-label" })
+                                    <div class="col-sm-4">
+                                        @Html.CheckBoxFor(model => model.Visiable)
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    @Html.LabelFor(model => model.TotalPlan, new { @class = "col-sm-4 control-label" })
+                                    <div class="col-sm-8">
+                                        @Html.TextBoxFor(model => model.TotalPlan, new { @class = "form-control", data_placement = "top", data_title = "", data_toggle = "tooltip", @placeholder = "" })
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    @Html.LabelFor(model => model.TotalTarget, new { @class = "col-sm-4 control-label" })
+                                    <div class="col-sm-8">
+                                        @Html.TextBoxFor(model => model.TotalTarget, new { @class = "form-control", data_placement = "top", data_title = "Mã dự án", data_toggle = "tooltip", @placeholder = "" })
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    @Html.LabelFor(model => model.MonthlyPlan, new { @class = "col-sm-4 control-label" })
+                                    <div class="col-sm-8">
+                                        @Html.TextBoxFor(model => model.MonthlyPlan, new { @class = "form-control", data_placement = "top", data_title = "Mã dự án", data_toggle = "tooltip", @placeholder = "" })
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    @Html.LabelFor(model => model.MonthlyTarget, new { @class = "col-sm-4 control-label" })
+                                    <div class="col-sm-8">
+                                        @Html.TextBoxFor(model => model.MonthlyTarget, new { @class = "form-control", data_placement = "top", data_title = "Mã dự án", data_toggle = "tooltip", @placeholder = "" })
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    @Html.LabelFor(model => model.DailyPlan, new { @class = "col-sm-4 control-label" })
+                                    <div class="col-sm-8">
+                                        @Html.TextBoxFor(model => model.DailyPlan, new { @class = "form-control", data_placement = "top", data_title = "Mã dự án", data_toggle = "tooltip", @placeholder = "" })
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    @Html.LabelFor(model => model.DailyTarget, new { @class = "col-sm-4 control-label" })
+                                    <div class="col-sm-8">
+                                        @Html.TextBoxFor(model => model.DailyTarget, new { @class = "form-control", data_placement = "top", data_title = "Mã dự án", data_toggle = "tooltip", @placeholder = "" })
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="box-footer text-center">
+                        <div class="col-md-8 center">
+                            @Html.MBButton("btnSave", "Lưu", null, "btn btn-primary")
+                            @if (CommonHelper.CheckPermisionExist(Permissions.XoaDuAn.ToString()))
+                            {
+                                @Html.MBButton("btnDelete", "Xóa", null, "btn btn-warning")
+                            }
+                            <a href="@Url.Action("ListProjects", "Project")">
+                                <input type="button" class="btn btn-danger" value="Hủy" />
+                            </a>
+                        </div>
+                    </div>
+                    <script>
+                        $(document).ready(function () {
+                            $(@Html.IdFor(model => model.Greeting)).wysihtml5();
+                            $(@Html.IdFor(model => model.Conclusion)).wysihtml5();
+                            $("#@Html.IdFor(model => model.CampaignID)").select2();
+                        });
+                    </script>
+                </div>
+            </div>
+            <div class="tab-pane fade" id="tab_2">
+                <div class="box box-default">
+                    <div class="box-body">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <h3 class="page-header text-info">Khách hàng ban đầu</h3>
+                                <div class="form-group">
+
+                                    <div class="col-sm-4">
+                                        @Html.DropDownListFor(model => model.SearchSourceID1, Model.AvailableSource, new { @class = "form-control", @style = "width:100%;" })
+                                    </div>
+                                    <div class="col-sm-4">
+                                        <button type="button" id="search" class="btn btn-default" style="margin-right: 5px;"><i class="fa fa-fw fa-search"></i>Tìm kiếm</button>
+                                    </div>
+                                </div>
+
+
+                                <div id="grid" class="box-body table-responsive no-padding k-grid k-widget">
+                                    <script type="text/javascript">
+                                        var array = @Html.Raw(Json.Encode(ViewBag.ListCustomerField1))
+                                            array.unshift({
+                                                field: "[6].Value",
+                                                headerTemplate: "<input id='mastercheckbox' type='checkbox'/>",
+                                                headerAttributes: { style: "text-align:center" },
+                                                attributes: { style: "text-align:center" },
+                                                template: "<input type='checkbox' value='#=data[6].Value#' class='checkboxGroups'/>",
+                                                width: 30,
+                                                filterable: false,
+                                                sortable: false,
+                                            });
+                                        $(document).ready(function () {
+
+                                            $('select[name=SearchSourceID1]').val('0');
+
+                                            var dataSource = new kendo.data.DataSource({
+                                                type: "json",
+                                                transport: {
+                                                    read: {
+                                                        url: "@Html.Raw(Url.Action("GetListCustomer", "Project"))",
+                                                        type: "POST",
+                                                        dataType: "json",
+                                                        data: additionalData,
+                                                        success: function (result) {
+                                                            options.success(result);
+                                                        }
+                                                    }
+                                                },
+                                                schema: {
+                                                    data: "Data",
+                                                    total: "Total",
+                                                    errors: "Errors"
+                                                },
+                                                error: function (e) {
+                                                    display_kendoui_grid_error(e);
+                                                    // Cancel the changes
+                                                    this.cancelChanges();
+                                                },
+                                                parameterMap: function (options, type) {
+                                                    return JSON.stringify(options);
+                                                },
+                                                pageSize: 20,
+                                                serverPaging: true
+                                            });
+                                            $("#grid").kendoGrid({
+                                                dataSource: dataSource,
+                                                pageable: {
+                                                    refresh: true,
+                                                    pageSizes: [20, 50, 100, 200, 500],
+                                                    messages: {
+                                                        display: "Hiển thị {0} - {1} trong {2} dòng",
+                                                        empty: "Không có dữ liệu",
+                                                        itemsPerPage: "dòng trên trang. "
+                                                    }
+                                                },
+                                                sortable: true,
+                                                filterable: {
+                                                    extra: false,
+                                                    operators: {
+                                                        string: {
+                                                            contains: "Kết quả chứa"
+                                                        }
+                                                    },
+                                                    messages: {
+                                                        info: "Chọn các mục tìm kiếm : ",
+                                                        clear: "Xóa",
+                                                        filter: "Tìm kiếm"
+                                                    }
+                                                },
+                                                scrollable: true,
+                                                dataBound: onDataBound,
+                                                columns: array
+                                            });
+
+                                            dataSource.fetch(function () {
+                                                var data = this.data();
+                                                $("#grid th[data-field='" + array[1] + "'] .k-link").html("Di động");
+                                                for (var i = 2; i <= array.length; i++) {
+                                                    $("#grid th[data-field='" + array[i] + "'] .k-link").html(data[0][5 + i].Key);
+                                                }
+                                            });
+                                        });
+                                    </script>
+                                    <script type="text/javascript">
+                                        var selectedIds = [];
+                                        $(document).ready(function () {
+
+                                            $("#@Html.IdFor(model => model.SearchSourceID1)").select2();
+
+                                            //search button
+                                            $('#search').click(function () {
+                                                //search
+                                                var grid = $('#grid').data('kendoGrid');
+                                                grid.dataSource.page(1);
+
+                                                $('.checkboxGroups').attr('checked', false).change();
+                                                selectedIds = [];
+
+                                                return false;
+                                            });
+
+                                            //Share customer
+                                            $('#sharecustomer-selected').click(function (e) {
+                                                e.preventDefault();
+
+                                                var postData = {
+                                                    selectedIds: selectedIds,
+                                                    projectID: $('#ProjectID').val()
+                                                };
+
+                                                $.ajax({
+                                                    cache: false,
+                                                    type: "POST",
+                                                    url: "@(Url.Action("ShareCustomerSelected", "Project"))",
+                                                    data: postData,
+                                                    complete: function (data) {
+                                                        //reload grid
+                                                        var grid = $('#grid').data('kendoGrid');
+                                                        grid.dataSource.read();
+
+                                                        var grid1 = $('#grid1').data('kendoGrid');
+                                                        grid1.dataSource.read();
+
+                                                        selectedIds = [];
+                                                    },
+                                                    error: function (xhr, ajaxOptions, thrownError) {
+                                                        alert(thrownError);
+                                                    },
+                                                    traditional: true
+                                                });
+                                                return false;
+                                            });
+                                            //Share All customer
+                                            $('#sharecustomer-all').click(function (e) {
+                                                e.preventDefault();
+
+                                                var postData = {
+                                                    projectID: $('#ProjectID').val(),
+                                                    sourceID: $('#SearchSourceID1').val()
+                                                };
+
+                                                $.ajax({
+                                                    cache: false,
+                                                    type: "POST",
+                                                    url: "@(Url.Action("ShareCustomerAll", "Project"))",
+                                                    data: postData,
+                                                    complete: function (data) {
+                                                        //reload grid
+                                                        var grid = $('#grid').data('kendoGrid');
+                                                        grid.dataSource.read();
+
+                                                        var grid1 = $('#grid1').data('kendoGrid');
+                                                        grid1.dataSource.read();
+
+                                                        selectedIds = [];
+                                                    },
+                                                    error: function (xhr, ajaxOptions, thrownError) {
+                                                        alert(thrownError);
+                                                    },
+                                                    traditional: true
+                                                });
+                                                return false;
+                                            });
+                                            $('#mastercheckbox').click(function () {
+                                                $('.checkboxGroups').attr('checked', $(this).is(':checked')).change();
+                                            });
+
+                                            //wire up checkboxes.
+                                            $('#grid').on('change', 'input[type=checkbox][id!=mastercheckbox]', function (e) {
+                                                var $check = $(this);
+                                                if ($check.is(":checked") == true) {
+                                                    var checked = jQuery.inArray($check.val(), selectedIds);
+                                                    if (checked == -1) {
+                                                        //add id to selectedIds.
+                                                        selectedIds.push($check.val());
+                                                    }
+                                                }
+                                                else {
+                                                    var checked = jQuery.inArray($check.val(), selectedIds);
+                                                    if (checked > -1) {
+                                                        //remove id from selectedIds.
+                                                        selectedIds = $.grep(selectedIds, function (item, index) {
+                                                            return item != $check.val();
+                                                        });
+                                                    }
+                                                }
+                                                updateMasterCheckbox();
+                                            });
+
+                                            $('#SearchSourceID1').keydown(function (even) {
+                                                if (even.keyCode == 13) {
+                                                    var grid = $('#grid').data('kendoGrid');
+                                                    grid.dataSource.page(1);
+                                                    return false;
+                                                }
+                                            });
+                                        });
+
+                                        function additionalData() {
+                                            return {
+                                                SearchSourceID1: $('#SearchSourceID1').val(),
+                                                ProjectID: $('#ProjectID').val()
+                                            };
+                                        }
+                                        function onDataBound(e) {
+                                            $('#grid input[type=checkbox][id!=mastercheckbox]').each(function () {
+                                                var currentId = $(this).val();
+                                                var checked = jQuery.inArray(currentId, selectedIds);
+                                                //set checked based on if current checkbox's value is in selectedIds.
+                                                $(this).attr('checked', checked > -1);
+                                            });
+
+                                            updateMasterCheckbox();
+                                        }
+
+                                        function updateMasterCheckbox() {
+                                            var numChkBoxes = $('#grid input[type=checkbox][id!=mastercheckbox]').length;
+                                            var numChkBoxesChecked = $('#grid input[type=checkbox][id!=mastercheckbox]:checked').length;
+                                            $('#mastercheckbox').attr('checked', numChkBoxes == numChkBoxesChecked && numChkBoxes > 0);
+                                        }
+                                    </script>
+                                </div>
+                            </div>
+                            <div class="col-md-12 text-center">
+
+                                <br />
+                                <div class="col-md-3 "><button type="button" class="btn btn-primary" id="sharecustomer-selected"><i class="fa fa-arrow-down" aria-hidden="true"></i> </button></div>
+
+                                <div class="col-md-3 "><button type="button" class="btn btn-primary" id="sharecustomer-all"><i class="fa fa-angle-double-down" aria-hidden="true"></i> </button></div>
+
+                                <div class="col-md-3 "><button type="button" class="btn btn-primary" id="destroycustomer-all"><i class="fa fa-angle-double-up" aria-hidden="true"></i> </button></div>
+
+                                <div class="col-md-3 "><button type="button" class="btn btn-primary" id="destroycustomer-selected"> <i class="fa fa-arrow-up" aria-hidden="true"></i></button></div>
+                            </div>
+                            <div class="col-md-12">
+                                <h3 class="page-header text-info ">Khách hàng đã phân công</h3>
+                                <div class="form-group">
+                                    <div class="col-sm-4">
+                                        @Html.DropDownListFor(model => model.SearchSourceID2, Model.AvailableSource, new { @class = "form-control", @style = "width:100%;" })
+                                    </div>
+
+                                    <div class="col-sm-4 ">
+                                        <button type="button" id="search1" class="btn btn-default" style="margin-right: 5px;"><i class="fa fa-fw fa-search"></i>Tìm kiếm</button>
+                                    </div>
+                                </div>
+
+                                <div id="grid1" class="box-body table-responsive no-padding k-grid k-widget">
+                                    <script type="text/javascript">
+                                        var array1 = @Html.Raw(Json.Encode(ViewBag.ListCustomerField2))
+                                        array1.unshift({
+                                            field: "[8].Value",
+                                            headerTemplate: "<input id='mastercheckbox1' type='checkbox'/>",
+                                            headerAttributes: { style: "text-align:center" },
+                                            attributes: { style: "text-align:center" },
+                                            template: "<input type='checkbox' value='#=data[8].Value#' class='checkboxGroups1'/>",
+                                            width: 30,
+                                            filterable: false,
+                                            sortable: false,
+                                        });
+                                        $(document).ready(function () {
+                                            var dataSource = new kendo.data.DataSource({
+                                                type: "json",
+                                                transport: {
+                                                    read: {
+                                                        url: "@Html.Raw(Url.Action("GetListCustomerInProject", "Project"))",
+                                                        type: "POST",
+                                                        dataType: "json",
+                                                        data: additionalData1,
+                                                        success: function (result) {
+                                                            options.success(result);
+                                                        }
+                                                    }
+                                                },
+                                                schema: {
+                                                    data: "Data",
+                                                    total: "Total",
+                                                    errors: "Errors"
+                                                },
+                                                error: function (e) {
+                                                    display_kendoui_grid_error(e);
+                                                    // Cancel the changes
+                                                    this.cancelChanges();
+                                                },
+                                                parameterMap: function (options, type) {
+                                                    return JSON.stringify(options);
+                                                },
+                                                pageSize: 20,
+                                                serverPaging: true
+                                            });
+                                            $("#grid1").kendoGrid({
+                                                dataSource: dataSource,
+                                                pageable: {
+                                                    refresh: true,
+                                                    pageSizes: [20, 50, 100, 200, 500],
+                                                    messages: {
+                                                        display: "Hiển thị {0} - {1} trong {2} dòng",
+                                                        empty: "Không có dữ liệu",
+                                                        itemsPerPage: "dòng trên trang. "
+                                                    }
+                                                },
+                                                sortable: true,
+                                                filterable: {
+                                                    extra: false,
+                                                    operators: {
+                                                        string: {
+                                                            contains: "Kết quả chứa"
+                                                        }
+                                                    },
+                                                    messages: {
+                                                        info: "Chọn các mục tìm kiếm : ",
+                                                        clear: "Xóa",
+                                                        filter: "Tìm kiếm"
+                                                    }
+                                                },
+                                                scrollable: true,
+                                                dataBound: onDataBound1,
+                                                columns: array1
+                                            });
+                                            dataSource.fetch(function () {
+                                                var data = this.data();
+                                                $("#grid1 th[data-field='" + array1[1] + "'] .k-link").html("Di động");
+                                                for (var i = 2; i <= array1.length; i++) {
+                                                    $("#grid1 th[data-field='" + array1[i] + "'] .k-link").html(data[0][7 + i].Key);
+                                                }
+                                            });
+                                        });
+                                    </script>
+                                    <script type="text/javascript">
+                                        var selectedIds1 = [];
+                                        $(document).ready(function () {
+
+                                            $("#@Html.IdFor(model => model.SearchSourceID2)").select2();
+
+                                            //search1 button
+                                            $('#search1').click(function () {
+                                                //search
+                                                var grid = $('#grid1').data('kendoGrid');
+                                                grid.dataSource.page(1);
+
+                                                $('.checkboxGroups1').attr('checked', false).change();
+                                                selectedIds1 = [];
+
+                                                return false;
+                                            });
+
+                                            //Destroy customer
+                                            $('#destroycustomer-selected').click(function (e) {
+                                                e.preventDefault();
+
+                                                var postData = {
+                                                    selectedIds: selectedIds1,
+                                                    projectID: $('#ProjectID').val()
+                                                };
+                                                if (selectedIds1.length <= 0) {
+                                                    swal({ title: "Chuyển khách hàng về kho không thành công", text: "Chọn khách hàng trước khi chuyển", type: "error" });
+                                                }
+                                                else {
+
+                                                    swal({
+                                                        title: "Xác nhận chuyển!",
+                                                        text: "Dữ liệu cuộc gọi liên quan tới khách hàng sẽ bị mất nếu chuyển!<br>Bạn có chắc chắn chuyển về kho những khách hàng đã chọn không?",
+                                                        type: "warning",
+                                                        showCancelButton: true,
+                                                        cancelButtonText: "Hủy",
+                                                        confirmButtonColor: "#DD6B55",
+                                                        confirmButtonText: "Xác nhận!",
+                                                        closeOnConfirm: false,
+                                                        showLoaderOnConfirm: true,
+                                                    }, function (isConfirm) {
+                                                        if (isConfirm) {
+                                                            $.ajax({
+                                                                cache: false,
+                                                                type: "POST",
+                                                                url: "@(Url.Action("DestroyCustomerSelected", "Project"))",
+                                                                data: postData,
+                                                                success: function (data) {
+                                                                    //reload grid
+                                                                    var grid = $('#grid').data('kendoGrid');
+                                                                    grid.dataSource.read();
+
+                                                                    var grid1 = $('#grid1').data('kendoGrid');
+                                                                    grid1.dataSource.read();
+
+                                                                    swal({ title: data.Title, text: data.Message, type: "success" });
+
+                                                                    selectedIds1 = [];
+                                                                },
+                                                                error: function (xhr, ajaxOptions, thrownError) {
+                                                                    alert(thrownError);
+                                                                },
+                                                                traditional: true
+                                                            });
+                                                        }
+                                                    });
+                                                }
+
+                                            });
+                                            //Destroy ALL customer
+                                            $('#destroycustomer-all').click(function (e) {
+                                                e.preventDefault();
+
+                                                var postData = {
+                                                    projectID: $('#ProjectID').val()
+                                                };
+                                                if ($('#ProjectID').val().length <= 0) {
+                                                    swal({ title: "Chuyển khách hàng về kho không thành công", text: "Chọn khách hàng trước khi chuyển", type: "error" });
+                                                }
+                                                else {
+                                                    swal({
+                                                        title: "Xác nhận chuyển!",
+                                                        text: "Dữ liệu cuộc gọi liên quan tới khách hàng sẽ bị mất nếu chuyển!<br>Bạn có chắc chắn chuyển về kho tất cả khách hàng không?",
+                                                        type: "warning",
+                                                        showCancelButton: true,
+                                                        cancelButtonText: "Hủy",
+                                                        confirmButtonColor: "#DD6B55",
+                                                        confirmButtonText: "Xác nhận!",
+                                                        closeOnConfirm: false,
+                                                        showLoaderOnConfirm: true,
+                                                    }, function (isConfirm) {
+                                                        if (isConfirm) {
+                                                            $.ajax({
+                                                                cache: false,
+                                                                type: "POST",
+                                                                url: "@(Url.Action("DestroyCustomerAll", "Project"))",
+                                                                data: postData,
+                                                                success: function (data) {
+                                                                    //reload grid
+                                                                    var grid = $('#grid').data('kendoGrid');
+                                                                    grid.dataSource.read();
+
+                                                                    var grid1 = $('#grid1').data('kendoGrid');
+                                                                    grid1.dataSource.read();
+                                                                    swal({ title: data.Title, text: data.Message, type: "success" });
+                                                                    selectedIds1 = [];
+                                                                },
+                                                                error: function (xhr, ajaxOptions, thrownError) {
+                                                                    alert(thrownError);
+                                                                },
+                                                                traditional: true
+                                                            });
+                                                        }
+                                                    });
+                                                }
+
+                                            });
+                                            $('#mastercheckbox1').click(function () {
+                                                $('.checkboxGroups1').attr('checked', $(this).is(':checked')).change();
+                                            });
+
+                                            //wire up checkboxes.
+                                            $('#grid1').on('change', 'input[type=checkbox][id!=mastercheckbox1]', function (e) {
+                                                var $check = $(this);
+                                                if ($check.is(":checked") == true) {
+                                                    var checked = jQuery.inArray($check.val(), selectedIds1);
+                                                    if (checked == -1) {
+                                                        //add id to selectedIds1.
+                                                        selectedIds1.push($check.val());
+                                                    }
+                                                }
+                                                else {
+                                                    var checked = jQuery.inArray($check.val(), selectedIds1);
+                                                    if (checked > -1) {
+                                                        //remove id from selectedIds1.
+                                                        selectedIds1 = $.grep(selectedIds1, function (item, index) {
+                                                            return item != $check.val();
+                                                        });
+                                                    }
+                                                }
+                                                updateMasterCheckbox1();
+                                            });
+
+                                            $('#SearchSourceID2').keydown(function (even) {
+                                                if (even.keyCode == 13) {
+                                                    var grid = $('#grid1').data('kendoGrid');
+                                                    grid.dataSource.page(1);
+                                                    return false;
+                                                }
+                                            });
+                                        });
+
+                                        function additionalData1() {
+                                            return {
+                                                SearchSourceID2: $('#SearchSourceID2').val(),
+                                                ProjectID: $('#ProjectID').val()
+                                            };
+                                        }
+                                        function onDataBound1(e) {
+                                            $('#grid1 input[type=checkbox][id!=mastercheckbox1]').each(function () {
+                                                var currentId = $(this).val();
+                                                var checked = jQuery.inArray(currentId, selectedIds1);
+                                                //set checked based on if current checkbox's value is in selectedIds1.
+                                                $(this).attr('checked', checked > -1);
+                                            });
+
+                                            updateMasterCheckbox1();
+                                        }
+
+                                        function updateMasterCheckbox1() {
+                                            var numChkBoxes = $('#grid1 input[type=checkbox][id!=mastercheckbox1]').length;
+                                            var numChkBoxesChecked = $('#grid1 input[type=checkbox][id!=mastercheckbox1]:checked').length;
+                                            $('#mastercheckbox1').attr('checked', numChkBoxes == numChkBoxesChecked && numChkBoxes > 0);
+                                        }
+                                    </script>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="tab-pane fade" id="tab_3">
+                <div class="box box-default">
+                    <div class="box-header with-border">
+                        <h3 class="box-title">Phân chia điện thoại viên cho dự án </h3>
+                    </div>
+                    <div class="box-body">
+                        <div class="row">
+                            <div class="col-md-5">
+                                <h3 class="page-header text-info">Điện thoại viên</h3>
+                                <div id="grid2" class="box-body table-responsive no-padding k-grid k-widget">
+                                    <script type="text/javascript">
+                                        $(document).ready(function () {
+                                            $("#grid2").kendoGrid({
+                                                dataSource: {
+                                                    type: "json",
+                                                    transport: {
+                                                        read: {
+                                                            url: "@Html.Raw(Url.Action("GetListUser", "Project"))",
+                                                            type: "POST",
+                                                            dataType: "json",
+                                                            data: additionalData2,
+                                                            success: function (result) {
+                                                                options.success(result);
+                                                            }
+                                                        }
+                                                    },
+                                                    schema: {
+                                                        data: "Data",
+                                                        total: "Total",
+                                                        errors: "Errors"
+                                                    },
+                                                    error: function (e) {
+                                                        display_kendoui_grid_error(e);
+                                                        // Cancel the changes
+                                                        this.cancelChanges();
+                                                    },
+                                                    parameterMap: function (options, type) {
+                                                        return JSON.stringify(options);
+                                                    },
+                                                    pageSize: 20,
+                                                    serverPaging: true,
+                                                    serverFiltering: true,
+                                                    serverSorting: true
+                                                },
+                                                pageable: {
+                                                    refresh: true,
+                                                    pageSizes: [20, 40, 60],
+                                                    messages: {
+                                                        display: "Hiển thị {0} - {1} trong {2} dòng",
+                                                        empty: "Không có dữ liệu",
+                                                        itemsPerPage: "dòng trên trang. "
+                                                    }
+                                                },
+                                                sortable: true,
+                                                filterable: {
+                                                    extra: false,
+                                                    operators: {
+                                                        string: {
+                                                            contains: "Kết quả chứa"
+                                                        }
+                                                    },
+                                                    messages: {
+                                                        info: "Chọn các mục tìm kiếm : ",
+                                                        clear: "Xóa",
+                                                        filter: "Tìm kiếm"
+                                                    }
+                                                },
+                                                scrollable: false,
+                                                dataBound: onDataBound2,
+                                                columns: [{
+                                                    field: "Id",
+                                                    headerTemplate: "<input id='mastercheckbox2' type='checkbox'/>",
+                                                    headerAttributes: { style: "text-align:center" },
+                                                    attributes: { style: "text-align:center" },
+                                                    template: "<input type='checkbox' value='#=Id#' class='checkboxGroups2'/>",
+                                                    width: 30,
+                                                    filterable: false,
+                                                    sortable: false,
+                                                }, {
+                                                    field: "UserName",
+                                                    title: "Tài khoản",
+                                                    headerAttributes: { style: "text-align:left;" },
+                                                    width: 100
+                                                }, {
+                                                    field: "FullName",
+                                                    title: "Họ tên",
+                                                    headerAttributes: { style: "text-align:left;" },
+                                                    //template: "#=FirstName# #=LastName#",
+                                                    width: 100
+                                                }
+                                                ]
+                                            });
+                                        });
+                                    </script>
+                                    <script type="text/javascript">
+                                        var selectedIds2 = [];
+                                        $(document).ready(function () {
+
+                                            //Share customer
+                                            $('#shareuser-selected').click(function (e) {
+                                                e.preventDefault();
+
+                                                var postData = {
+                                                    selectedIds: selectedIds2,
+                                                    projectID: $('#ProjectID').val()
+                                                };
+
+                                                $.ajax({
+                                                    cache: false,
+                                                    type: "POST",
+                                                    url: "@(Url.Action("ShareUserSelected", "Project"))",
+                                                    data: postData,
+                                                    complete: function (data) {
+                                                        //reload grid
+                                                        var grid2 = $('#grid2').data('kendoGrid');
+                                                        grid2.dataSource.read();
+
+                                                        var grid3 = $('#grid3').data('kendoGrid');
+                                                        grid3.dataSource.read();
+
+                                                        selectedIds2 = [];
+                                                    },
+                                                    error: function (xhr, ajaxOptions, thrownError) {
+                                                        alert(thrownError);
+                                                    },
+                                                    traditional: true
+                                                });
+                                                return false;
+                                            });
+
+                                            $('#mastercheckbox2').click(function () {
+                                                $('.checkboxGroups2').attr('checked', $(this).is(':checked')).change();
+                                            });
+
+                                            //wire up checkboxes.
+                                            $('#grid2').on('change', 'input[type=checkbox][id!=mastercheckbox2]', function (e) {
+                                                var $check = $(this);
+                                                if ($check.is(":checked") == true) {
+                                                    var checked = jQuery.inArray($check.val(), selectedIds2);
+                                                    if (checked == -1) {
+                                                        //add id to selectedIds2.
+                                                        selectedIds2.push($check.val());
+                                                    }
+                                                }
+                                                else {
+                                                    var checked = jQuery.inArray($check.val(), selectedIds2);
+                                                    if (checked > -1) {
+                                                        //remove id from selectedIds2.
+                                                        selectedIds2 = $.grep(selectedIds2, function (item, index) {
+                                                            return item != $check.val();
+                                                        });
+                                                    }
+                                                }
+                                                updateMasterCheckbox2();
+                                            });
+                                        });
+
+                                        function additionalData2() {
+                                            return {
+                                                ProjectID: $('#ProjectID').val()
+                                            };
+                                        }
+                                        function onDataBound2(e) {
+                                            $('#grid2 input[type=checkbox][id!=mastercheckbox2]').each(function () {
+                                                var currentId = $(this).val();
+                                                var checked = jQuery.inArray(currentId, selectedIds2);
+                                                //set checked based on if current checkbox's value is in selectedIds2.
+                                                $(this).attr('checked', checked > -1);
+                                            });
+
+                                            updateMasterCheckbox2();
+                                        }
+
+                                        function updateMasterCheckbox2() {
+                                            var numChkBoxes = $('#grid2 input[type=checkbox][id!=mastercheckbox2]').length;
+                                            var numChkBoxesChecked = $('#grid2 input[type=checkbox][id!=mastercheckbox2]:checked').length;
+                                            $('#mastercheckbox2').attr('checked', numChkBoxes == numChkBoxesChecked && numChkBoxes > 0);
+                                        }
+                                    </script>
+                                </div>
+                            </div>
+                            <div class="col-md-1 text-center">
+                                <br /><br /><br />
+                                <div class="row"><button type="button" class="btn btn-primary" id="shareuser-selected"> > </button></div>
+                                <br />
+                                <div class="row"><button type="button" class="btn btn-primary" id="destroyuser-selected"> < </button></div>
+                            </div>
+                            <div class="col-md-6">
+                                <h3 class="page-header text-info">Điện thoại viên đã phân công</h3>
+                                <div id="grid3" class="box-body table-responsive no-padding k-grid k-widget">
+                                    <script type="text/javascript">
+                                        $(document).ready(function () {
+                                            $("#grid3").kendoGrid({
+                                                dataSource: {
+                                                    type: "json",
+                                                    transport: {
+                                                        read: {
+                                                            url: "@Html.Raw(Url.Action("GetListUserInProject", "Project"))",
+                                                            type: "POST",
+                                                            dataType: "json",
+                                                            data: additionalData3,
+                                                            success: function (result) {
+                                                                options.success(result);
+                                                            }
+                                                        }
+                                                    },
+                                                    schema: {
+                                                        data: "Data",
+                                                        total: "Total",
+                                                        errors: "Errors"
+                                                    },
+                                                    error: function (e) {
+                                                        display_kendoui_grid_error(e);
+                                                        // Cancel the changes
+                                                        this.cancelChanges();
+                                                    },
+                                                    parameterMap: function (options, type) {
+                                                        return JSON.stringify(options);
+                                                    },
+                                                    pageSize: 20,
+                                                    serverPaging: true,
+                                                    serverFiltering: true,
+                                                    serverSorting: true
+                                                },
+                                                pageable: {
+                                                    refresh: true,
+                                                    pageSizes: [20, 40, 60],
+                                                    messages: {
+                                                        display: "Hiển thị {0} - {1} trong {2} dòng",
+                                                        empty: "Không có dữ liệu",
+                                                        itemsPerPage: "dòng trên trang. "
+                                                    }
+                                                },
+                                                sortable: true,
+                                                filterable: {
+                                                    extra: false,
+                                                    operators: {
+                                                        string: {
+                                                            contains: "Kết quả chứa"
+                                                        }
+                                                    },
+                                                    messages: {
+                                                        info: "Chọn các mục tìm kiếm : ",
+                                                        clear: "Xóa",
+                                                        filter: "Tìm kiếm"
+                                                    }
+                                                },
+                                                scrollable: false,
+                                                dataBound: onDataBound3,
+                                                columns: [{
+                                                    field: "Id",
+                                                    headerTemplate: "<input id='mastercheckbox3' type='checkbox'/>",
+                                                    headerAttributes: { style: "text-align:center" },
+                                                    attributes: { style: "text-align:center" },
+                                                    template: "<input type='checkbox' value='#=Id#' class='checkboxGroups3'/>",
+                                                    width: 30,
+                                                    filterable: false,
+                                                    sortable: false,
+                                                }, {
+                                                    field: "UserName",
+                                                    title: "Tài khoản",
+                                                    headerAttributes: { style: "text-align:left;" },
+                                                    width: 100
+                                                }, {
+                                                    field: "FullName",
+                                                    title: "Họ tên",
+                                                    headerAttributes: { style: "text-align:left;" },
+                                                    width: 100
+                                                }
+                                                ]
+                                            });
+                                        });
+                                    </script>
+                                    <script type="text/javascript">
+                                        var selectedIds3 = [];
+                                        $(document).ready(function () {
+
+                                            //Share customer
+                                            $('#destroyuser-selected').click(function (e) {
+                                                e.preventDefault();
+
+                                                var postData = {
+                                                    selectedIds: selectedIds3,
+                                                    projectID: $('#ProjectID').val()
+                                                };
+
+                                                $.ajax({
+                                                    cache: false,
+                                                    type: "POST",
+                                                    url: "@(Url.Action("DestroyUserSelected", "Project"))",
+                                                    data: postData,
+                                                    complete: function (data) {
+                                                        //reload grid
+                                                        var grid2 = $('#grid2').data('kendoGrid');
+                                                        grid2.dataSource.read();
+
+                                                        var grid3 = $('#grid3').data('kendoGrid');
+                                                        grid3.dataSource.read();
+
+                                                        selectedIds3 = [];
+                                                    },
+                                                    error: function (xhr, ajaxOptions, thrownError) {
+                                                        alert(thrownError);
+                                                    },
+                                                    traditional: true
+                                                });
+                                                return false;
+                                            });
+
+                                            $('#mastercheckbox3').click(function () {
+                                                $('.checkboxGroups3').attr('checked', $(this).is(':checked')).change();
+                                            });
+
+                                            //wire up checkboxes.
+                                            $('#grid3').on('change', 'input[type=checkbox][id!=mastercheckbox3]', function (e) {
+                                                var $check = $(this);
+                                                if ($check.is(":checked") == true) {
+                                                    var checked = jQuery.inArray($check.val(), selectedIds3);
+                                                    if (checked == -1) {
+                                                        //add id to selectedIds3.
+                                                        selectedIds3.push($check.val());
+                                                    }
+                                                }
+                                                else {
+                                                    var checked = jQuery.inArray($check.val(), selectedIds3);
+                                                    if (checked > -1) {
+                                                        //remove id from selectedIds3.
+                                                        selectedIds3 = $.grep(selectedIds3, function (item, index) {
+                                                            return item != $check.val();
+                                                        });
+                                                    }
+                                                }
+                                                updateMasterCheckbox3();
+                                            });
+                                        });
+
+                                        function additionalData3() {
+                                            return {
+                                                ProjectID: $('#ProjectID').val()
+                                            };
+                                        }
+                                        function onDataBound3(e) {
+                                            $('#grid3 input[type=checkbox][id!=mastercheckbox3]').each(function () {
+                                                var currentId = $(this).val();
+                                                var checked = jQuery.inArray(currentId, selectedIds3);
+                                                //set checked based on if current checkbox's value is in selectedIds3.
+                                                $(this).attr('checked', checked > -1);
+                                            });
+
+                                            updateMasterCheckbox3();
+                                        }
+
+                                        function updateMasterCheckbox3() {
+                                            var numChkBoxes = $('#grid3 input[type=checkbox][id!=mastercheckbox3]').length;
+                                            var numChkBoxesChecked = $('#grid3 input[type=checkbox][id!=mastercheckbox3]:checked').length;
+                                            $('#mastercheckbox3').attr('checked', numChkBoxes == numChkBoxesChecked && numChkBoxes > 0);
+                                        }
+                                    </script>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="tab-pane fade" id="tab_4">
+                <div class="box box-default">
+                    <div class="box-header with-border">
+                        <h3 class="box-title">Phân chia trạng thái cuộc gọi cho dự án </h3>
+                    </div>
+                    <div class="box-body">
+                        <div class="row">
+                            <div class="col-md-5">
+                                <h3 class="page-header text-info">Trạng thái cuộc gọi</h3>
+                                <div id="grid4" class="box-body table-responsive no-padding k-grid k-widget">
+                                    <script type="text/javascript">
+                                        $(document).ready(function () {
+                                            $("#grid4").kendoGrid({
+                                                dataSource: {
+                                                    type: "json",
+                                                    transport: {
+                                                        read: {
+                                                            url: "@Html.Raw(Url.Action("GetListStatusCall", "Project"))",
+                                                            type: "POST",
+                                                            dataType: "json",
+                                                            data: additionalData4,
+                                                            success: function (result) {
+                                                                options.success(result);
+                                                            }
+                                                        }
+                                                    },
+                                                    schema: {
+                                                        data: "Data",
+                                                        total: "Total",
+                                                        errors: "Errors"
+                                                    },
+                                                    error: function (e) {
+                                                        display_kendoui_grid_error(e);
+                                                        // Cancel the changes
+                                                        this.cancelChanges();
+                                                    },
+                                                    parameterMap: function (options, type) {
+                                                        return JSON.stringify(options);
+                                                    },
+                                                    pageSize: 20,
+                                                    serverPaging: true,
+                                                    serverFiltering: true,
+                                                    serverSorting: true
+                                                },
+                                                pageable: {
+                                                    refresh: true,
+                                                    pageSizes: [20, 50, 100, 200, 500],
+                                                    messages: {
+                                                        display: "Hiển thị {0} - {1} trong {2} dòng",
+                                                        empty: "Không có dữ liệu",
+                                                        itemsPerPage: "dòng trên trang. "
+                                                    }
+                                                },
+                                                sortable: true,
+                                                filterable: {
+                                                    extra: false,
+                                                    operators: {
+                                                        string: {
+                                                            contains: "Kết quả chứa"
+                                                        }
+                                                    },
+                                                    messages: {
+                                                        info: "Chọn các mục tìm kiếm : ",
+                                                        clear: "Xóa",
+                                                        filter: "Tìm kiếm"
+                                                    }
+                                                },
+                                                scrollable: false,
+                                                dataBound: onDataBound4,
+                                                columns: [{
+                                                    field: "StatusCallID",
+                                                    headerTemplate: "<input id='mastercheckbox4' type='checkbox'/>",
+                                                    headerAttributes: { style: "text-align:center" },
+                                                    attributes: { style: "text-align:center" },
+                                                    template: "<input type='checkbox' value='#=StatusCallID#' class='checkboxGroups4'/>",
+                                                    width: 30,
+                                                    filterable: false,
+                                                    sortable: false
+                                                }, {
+                                                    field: "Name",
+                                                    title: "Tên trạng thái",
+                                                    headerAttributes: { style: "text-align:left;" },
+                                                    width: 100
+                                                }]
+                                            });
+                                        });
+                                    </script>
+                                    <script type="text/javascript">
+                                        var selectedIds4 = [];
+                                        $(document).ready(function () {
+
+                                            //Share sharestatus
+                                            $('#sharestatus-selected').click(function (e) {
+                                                e.preventDefault();
+
+                                                var postData = {
+                                                    selectedIds: selectedIds4,
+                                                    projectID: $('#ProjectID').val()
+                                                };
+
+                                                $.ajax({
+                                                    cache: false,
+                                                    type: "POST",
+                                                    url: "@(Url.Action("ShareStatusCallSelected", "Project"))",
+                                                    data: postData,
+                                                    complete: function (data) {
+                                                        //reload grid
+                                                        var grid4 = $('#grid4').data('kendoGrid');
+                                                        grid4.dataSource.read();
+
+                                                        var grid5 = $('#grid5').data('kendoGrid');
+                                                        grid5.dataSource.read();
+
+                                                        selectedIds4 = [];
+                                                    },
+                                                    error: function (xhr, ajaxOptions, thrownError) {
+                                                        alert(thrownError);
+                                                    },
+                                                    traditional: true
+                                                });
+                                                return false;
+                                            });
+
+                                            $('#mastercheckbox4').click(function () {
+                                                $('.checkboxGroups4').attr('checked', $(this).is(':checked')).change();
+                                            });
+
+                                            //wire up checkboxes.
+                                            $('#grid4').on('change', 'input[type=checkbox][id!=mastercheckbox4]', function (e) {
+                                                var $check = $(this);
+                                                if ($check.is(":checked") == true) {
+                                                    var checked = jQuery.inArray($check.val(), selectedIds4);
+                                                    if (checked == -1) {
+                                                        //add id to selectedIds4.
+                                                        selectedIds4.push($check.val());
+                                                    }
+                                                }
+                                                else {
+                                                    var checked = jQuery.inArray($check.val(), selectedIds4);
+                                                    if (checked > -1) {
+                                                        //remove id from selectedIds4.
+                                                        selectedIds4 = $.grep(selectedIds4, function (item, index) {
+                                                            return item != $check.val();
+                                                        });
+                                                    }
+                                                }
+                                                updateMasterCheckbox4();
+                                            });
+                                        });
+
+                                        function additionalData4() {
+                                            return {
+                                                ProjectID: $('#ProjectID').val()
+                                            };
+                                        }
+                                        function onDataBound4(e) {
+                                            $('#grid4 input[type=checkbox][id!=mastercheckbox4]').each(function () {
+                                                var currentId = $(this).val();
+                                                var checked = jQuery.inArray(currentId, selectedIds4);
+                                                //set checked based on if current checkbox's value is in selectedIds4.
+                                                $(this).attr('checked', checked > -1);
+                                            });
+
+                                            updateMasterCheckbox4();
+                                        }
+
+                                        function updateMasterCheckbox4() {
+                                            var numChkBoxes = $('#grid4 input[type=checkbox][id!=mastercheckbox4]').length;
+                                            var numChkBoxesChecked = $('#grid4 input[type=checkbox][id!=mastercheckbox4]:checked').length;
+                                            $('#mastercheckbox4').attr('checked', numChkBoxes == numChkBoxesChecked && numChkBoxes > 0);
+                                        }
+                                    </script>
+                                </div>
+                            </div>
+                            <div class="col-md-1 text-center">
+                                <br /><br /><br />
+                                <div class="row"><button type="button" class="btn btn-primary" id="sharestatus-selected"> > </button></div>
+                                <br />
+                                <div class="row"><button type="button" class="btn btn-primary" id="destroystatus-selected"> < </button></div>
+                            </div>
+                            <div class="col-md-6">
+                                <h3 class="page-header text-info">Trạng thái cuộc gọi đã phân</h3>
+                                <div id="grid5" class="box-body table-responsive no-padding k-grid k-widget">
+                                    <script type="text/javascript">
+                                        $(document).ready(function () {
+                                            $("#grid5").kendoGrid({
+                                                dataSource: {
+                                                    type: "json",
+                                                    transport: {
+                                                        read: {
+                                                            url: "@Html.Raw(Url.Action("GetListStatusCallInProject", "Project"))",
+                                                            type: "POST",
+                                                            dataType: "json",
+                                                            data: additionalData5,
+                                                            success: function (result) {
+                                                                options.success(result);
+                                                            }
+                                                        }
+                                                    },
+                                                    schema: {
+                                                        data: "Data",
+                                                        total: "Total",
+                                                        errors: "Errors"
+                                                    },
+                                                    error: function (e) {
+                                                        display_kendoui_grid_error(e);
+                                                        // Cancel the changes
+                                                        this.cancelChanges();
+                                                    },
+                                                    parameterMap: function (options, type) {
+                                                        return JSON.stringify(options);
+                                                    },
+                                                    pageSize: 20,
+                                                    serverPaging: true,
+                                                    serverFiltering: true,
+                                                    serverSorting: true
+                                                },
+                                                pageable: {
+                                                    refresh: true,
+                                                    pageSizes: [20, 50, 100, 200, 500],
+                                                    messages: {
+                                                        display: "Hiển thị {0} - {1} trong {2} dòng",
+                                                        empty: "Không có dữ liệu",
+                                                        itemsPerPage: "dòng trên trang. "
+                                                    }
+                                                },
+                                                sortable: true,
+                                                filterable: {
+                                                    extra: false,
+                                                    operators: {
+                                                        string: {
+                                                            contains: "Kết quả chứa"
+                                                        }
+                                                    },
+                                                    messages: {
+                                                        info: "Chọn các mục tìm kiếm : ",
+                                                        clear: "Xóa",
+                                                        filter: "Tìm kiếm"
+                                                    }
+                                                },
+                                                scrollable: false,
+                                                dataBound: onDataBound5,
+                                                columns: [{
+                                                    field: "StatusCallID",
+                                                    headerTemplate: "<input id='mastercheckbox5' type='checkbox'/>",
+                                                    headerAttributes: { style: "text-align:center" },
+                                                    attributes: { style: "text-align:center" },
+                                                    template: "<input type='checkbox' value='#=StatusCallID#' class='checkboxGroups5'/>",
+                                                    width: 30,
+                                                    filterable: false,
+                                                    sortable: false
+                                                }, {
+                                                    field: "Name",
+                                                    title: "Tên trạng thái",
+                                                    headerAttributes: { style: "text-align:left;" },
+                                                    width: 100
+                                                }]
+                                            });
+                                        });
+                                    </script>
+                                    <script type="text/javascript">
+                                        var selectedIds5 = [];
+                                        $(document).ready(function () {
+
+                                            //Share customer
+                                            $('#destroystatus-selected').click(function (e) {
+                                                e.preventDefault();
+
+                                                var postData = {
+                                                    selectedIds: selectedIds5,
+                                                    projectID: $('#ProjectID').val()
+                                                };
+
+                                                $.ajax({
+                                                    cache: false,
+                                                    type: "POST",
+                                                    url: "@(Url.Action("DestroyStatusCallSelected", "Project"))",
+                                                    data: postData,
+                                                    complete: function (data) {
+                                                        //reload grid
+                                                        var grid4 = $('#grid4').data('kendoGrid');
+                                                        grid4.dataSource.read();
+
+                                                        var grid5 = $('#grid5').data('kendoGrid');
+                                                        grid5.dataSource.read();
+
+                                                        selectedIds5 = [];
+                                                    },
+                                                    error: function (xhr, ajaxOptions, thrownError) {
+                                                        alert(thrownError);
+                                                    },
+                                                    traditional: true
+                                                });
+                                                return false;
+                                            });
+
+                                            $('#mastercheckbox5').click(function () {
+                                                $('.checkboxGroups5').attr('checked', $(this).is(':checked')).change();
+                                            });
+
+                                            //wire up checkboxes.
+                                            $('#grid5').on('change', 'input[type=checkbox][id!=mastercheckbox5]', function (e) {
+                                                var $check = $(this);
+                                                if ($check.is(":checked") == true) {
+                                                    var checked = jQuery.inArray($check.val(), selectedIds5);
+                                                    if (checked == -1) {
+                                                        //add id to selectedIds5.
+                                                        selectedIds5.push($check.val());
+                                                    }
+                                                }
+                                                else {
+                                                    var checked = jQuery.inArray($check.val(), selectedIds5);
+                                                    if (checked > -1) {
+                                                        //remove id from selectedIds5.
+                                                        selectedIds5 = $.grep(selectedIds5, function (item, index) {
+                                                            return item != $check.val();
+                                                        });
+                                                    }
+                                                }
+                                                updateMasterCheckbox5();
+                                            });
+                                        });
+
+                                        function additionalData5() {
+                                            return {
+                                                ProjectID: $('#ProjectID').val()
+                                            };
+                                        }
+                                        function onDataBound5(e) {
+                                            $('#grid5 input[type=checkbox][id!=mastercheckbox5]').each(function () {
+                                                var currentId = $(this).val();
+                                                var checked = jQuery.inArray(currentId, selectedIds5);
+                                                //set checked based on if current checkbox's value is in selectedIds5.
+                                                $(this).attr('checked', checked > -1);
+                                            });
+
+                                            updateMasterCheckbox5();
+                                        }
+
+                                        function updateMasterCheckbox5() {
+                                            var numChkBoxes = $('#grid5 input[type=checkbox][id!=mastercheckbox5]').length;
+                                            var numChkBoxesChecked = $('#grid5 input[type=checkbox][id!=mastercheckbox5]:checked').length;
+                                            $('#mastercheckbox5').attr('checked', numChkBoxes == numChkBoxesChecked && numChkBoxes > 0);
+                                        }
+                                    </script>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="tab-pane fade" id="tab_5">
+                <div class="box box-default">
+                    <div class="box-header with-border">
+                        <h3 class="box-title">Phân thuộc tính khách hàng cho dự án </h3>
+                    </div>
+                    <div class="box-body">
+                        <div class="row">
+                            <div class="col-md-5">
+                                <h3 class="page-header text-info">Thuộc tính khách hàng</h3>
+                                <div id="grid6" class="box-body table-responsive no-padding k-grid k-widget">     
+                                    @*<table id="grid6" class="table table-striped table-bordered display" cellspacing="0" style="width:100%" data-page-length="30">
+
+                                    </table>
+                                    <script type="text/javascript">
+                                        $(document).ready(function () {
+                                            $("#grid6").DataTable({
+                                                processing: true,
+                                                searching: false,
+                                                pagingType: "full_numbers",
+                                                lengthChange: false,            //Show .... entires (rows per page)
+                                                ajax: {
+                                                    url: "@Html.Raw(Url.Action("GetListCustomerField", "Project"))",
+                                                    type: "POST",
+                                                    dataType: "json",
+                                                    dataSrc: "Data",
+                                                },
+                                                data: additionalData6,
+                                                columns: [
+                                                    { data: 'CustomerFieldID' },
+                                                    { data: 'FieldName', name: 'Tên thuộc tính' },
+                                                ],
+                                                language: {                                                         //Vietsub
+                                                    paginate: {                                                     //Vietsub page number
+                                                        first: "Đầu",
+                                                        previous: "Trước",
+                                                        next: "Sau",
+                                                        last: "Cuối",
+                                                    },
+                                                    info: "Hiển thị _START_ - _END_ trong _TOTAL_ dòng"             //Vietsub display page in total
+                                                }
+                                            });
+                                        });
+                                    </script>
+                                    <script type="text/javascript">
+                                        var selectedIds6 = [];
+                                        $(document).ready(function () {
+                                            //Share customerfield
+                                            $('#sharecustomerfield-selected').click(function (e) {
+                                                e.preventDefault();
+
+                                                var postData = {
+                                                    selectedIds: selectedIds6,
+                                                    projectID: $('#ProjectID').val()
+                                                };
+                                                $.ajax({
+                                                    cache: false,
+                                                    type: "POST",
+                                                    url: "@(Url.Action("ShareCustomerFieldSelected", "Project"))",
+                                                    data: postData,
+                                                    complete: function (data) {
+                                                        //reload grid
+                                                        $('#grid6').dataTable().load();
+                                                        
+
+                                                        $('#grid7').dataTable().load();
+                                                        
+
+                                                        selectedIds6 = [];
+                                                    },
+                                                    error: function (xhr, ajaxOptions, thrownError) {
+                                                        alert(thrownError);
+                                                    },
+                                                    traditional: true
+                                                });
+                                                return false;
+                                            });
+
+                                            $('#mastercheckbox6').click(function () {
+                                                $('.checkboxGroups6').attr('checked', $(this).is(':checked')).change();
+                                            });
+
+                                            //wire up checkboxes.
+                                            $('#grid6').on('change', 'input[type=checkbox][id!=mastercheckbox6]', function (e) {
+                                                var $check = $(this);
+                                                if ($check.is(":checked") == true) {
+                                                    var checked = jQuery.inArray($check.val(), selectedIds6);
+                                                    if (checked == -1) {
+                                                        //add id to selectedIds6.
+                                                        selectedIds6.push($check.val());
+                                                    }
+                                                }
+                                                else {
+                                                    var checked = jQuery.inArray($check.val(), selectedIds6);
+                                                    if (checked > -1) {
+                                                        //remove id from selectedIds6.
+                                                        selectedIds6 = $.grep(selectedIds6, function (item, index) {
+                                                            return item != $check.val();
+                                                        });
+                                                    }
+                                                }
+                                                updateMasterCheckbox6();
+                                            });
+                                        });
+
+                                        function additionalData6() {
+                                            return {
+                                                ProjectID: $('#ProjectID').val()
+                                            };
+                                        }
+                                        function onDataBound6(e) {
+                                            $('#grid6 input[type=checkbox][id!=mastercheckbox6]').each(function () {
+                                                var currentId = $(this).val();
+                                                var checked = jQuery.inArray(currentId, selectedIds6);
+                                                //set checked based on if current checkbox's value is in selectedIds6.
+                                                $(this).attr('checked', checked > -1);
+                                            });
+
+                                            updateMasterCheckbox6();
+                                        }
+
+                                        function updateMasterCheckbox6() {
+                                            var numChkBoxes = $('#grid6 input[type=checkbox][id!=mastercheckbox6]').length;
+                                            var numChkBoxesChecked = $('#grid6 input[type=checkbox][id!=mastercheckbox6]:checked').length;
+                                            $('#mastercheckbox6').attr('checked', numChkBoxes == numChkBoxesChecked && numChkBoxes > 0);
+                                        }                                       
+                                    </script>*@
+                                    <script type="text/javascript">
+                                            $(document).ready(function () {
+                                                $("#grid6").kendoGrid({
+                                                    dataSource: {
+                                                        type: "json",
+                                                        transport: {
+                                                            read: {
+                                                                url: "@Html.Raw(Url.Action("GetListCustomerField", "Project"))",
+                                                                type: "POST",
+                                                                dataType: "json",
+                                                                data: additionalData6,
+                                                                success: function (result) {
+                                                                    options.success(result);
+                                                                }
+                                                            }
+                                                        },
+                                                        schema: {
+                                                            data: "Data",
+                                                            total: "Total",
+                                                            errors: "Errors"
+                                                        },
+                                                        error: function (e) {
+                                                            display_kendoui_grid_error(e);
+                                                            // Cancel the changes
+                                                            this.cancelChanges();
+                                                        },
+                                                        parameterMap: function (options, type) {
+                                                            return JSON.stringify(options);
+                                                        },
+                                                        pageSize: 20,
+                                                        serverPaging: true,
+                                                        serverFiltering: true,
+                                                        serverSorting: true
+                                                    },
+                                                    pageable: {
+                                                        refresh: true,
+                                                        pageSizes: [20, 50, 100, 200, 500],
+                                                        messages: {
+                                                            display: "Hiển thị {0} - {1} trong {2} dòng",
+                                                            empty: "Không có dữ liệu",
+                                                            itemsPerPage: "dòng trên trang. "
+                                                        }
+                                                    },
+                                                    sortable: true,
+                                                    filterable: {
+                                                        extra: false,
+                                                        operators: {
+                                                            string: {
+                                                                contains: "Kết quả chứa"
+                                                            }
+                                                        },
+                                                        messages: {
+                                                            info: "Chọn các mục tìm kiếm : ",
+                                                            clear: "Xóa",
+                                                            filter: "Tìm kiếm"
+                                                        }
+                                                    },
+                                                    scrollable: false,
+                                                    dataBound: onDataBound6,
+                                                    columns: [{
+                                                        field: "CustomerFieldID",
+                                                        headerTemplate: "<input id='mastercheckbox6' type='checkbox'/>",
+                                                        headerAttributes: { style: "text-align:center" },
+                                                        attributes: { style: "text-align:center" },
+                                                        template: "<input type='checkbox' value='#=CustomerFieldID#' class='checkboxGroups6'/>",
+                                                        width: 30,
+                                                        filterable: false,
+                                                        sortable: false
+                                                    }, {
+                                                        field: "FieldName",
+                                                        title: "Tên thuộc tính",
+                                                        headerAttributes: { style: "text-align:left;" },
+                                                        width: 100
+                                                    }]
+                                                });
+                                            });
+                                        </script>
+                                    <script type="text/javascript">
+                                        var selectedIds6 = [];
+                                        $(document).ready(function () {
+
+                                            //Share customerfield
+                                            $('#sharecustomerfield-selected').click(function (e) {
+                                                e.preventDefault();
+
+                                                var postData = {
+                                                    selectedIds: selectedIds6,
+                                                    projectID: $('#ProjectID').val()
+                                                };
+
+                                                $.ajax({
+                                                    cache: false,
+                                                    type: "POST",
+                                                    url: "@(Url.Action("ShareCustomerFieldSelected", "Project"))",
+                                                    data: postData,
+                                                    complete: function (data) {
+                                                        //reload grid
+                                                        var grid6 = $('#grid6').data('kendoGrid');
+                                                        grid6.dataSource.read();
+
+                                                        var grid7 = $('#grid7').data('kendoGrid');
+                                                        grid7.dataSource.read();
+
+                                                        selectedIds6 = [];
+                                                    },
+                                                    error: function (xhr, ajaxOptions, thrownError) {
+                                                        alert(thrownError);
+                                                    },
+                                                    traditional: true
+                                                });
+                                                return false;
+                                            });
+
+                                            $('#mastercheckbox6').click(function () {
+                                                $('.checkboxGroups6').attr('checked', $(this).is(':checked')).change();
+                                            });
+
+                                            //wire up checkboxes.
+                                            $('#grid6').on('change', 'input[type=checkbox][id!=mastercheckbox6]', function (e) {
+                                                var $check = $(this);
+                                                if ($check.is(":checked") == true) {
+                                                    var checked = jQuery.inArray($check.val(), selectedIds6);
+                                                    if (checked == -1) {
+                                                        //add id to selectedIds6.
+                                                        selectedIds6.push($check.val());
+                                                    }
+                                                }
+                                                else {
+                                                    var checked = jQuery.inArray($check.val(), selectedIds6);
+                                                    if (checked > -1) {
+                                                        //remove id from selectedIds6.
+                                                        selectedIds6 = $.grep(selectedIds6, function (item, index) {
+                                                            return item != $check.val();
+                                                        });
+                                                    }
+                                                }
+                                                updateMasterCheckbox6();
+                                            });
+                                        });
+
+                                        function additionalData6() {
+                                            return {
+                                                ProjectID: $('#ProjectID').val()
+                                            };
+                                        }
+                                        function onDataBound6(e) {
+                                            $('#grid6 input[type=checkbox][id!=mastercheckbox6]').each(function () {
+                                                var currentId = $(this).val();
+                                                var checked = jQuery.inArray(currentId, selectedIds6);
+                                                //set checked based on if current checkbox's value is in selectedIds6.
+                                                $(this).attr('checked', checked > -1);
+                                            });
+
+                                            updateMasterCheckbox6();
+                                        }
+
+                                        function updateMasterCheckbox6() {
+                                            var numChkBoxes = $('#grid6 input[type=checkbox][id!=mastercheckbox6]').length;
+                                            var numChkBoxesChecked = $('#grid6 input[type=checkbox][id!=mastercheckbox6]:checked').length;
+                                            $('#mastercheckbox6').attr('checked', numChkBoxes == numChkBoxesChecked && numChkBoxes > 0);
+                                        }
+                                    </script>         
+                                </div>
+                            </div>
+                            <div class="col-md-1 text-center">
+                                <br /><br /><br />
+                                <div class="row"><button type="button" class="btn btn-primary" id="sharecustomerfield-selected"> > </button></div>
+                                <br />
+                                <div class="row"><button type="button" class="btn btn-primary" id="destroycustomerfield-selected"> < </button></div>
+                            </div>
+                            <div class="col-md-6">
+                                <h3 class="page-header text-info">Thuộc tính khách hàng đã phân</h3>
+                                <div id="grid7" class="box-body table-responsive no-padding k-grid k-widget">
+                                    <script type="text/javascript">
+                                        $(document).ready(function () {
+                                            $("#grid7").kendoGrid({
+                                                dataSource: {
+                                                    type: "json",
+                                                    transport: {
+                                                        read: {
+                                                            url: "@Html.Raw(Url.Action("GetListCustomerFieldInProject", "Project"))",
+                                                            type: "POST",
+                                                            dataType: "json",
+                                                            data: additionalData7,
+                                                            success: function (result) {
+                                                                options.success(result);
+                                                            }
+                                                        }
+                                                    },
+                                                    schema: {
+                                                        data: "Data",
+                                                        total: "Total",
+                                                        errors: "Errors"
+                                                    },
+                                                    error: function (e) {
+                                                        display_kendoui_grid_error(e);
+                                                        // Cancel the changes
+                                                        this.cancelChanges();
+                                                    },
+                                                    parameterMap: function (options, type) {
+                                                        return JSON.stringify(options);
+                                                    },
+                                                    pageSize: 20,
+                                                    serverPaging: true,
+                                                    serverFiltering: true,
+                                                    serverSorting: true
+                                                },
+                                                pageable: {
+                                                    refresh: true,
+                                                    pageSizes: [20, 50, 100, 200, 500],
+                                                    messages: {
+                                                        display: "Hiển thị {0} - {1} trong {2} dòng",
+                                                        empty: "Không có dữ liệu",
+                                                        itemsPerPage: "dòng trên trang. "
+                                                    }
+                                                },
+                                                sortable: true,
+                                                filterable: {
+                                                    extra: false,
+                                                    operators: {
+                                                        string: {
+                                                            contains: "Kết quả chứa"
+                                                        }
+                                                    },
+                                                    messages: {
+                                                        info: "Chọn các mục tìm kiếm : ",
+                                                        clear: "Xóa",
+                                                        filter: "Tìm kiếm"
+                                                    }
+                                                },
+                                                scrollable: false,
+                                                dataBound: onDataBound7,
+                                                columns: [{
+                                                    field: "CustomerFieldID",
+                                                    headerTemplate: "<input id='mastercheckbox7' type='checkbox'/>",
+                                                    headerAttributes: { style: "text-align:center" },
+                                                    attributes: { style: "text-align:center" },
+                                                    template: "<input type='checkbox' value='#=CustomerFieldID#' class='checkboxGroups7'/>",
+                                                    width: 30,
+                                                    filterable: false,
+                                                    sortable: false
+                                                }, {
+                                                    field: "FieldName",
+                                                    title: "Tên thuộc tính",
+                                                    headerAttributes: { style: "text-align:left;" },
+                                                    width: 100
+                                                }]
+                                            });
+                                        });
+                                    </script>
+                                    <script type="text/javascript">
+                                        var selectedIds7 = [];
+                                        $(document).ready(function () {
+
+                                            //Destroy customerfield
+                                            $('#destroycustomerfield-selected').click(function (e) {
+                                                e.preventDefault();
+
+                                                var postData = {
+                                                    selectedIds: selectedIds7,
+                                                    projectID: $('#ProjectID').val()
+                                                };
+
+                                                $.ajax({
+                                                    cache: false,
+                                                    type: "POST",
+                                                    url: "@(Url.Action("DestroyCustomerFieldSelected", "Project"))",
+                                                    data: postData,
+                                                    complete: function (data) {
+                                                        //reload grid
+                                                        var grid6 = $('#grid6').data('kendoGrid');
+                                                        grid6.dataSource.read();
+
+                                                        var grid7 = $('#grid7').data('kendoGrid');
+                                                        grid7.dataSource.read();
+
+                                                        selectedIds7 = [];
+                                                    },
+                                                    error: function (xhr, ajaxOptions, thrownError) {
+                                                        alert(thrownError);
+                                                    },
+                                                    traditional: true
+                                                });
+                                                return false;
+                                            });
+
+                                            $('#mastercheckbox7').click(function () {
+                                                $('.checkboxGroups7').attr('checked', $(this).is(':checked')).change();
+                                            });
+
+                                            //wire up checkboxes.
+                                            $('#grid7').on('change', 'input[type=checkbox][id!=mastercheckbox7]', function (e) {
+                                                var $check = $(this);
+                                                if ($check.is(":checked") == true) {
+                                                    var checked = jQuery.inArray($check.val(), selectedIds7);
+                                                    if (checked == -1) {
+                                                        //add id to selectedIds7.
+                                                        selectedIds7.push($check.val());
+                                                    }
+                                                }
+                                                else {
+                                                    var checked = jQuery.inArray($check.val(), selectedIds7);
+                                                    if (checked > -1) {
+                                                        //remove id from selectedIds7.
+                                                        selectedIds7 = $.grep(selectedIds7, function (item, index) {
+                                                            return item != $check.val();
+                                                        });
+                                                    }
+                                                }
+                                                updateMasterCheckbox7();
+                                            });
+                                        });
+
+                                        function additionalData7() {
+                                            return {
+                                                ProjectID: $('#ProjectID').val()
+                                            };
+                                        }
+                                        function onDataBound7(e) {
+                                            $('#grid7 input[type=checkbox][id!=mastercheckbox7]').each(function () {
+                                                var currentId = $(this).val();
+                                                var checked = jQuery.inArray(currentId, selectedIds7);
+                                                //set checked based on if current checkbox's value is in selectedIds7.
+                                                $(this).attr('checked', checked > -1);
+                                            });
+
+                                            updateMasterCheckbox7();
+                                        }
+
+                                        function updateMasterCheckbox7() {
+                                            var numChkBoxes = $('#grid7 input[type=checkbox][id!=mastercheckbox7]').length;
+                                            var numChkBoxesChecked = $('#grid7 input[type=checkbox][id!=mastercheckbox7]:checked').length;
+                                            $('#mastercheckbox7').attr('checked', numChkBoxes == numChkBoxesChecked && numChkBoxes > 0);
+                                        }
+                                    </script>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="tab-pane fade" id="tab_6">
+                <div class="box box-default">
+                    <div class="box-header with-border">
+                        <h3 class="box-title">Phân chia câu hỏi cho dự án</h3>
+                    </div>
+                    <div class="box-body">
+                        <div class="row">
+                            <div class="col-md-5">
+                                <h3 class="page-header text-info">Câu hỏi</h3>
+                                <div id="grid8" class="box-body table-responsive no-padding k-grid k-widget">
+                                    <script type="text/javascript">
+                                        $(document).ready(function () {
+                                            $("#grid8").kendoGrid({
+                                                dataSource: {
+                                                    type: "json",
+                                                    transport: {
+                                                        read: {
+                                                            url: "@Html.Raw(Url.Action("GetListQuestion", "Project"))",
+                                                            type: "POST",
+                                                            dataType: "json",
+                                                            data: additionalData8,
+                                                            success: function (result) {
+                                                                options.success(result);
+                                                            }
+                                                        }
+                                                    },
+                                                    schema: {
+                                                        data: "Data",
+                                                        total: "Total",
+                                                        errors: "Errors"
+                                                    },
+                                                    error: function (e) {
+                                                        display_kendoui_grid_error(e);
+                                                        // Cancel the changes
+                                                        this.cancelChanges();
+                                                    },
+                                                    parameterMap: function (options, type) {
+                                                        return JSON.stringify(options);
+                                                    },
+                                                    pageSize: 20,
+                                                    serverPaging: true,
+                                                    serverFiltering: true,
+                                                    serverSorting: true
+                                                },
+                                                pageable: {
+                                                    refresh: true,
+                                                    pageSizes: [20, 50, 100, 200, 500],
+                                                    messages: {
+                                                        display: "Hiển thị {0} - {1} trong {2} dòng",
+                                                        empty: "Không có dữ liệu",
+                                                        itemsPerPage: "dòng trên trang. "
+                                                    }
+                                                },
+                                                sortable: true,
+                                                filterable: {
+                                                    extra: false,
+                                                    operators: {
+                                                        string: {
+                                                            contains: "Kết quả chứa"
+                                                        }
+                                                    },
+                                                    messages: {
+                                                        info: "Chọn các mục tìm kiếm : ",
+                                                        clear: "Xóa",
+                                                        filter: "Tìm kiếm"
+                                                    }
+                                                },
+                                                scrollable: false,
+                                                dataBound: onDataBound8,
+                                                columns: [{
+                                                    field: "QuestionID",
+                                                    headerTemplate: "<input id='mastercheckbox8' type='checkbox'/>",
+                                                    headerAttributes: { style: "text-align:center" },
+                                                    attributes: { style: "text-align:center" },
+                                                    template: "<input type='checkbox' value='#=QuestionID#' class='checkboxGroups8'/>",
+                                                    width: 30,
+                                                    filterable: false,
+                                                    sortable: false
+                                                }, {
+                                                    field: "TieuDeNgan",
+                                                    title: "Tên câu hỏi",
+                                                    headerAttributes: { style: "text-align:left;" },
+                                                    encoded: false,
+                                                    width: 100
+                                                }]
+                                            });
+                                            $("#grid8").kendoTooltip({
+                                                filter: "td:nth-child(2)", //this filter selects the second column's cells
+                                                position: "right",
+                                                content: function (e) {
+                                                    var dataItem = $("#grid8").data("kendoGrid").dataItem(e.target.closest("tr"));
+                                                    var content = dataItem.Name;
+                                                    return content;
+                                                }
+                                            }).data("kendoTooltip");
+                                        });
+
+                                    </script>
+                                    <script type="text/javascript">
+                                        var selectedIds8 = [];
+                                        $(document).ready(function () {
+
+                                            //Share question
+                                            $('#sharequestion-selected').click(function (e) {
+                                                e.preventDefault();
+
+                                                var postData = {
+                                                    selectedIds: selectedIds8,
+                                                    projectID: $('#ProjectID').val()
+                                                };
+
+                                                $.ajax({
+                                                    cache: false,
+                                                    type: "POST",
+                                                    url: "@(Url.Action("ShareQuestionSelected", "Project"))",
+                                                    data: postData,
+                                                    complete: function (data) {
+                                                        //reload grid
+                                                        var grid8 = $('#grid8').data('kendoGrid');
+                                                        grid8.dataSource.read();
+
+                                                        var grid9 = $('#grid9').data('kendoGrid');
+                                                        grid9.dataSource.read();
+
+                                                        selectedIds8 = [];
+                                                    },
+                                                    error: function (xhr, ajaxOptions, thrownError) {
+                                                        alert(thrownError);
+                                                    },
+                                                    traditional: true
+                                                });
+                                                return false;
+                                            });
+
+                                            $('#mastercheckbox8').click(function () {
+                                                $('.checkboxGroups8').attr('checked', $(this).is(':checked')).change();
+                                            });
+
+                                            //wire up checkboxes.
+                                            $('#grid8').on('change', 'input[type=checkbox][id!=mastercheckbox8]', function (e) {
+                                                var $check = $(this);
+                                                if ($check.is(":checked") == true) {
+                                                    var checked = jQuery.inArray($check.val(), selectedIds8);
+                                                    if (checked == -1) {
+                                                        //add id to selectedIds8.
+                                                        selectedIds8.push($check.val());
+                                                    }
+                                                }
+                                                else {
+                                                    var checked = jQuery.inArray($check.val(), selectedIds8);
+                                                    if (checked > -1) {
+                                                        //remove id from selectedIds8.
+                                                        selectedIds8 = $.grep(selectedIds8, function (item, index) {
+                                                            return item != $check.val();
+                                                        });
+                                                    }
+                                                }
+                                                updateMasterCheckbox8();
+                                            });
+                                        });
+
+                                        function additionalData8() {
+                                            return {
+                                                ProjectID: $('#ProjectID').val()
+                                            };
+                                        }
+                                        function onDataBound8(e) {
+                                            $('#grid8 input[type=checkbox][id!=mastercheckbox8]').each(function () {
+                                                var currentId = $(this).val();
+                                                var checked = jQuery.inArray(currentId, selectedIds8);
+                                                //set checked based on if current checkbox's value is in selectedIds8.
+                                                $(this).attr('checked', checked > -1);
+                                            });
+
+                                            updateMasterCheckbox8();
+                                        }
+
+                                        function updateMasterCheckbox8() {
+                                            var numChkBoxes = $('#grid8 input[type=checkbox][id!=mastercheckbox8]').length;
+                                            var numChkBoxesChecked = $('#grid8 input[type=checkbox][id!=mastercheckbox8]:checked').length;
+                                            $('#mastercheckbox8').attr('checked', numChkBoxes == numChkBoxesChecked && numChkBoxes > 0);
+                                        }
+                                    </script>
+                                </div>
+                            </div>
+                            <div class="col-md-1 text-center">
+                                <br /><br /><br />
+                                <div class="row"><button type="button" class="btn btn-primary" id="sharequestion-selected"> > </button></div>
+                                <br />
+                                <div class="row"><button type="button" class="btn btn-primary" id="destroyquestion-selected"> < </button></div>
+                            </div>
+                            <div class="col-md-6">
+                                <h3 class="page-header text-info">Câu hỏi đã phân chia</h3>
+                                <div id="grid9" class="box-body table-responsive no-padding k-grid k-widget">
+                                    <script type="text/javascript">
+                                        $(document).ready(function () {
+
+                                            var grid = $("#grid9").kendoGrid({
+                                                dataSource: {
+                                                    type: "json",
+                                                    transport: {
+                                                        read: {
+                                                            url: "@Html.Raw(Url.Action("GetListQuestionInProject", "Project"))",
+                                                            type: "POST",
+                                                            dataType: "json",
+                                                            data: additionalData9,
+                                                            success: function (result) {
+                                                                options.success(result);
+                                                            }
+                                                        }
+                                                    },
+                                                    schema: {
+                                                        data: "Data",
+                                                        total: "Total",
+                                                        errors: "Errors"
+                                                    },
+                                                    error: function (e) {
+                                                        display_kendoui_grid_error(e);
+                                                        // Cancel the changes
+                                                        this.cancelChanges();
+                                                    },
+                                                    parameterMap: function (options, type) {
+                                                        return JSON.stringify(options);
+                                                    },
+                                                    pageSize: 20,
+                                                    serverPaging: true,
+                                                    serverFiltering: true,
+                                                    serverSorting: true
+                                                },
+                                                pageable: {
+                                                    refresh: true,
+                                                    pageSizes: [20, 50, 100, 200, 500],
+                                                    messages: {
+                                                        display: "Hiển thị {0} - {1} trong {2} dòng",
+                                                        empty: "Không có dữ liệu",
+                                                        itemsPerPage: "dòng trên trang. "
+                                                    }
+                                                },
+                                                sortable: true,
+                                                filterable: {
+                                                    extra: false,
+                                                    operators: {
+                                                        string: {
+                                                            contains: "Kết quả chứa"
+                                                        }
+                                                    },
+                                                    messages: {
+                                                        info: "Chọn các mục tìm kiếm : ",
+                                                        clear: "Xóa",
+                                                        filter: "Tìm kiếm"
+                                                    }
+                                                },
+                                                scrollable: false,
+                                                dataBound: onDataBound9,
+                                                columns: [{
+                                                    field: "QuestionID",
+                                                    headerTemplate: "<input id='mastercheckbox9' type='checkbox'/>",
+                                                    headerAttributes: { style: "text-align:center" },
+                                                    attributes: { style: "text-align:center" },
+                                                    template: "<input type='checkbox' value='#=QuestionID#' class='checkboxGroups9'/>",
+                                                    width: "30px",
+                                                    filterable: false,
+                                                    sortable: false
+                                                }, {
+                                                    field: "TieuDeNgan",
+                                                    title: "Tên câu hỏi",
+                                                    headerAttributes: { style: "text-align:left;" },
+                                                    encoded: false,
+                                                    width: "250px",
+                                                    attributes: {
+                                                        style: 'white-space: nowrap;width:100px;'
+                                                    }
+
+                                                }, {
+                                                    field: "DisplayOrder",
+                                                    title: "TT",
+                                                    template: "<i class='k-arrow k-button fa fa-arrow-up row-up ' aria-hidden='true'></i><i class='k-arrow k-button fa fa-arrow-down row-down ' aria-hidden='true'></i>",
+                                                    headerAttributes: { style: "text-align:left;" },
+                                                    width: "50px",
+                                                    filterable: false,
+                                                    sortable: false
+                                                }, {
+                                                    title: "",
+                                                    width: "30px",
+                                                    command: [{
+                                                        name: "Cài đặt",
+                                                        text: "",
+                                                        imageClass: "fa fa-cog",
+                                                        //template: "<i class='k-button k-button-icontext fa fa-cog' aria-hidden='true'></i>",
+                                                        click: function (e) {
+                                                            // prevent page scroll position change
+                                                            e.preventDefault();
+                                                            // e.target is the DOM element representing the button
+                                                            var tr = $(e.target).closest("tr"); // get the current table row (tr)
+                                                            // get the data bound to the current table row
+                                                            var data = this.dataItem(tr);
+
+                                                            $.ajax({
+                                                                type: "GET",
+                                                                dataType: 'json',
+                                                                url: '@Url.Action("SurveyShareQuestion", "Question")?id=' + data.QuestionID,
+                                                                success: function (result) {
+                                                                    if (result.success) {
+                                                                        var mymodal = $('#myModal2');
+                                                                        mymodal.find('.modal-body').html(result.html);
+                                                                        mymodal.modal('show');
+                                                                    }
+                                                                    else {
+                                                                        swal({ title: result.message, confirmButtonText: "Đóng" });
+                                                                    }
+                                                                }
+                                                            });
+                                                        }
+                                                    }]
+                                                }]
+                                            }).data("kendoGrid");
+
+                                            grid.table.kendoSortable({
+                                                hint: hintElement,
+                                                cursor: "move",
+                                                placeholder: function (element) {
+                                                    return element.clone().addClass("k-state-hover").css("opacity", 0.65);
+                                                },
+                                                container: "#grid9 tbody",
+                                                filter: ">tbody >tr",
+                                                change: function (e) {
+                                                    var grid = $("#grid9").data("kendoGrid"),
+                                                        oldIndex = e.oldIndex, // The old position
+                                                        newIndex = e.newIndex, // The new position
+                                                        view = grid.dataSource.view(),
+                                                        dataItem = grid.dataSource.getByUid(e.item.data("uid")); // Retrieve the moved dataItem
+
+                                                    dataItem.Order = newIndex; // Update the order
+                                                    dataItem.dirty = true;
+
+                                                    // Shift the order of the records
+                                                    if (oldIndex < newIndex) {
+                                                        for (var i = oldIndex + 1; i <= newIndex; i++) {
+                                                            view[i].Order--;
+                                                            view[i].dirty = true;
+                                                        }
+                                                    } else {
+                                                        for (var i = oldIndex - 1; i >= newIndex; i--) {
+                                                            view[i].Order++;
+                                                            view[i].dirty = true;
+                                                        }
+                                                    }
+
+                                                    grid.dataSource.sync();
+                                                }
+                                            });
+
+
+
+                                            var hintElement = function () {
+                                                var grid = $("#grid9").data("kendoGrid"),
+                                                        table = grid.table.clone(), // Clone Grid's table
+                                                        wrapperWidth = grid.wrapper.width(), //get Grid's width
+                                                        wrapper = $("<div class='k-grid k-widget'></div>").width(wrapperWidth),
+                                                        hint;
+
+                                                table.find("thead").remove(); // Remove Grid's header from the hint
+                                                table.find("tbody").empty(); // Remove the existing rows from the hint
+                                                table.wrap(wrapper); // Wrap the table
+                                                table.append(element.clone().removeAttr("uid")); // Append the dragged element
+
+                                                hint = table.parent(); // Get the wrapper
+
+                                                return hint; // Return the hint element
+                                            }
+
+                                            $("#grid9").kendoTooltip({
+                                                filter: "td:nth-child(2)", //this filter selects the second column's cells
+                                                position: "right",
+                                                content: function (e) {
+                                                    var dataItem = $("#grid9").data("kendoGrid").dataItem(e.target.closest("tr"));
+                                                    var content = dataItem.Name;
+                                                    return content;
+                                                }
+                                            }).data("kendoTooltip");
+                                        });
+                                    </script>
+                                    <script type="text/javascript">
+                                        var selectedIds9 = [];
+                                        $(document).ready(function () {
+
+                                            //Destroy question
+                                            $('#destroyquestion-selected').click(function (e) {
+                                                e.preventDefault();
+
+                                                var postData = {
+                                                    selectedIds: selectedIds9,
+                                                    projectID: $('#ProjectID').val()
+                                                };
+
+                                                $.ajax({
+                                                    cache: false,
+                                                    type: "POST",
+                                                    url: "@(Url.Action("DestroyQuestionSelected", "Project"))",
+                                                    data: postData,
+                                                    complete: function (data) {
+                                                        //reload grid
+                                                        var grid8 = $('#grid8').data('kendoGrid');
+                                                        grid8.dataSource.read();
+
+                                                        var grid9 = $('#grid9').data('kendoGrid');
+                                                        grid9.dataSource.read();
+
+                                                        selectedIds9 = [];
+                                                    },
+                                                    error: function (xhr, ajaxOptions, thrownError) {
+                                                        alert(thrownError);
+                                                    },
+                                                    traditional: true
+                                                });
+                                                return false;
+                                            });
+
+                                            $('#mastercheckbox9').click(function () {
+                                                $('.checkboxGroups9').attr('checked', $(this).is(':checked')).change();
+                                            });
+
+                                            //wire up checkboxes.
+                                            $('#grid9').on('change', 'input[type=checkbox][id!=mastercheckbox9]', function (e) {
+                                                var $check = $(this);
+                                                if ($check.is(":checked") == true) {
+                                                    var checked = jQuery.inArray($check.val(), selectedIds9);
+                                                    if (checked == -1) {
+                                                        //add id to selectedIds9.
+                                                        selectedIds9.push($check.val());
+                                                    }
+                                                }
+                                                else {
+                                                    var checked = jQuery.inArray($check.val(), selectedIds9);
+                                                    if (checked > -1) {
+                                                        //remove id from selectedIds9.
+                                                        selectedIds9 = $.grep(selectedIds9, function (item, index) {
+                                                            return item != $check.val();
+                                                        });
+                                                    }
+                                                }
+                                                updateMasterCheckbox9();
+                                            });
+
+                                            $('.modal').on('hidden.bs.modal', function (e) {
+                                                if ($('.modal').hasClass('in')) {
+                                                    $('body').addClass('modal-open');
+                                                }
+                                            });
+                                        });
+
+                                        function additionalData9() {
+                                            return {
+                                                ProjectID: $('#ProjectID').val()
+                                            };
+                                        }
+                                        function onDataBound9(e) {
+                                            $('#grid9 input[type=checkbox][id!=mastercheckbox9]').each(function () {
+                                                var currentId = $(this).val();
+                                                var checked = jQuery.inArray(currentId, selectedIds9);
+                                                //set checked based on if current checkbox's value is in selectedIds9.
+                                                $(this).attr('checked', checked > -1);
+                                            });
+
+                                            updateMasterCheckbox9();
+
+
+                                            //bind event up - down row
+                                            $('.row-up').click(function () {
+
+                                                var grid = $("#grid9").data("kendoGrid");
+                                                var row = $($(this).closest('tr')[0]);
+                                                var rowIdx = $($(this).closest('tr')[0]).index();
+
+
+                                                var cur_Item = grid.dataItems()[rowIdx].QuestionID,
+                                                    pre_Item = null ? 0 : grid.dataItems()[rowIdx - 1].QuestionID;
+                                                var postDataUp = {
+                                                    projectID: $("#ProjectID").val(),
+                                                    cur_Item: cur_Item,
+                                                    pre_Item: pre_Item
+                                                };
+                                                $.ajax({
+                                                    cache: false,
+                                                    type: "POST",
+                                                    url: "@(Url.Action("ReOrder", "Project"))",
+                                                    data: postDataUp,
+                                                    success: function (data) {
+                                                        //reload grid
+                                                        var grid9 = $('#grid9').data('kendoGrid');
+                                                        grid9.dataSource.read();
+
+                                                        postDataUp = [];
+                                                    },
+                                                    error: function (xhr, ajaxOptions, thrownError) {
+                                                        alert(thrownError);
+                                                    },
+                                                    traditional: true
+                                                });
+                                            });
+
+                                            $('.row-down').click(function () {
+                                                var grid = $("#grid9").data("kendoGrid");
+                                                var row = $($(this).closest('tr')[0]);
+                                                var rowIdx = $($(this).closest('tr')[0]).index();
+
+
+                                                var cur_Item = grid.dataItems()[rowIdx].QuestionID,
+                                                    pre_Item = null ? 0 : grid.dataItems()[rowIdx + 1].QuestionID;
+                                                var postDataDown = {
+                                                    projectID: $("#ProjectID").val(),
+                                                    cur_Item: cur_Item,
+                                                    pre_Item: pre_Item
+                                                };
+                                                $.ajax({
+                                                    cache: false,
+                                                    type: "POST",
+                                                    url: "@(Url.Action("ReOrder", "Project"))",
+                                                    data: postDataDown,
+                                                    complete: function (data) {
+                                                        var grid9 = $('#grid9').data('kendoGrid');
+                                                        grid9.dataSource.read();
+
+                                                        postDataDown = [];
+                                                    },
+                                                    error: function (xhr, ajaxOptions, thrownError) {
+                                                        alert(thrownError);
+                                                    },
+                                                    traditional: true
+                                                });
+                                            });
+                                        }
+
+                                        function updateMasterCheckbox9() {
+                                            var numChkBoxes = $('#grid9 input[type=checkbox][id!=mastercheckbox9]').length;
+                                            var numChkBoxesChecked = $('#grid9 input[type=checkbox][id!=mastercheckbox9]:checked').length;
+                                            $('#mastercheckbox9').attr('checked', numChkBoxes == numChkBoxesChecked && numChkBoxes > 0);
+                                        }
+
+                                        //function demo1(id) {
+                                        //    alert(id);
+                                        //}
+                                    </script>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="tab-pane fade" id="tab_7">
+                <div class="box box-default">
+                    <div class="box-body">
+                        <div class="row">
+                            <div class="col-md-10 center">
+                                <div class="form-group">
+                                    @Html.LabelFor(model => model.Greeting, new { @class = "col-sm-3 control-label" })
+                                    <div class="col-sm-9">
+                                        @Html.Raw(HttpUtility.HtmlDecode(Model.Greeting))
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    @Html.Label("Kịch bản khảo sát", new { @class = "col-sm-3 control-label" })
+                                    <div class="col-sm-9">
+                                        <div id="slider">
+                                            @{
+                                                if (Model.AvailableQuestions != null && Model.AvailableQuestions.Count > 0)
+                                                {
+                                                    int i = 0;
+                                                    foreach (var question in Model.AvailableQuestions)
+                                                    {
+                                                        <div data-id="@question.QuestionID" data-index="@i">
+                                                            <label>@Html.Raw(HttpUtility.HtmlDecode(@question.Name))</label>
+                                                            @{
+                                                                int j = 0;
+                                                                foreach (var survey in question.AvailableSurveys)
+                                                                {
+                                                                    <p>
+                                                                        @if (survey.SurveyType == (int)TypeSurvey.CHECKBOX)
+                                                                        {
+                                                                            <span data-index="@j" data-id="@survey.SurveyID" data-question="@question.QuestionID" data-code="@survey.Code" data-next="@survey.NextQuestionID" data-control="checkbox" class="chkSurvey">
+                                                                                <input type="checkbox" value="@survey.SurveyID" name="Question_@question.QuestionID" /> @Regex.Replace(survey.SurveyContent, "<[^>]*(>|$)", string.Empty)
+                                                                            </span>
+                                                                        }
+                                                                        else if (survey.SurveyType == (int)TypeSurvey.RADIOBUTTON)
+                                                                        {
+                                                                            <span data-index="@j" data-id="@survey.SurveyID" data-question="@question.QuestionID" data-code="@survey.Code" data-next="@survey.NextQuestionID" data-control="radio" class="rdbSurvey">
+                                                                                <input type="radio" value="@survey.SurveyID" name="Question_@question.QuestionID" /> @Regex.Replace(survey.SurveyContent, "<[^>]*(>|$)", string.Empty)
+                                                                            </span>
+                                                                        }
+                                                                        else if (survey.SurveyType == (int)TypeSurvey.TEXTBOX)
+                                                                        {
+                                                                            <textarea class="aTextbox" placeholder="@Regex.Replace(survey.SurveyContent, "<[^>]*(>|$)", string.Empty)" name="Question_@question.QuestionID" rows="3" cols="50" data-index="@j" data-id="@survey.SurveyID" data-question="@question.QuestionID" data-code="@survey.Code" data-next="@survey.NextQuestionID" data-control="textbox" data-content="@survey.SurveyContent"></textarea>
+                                                                        }
+                                                                    </p>
+                                                                    j++;
+                                                                }
+                                                            }
+                                                            <div class="control-slide">
+                                                                <div id="btnPre" class="btnPre"></div>
+                                                                <div id="btnNext" class="btnNext"></div>
+                                                            </div>
+                                                        </div>
+                                                        i++;
+                                                    }
+                                                }
+                                                else
+                                                {
+                                                    <label class="label label-danger">Chưa có câu hỏi nào để khảo sát</label>
+                                                }
+                                            }
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    @Html.LabelFor(model => model.Conclusion, new { @class = "col-sm-3 control-label" })
+                                    <div class="col-sm-9">
+                                        @Html.Raw(HttpUtility.HtmlDecode(Model.Conclusion))
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <script type="text/javascript">
+                    $(document).ready(function () {
+                        $('#slider > div[data-index]').css('display', 'none');
+                        $('#slider > div[data-index]:first').css('display', 'block');
+
+                        $('.chkSurvey').click(function () {
+                            var data_question = $(this).attr('data-question');
+                            var allUnCheck = true;
+                            $(".chkSurvey[data-question=" + data_question + "]").each(function () {
+                                if ($(this).children('input[type=checkbox]').is(":checked")) {
+                                    allUnCheck = false;
+                                    return;;
+                                }
+                            });
+                            if (allUnCheck == true) {
+                                $(this).parent().parent().find('.control-slide').find('.btnNext').html('');
+                            }
+                            else {
+                                var question_next_id = $(this).attr('data-next');
+                                if (question_next_id == "0") {
+                                    $(this).parent().parent().find('.control-slide').find('.btnNext').html('<a class="btn btn-danger">Kết thúc khảo sát</a>');
+                                }
+                                else {
+                                    var question_next_index = $("div[data-id=" + question_next_id + "]").attr("data-index");
+                                    $(this).parent().parent().find('.control-slide').find('.btnNext').html('<a href="#' + question_next_index + '" class="btn btn-danger" >Tiếp</a>');
+
+                                    var question_pre_index = $(this).parent().parent().attr('data-index');
+                                    $("div[data-id=" + question_next_id + "]").find('.control-slide').find('.btnPre').html('<a href="#' + question_pre_index + '" class="btn btn-danger">Trở về</a>');
+                                }
+                            }
+                        });
+                        $('.rdbSurvey').click(function () {
+                            $(this).parent().parent().find('input[type=radio]').removeAttr("checked");
+                            $(this).children('input[type=radio]').prop('checked', true);
+                            var question_next_id = $(this).attr('data-next');
+                            if (question_next_id == "0") {
+                                $(this).parent().parent().find('.control-slide').find('.btnNext').html('<a class="btn btn-danger">Kết thúc khảo sát</a>');
+                            }
+                            else {
+                                var question_next_index = $("div[data-id=" + question_next_id + "]").attr("data-index");
+                                $(this).parent().parent().find('.control-slide').find('.btnNext').html('<a href="#' + question_next_index + '" class="btn btn-danger" >Tiếp</a>');
+
+                                var question_pre_index = $(this).parent().parent().attr('data-index');
+                                $("div[data-id=" + question_next_id + "]").find('.control-slide').find('.btnPre').html('<a href="#' + question_pre_index + '" class="btn btn-danger" >Trở về</a>');
+                            }
+                        });
+                        $('.aTextbox').keyup(function () {
+                            if ($(this).val() != "") {
+                                var question_next_id = $(this).attr('data-next');
+                                if (question_next_id == "0") {
+                                    $(this).parent().parent().find('.control-slide').find('.btnNext').html('<a class="btn btn-danger">Kết thúc khảo sát</a>');
+                                }
+                                else {
+                                    var question_next_index = $("div[data-id=" + question_next_id + "]").attr("data-index");
+                                    $(this).parent().parent().find('.control-slide').find('.btnNext').html('<a href="#' + question_next_index + '" class="btn btn-danger" >Tiếp</a>');
+
+                                    var question_pre_index = $(this).parent().parent().attr('data-index');
+                                    $("div[data-id=" + question_next_id + "]").find('.control-slide').find('.btnPre').html('<a href="#' + question_pre_index + '" class="btn btn-danger" >Trở về</a>');
+                                }
+                            }
+                            else {
+                                $(this).parent().parent().find('.control-slide').find('.btnNext').html('');
+                            }
+                        });
+                        $('.btnPre').live('click', function () {
+                            $(this).parent().parent().find("input[type=radio]").prop('checked', false);
+                            $(this).parent().parent().find("input[type=checkbox]").prop('checked', false);
+                            $(this).parent().parent().find("textarea").val('');
+                            $(this).next().html('');
+
+                            var dataPrevID = $(this).children('a').attr('href');
+                            if (dataPrevID != null && dataPrevID.indexOf('#') != -1) {
+                                dataPrevID = dataPrevID.replace('#', '');
+                                $(this).parent().parent().css('display', 'none');
+                            }
+                            $(this).parent().parent().parent().find('div[data-index=' + dataPrevID + ']').css('display', 'block');
+                        });
+                        $('.btnNext').live('click', function () {
+                            var dataNextID = $(this).children('a').attr('href');
+                            if (dataNextID != null && dataNextID.indexOf('#') != -1) {
+                                dataNextID = dataNextID.replace('#', '');
+                                $(this).parent().parent().css('display', 'none');
+                            }
+                            $(this).parent().parent().parent().find('div[data-index=' + dataNextID + ']').css('display', 'block');
+                        });
+
+                        $('.btnNext a').each(function () {
+                            var dataNextID = $(this).attr('data-nextid');
+                            if (dataNextID != 0) {
+                                $(this).attr('href', '#' + $('div[data-id="' + dataNextID + '"]').attr('data-index'));
+                            }
+                        });
+                    });
+                </script>
+            </div>
+        </div>
+    </div>
+}
+<script src="~/Areas/OMS/Scripts/project.js"></script>
+<div class="modal fade" id="myModal2" role="dialog">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">Cài đặt câu trả lời cho câu hỏi</h4>
+            </div>
+            <div class="modal-body">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal"><i class="fa fa-remove"></i> Đóng</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="myModal1" role="dialog">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">Cài đặt câu hỏi tiếp theo</h4>
+            </div>
+            <div class="modal-body">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" id="modalSave">Lưu</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal"><i class="fa fa-remove"></i> Đóng</button>
+            </div>
+        </div>
+    </div>
+</div>

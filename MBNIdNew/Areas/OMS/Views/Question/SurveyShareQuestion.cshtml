@@ -1,0 +1,498 @@
+﻿@using MB.Web.Core.HTMLHelpers;
+@model MB.OMS.Telesale.Domain.Model.SurveyDTO
+
+@Html.HiddenFor(model => model.QuestionID)
+<div class="box box-primary">
+    <div class="box-header with-border">
+        <h3 class="box-title">Cài đặt câu trả lời cho câu hỏi</h3>
+    </div>
+    <div class="box-body">
+        <div class="row">
+            <div class="col-md-5">
+                <h3 class="page-header text-info">Câu trả lời</h3>
+                <div id="grid20" class="box-body table-responsive no-padding k-grid k-widget">
+                    <script type="text/javascript">
+                        var selectedIds20 = [];
+                        $(document).ready(function () {
+                            $("#grid20").kendoGrid({
+                                dataSource: {
+                                    type: "json",
+                                    transport: {
+                                        read: {
+                                            url: "@Html.Raw(Url.Action("GetListSurvey", "Question"))",
+                                            type: "POST",
+                                            dataType: "json",
+                                            data: additionalData20,
+                                            success: function (result) {
+                                                options.success(result);
+                                            }
+                                        }
+                                    },
+                                    schema: {
+                                        data: "Data",
+                                        total: "Total",
+                                        errors: "Errors"
+                                    },
+                                    error: function (e) {
+                                        display_kendoui_grid_error(e);
+                                        // Cancel the changes
+                                        this.cancelChanges();
+                                    },
+                                    parameterMap: function (options, type) {
+                                        return JSON.stringify(options);
+                                    },
+                                    pageSize: 20,
+                                    serverPaging: true,
+                                    serverFiltering: true,
+                                    serverSorting: true
+                                },
+                                pageable: {
+                                    refresh: true,
+                                    pageSizes: [20, 50, 100, 200, 500],
+                                    messages: {
+                                        display: "Hiển thị {0} - {1} trong {2} dòng",
+                                        empty: "Không có dữ liệu",
+                                        itemsPerPage: "dòng trên trang. "
+                                    }
+                                },
+                                sortable: true,
+                                filterable: {
+                                    extra: false,
+                                    operators: {
+                                        string: {
+                                            contains: "Kết quả chứa"
+                                        }
+                                    },
+                                    messages: {
+                                        info: "Chọn các mục tìm kiếm : ",
+                                        clear: "Xóa",
+                                        filter: "Tìm kiếm"
+                                    }
+                                },
+                                scrollable: false,
+                                dataBound: onDataBound20,
+                                columns: [{
+                                    field: "SurveyID",
+                                    headerTemplate: "<input id='mastercheckbox20' type='checkbox'/>",
+                                    headerAttributes: { style: "text-align:center" },
+                                    attributes: { style: "text-align:center" },
+                                    template: "<input type='checkbox' value='#=SurveyID#' class='checkboxGroups20'/>",
+                                    width: 30,
+                                    filterable: false,
+                                    sortable: false
+                                }, {
+                                    field: "Code",
+                                    title: "Mã câu trả lời",
+                                    headerAttributes: { style: "text-align:left;" },
+                                    width: 100
+                                }, {
+                                    field: "NoiDungNgan",
+                                    title: "Nội dung câu trả lời",
+                                    headerAttributes: { style: "text-align:left;" },
+                                    encoded: false,
+                                    width: 100
+                                }
+                                ]
+                            });
+                            $("#grid20").kendoTooltip({
+                                filter: "td:nth-child(3)", //this filter selects the second column's cells
+                                position: "right",
+                                content: function (e) {
+                                    var dataItem = $("#grid20").data("kendoGrid").dataItem(e.target.closest("tr"));
+                                    var content = dataItem.SurveyContent;
+                                    return content;
+                                }
+                            }).data("kendoTooltip");
+
+                            //Share Survey
+                            $('#sharesurvey-selected').click(function (e) {
+                                e.preventDefault();
+
+                                var postData = {
+                                    selectedIds: selectedIds20,
+                                    questionId: $('#QuestionID').val(),
+                                    projectID: $('#ProjectID').val()
+                                };
+
+                                $.ajax({
+                                    cache: false,
+                                    type: "POST",
+                                    url: "@(Url.Action("ShareSurveySelected", "Question"))",
+                                    data: postData,
+                                    complete: function (data) {
+                                        //reload grid
+                                        var grid20 = $('#grid20').data('kendoGrid');
+                                        grid20.dataSource.read();
+
+                                        var grid21 = $('#grid21').data('kendoGrid');
+                                        grid21.dataSource.read();
+
+                                        selectedIds20 = [];
+                                    },
+                                    error: function (xhr, ajaxOptions, thrownError) {
+                                        alert(thrownError);
+                                    },
+                                    traditional: true
+                                });
+                                return false;
+                            });
+
+                            $('#mastercheckbox20').click(function () {
+                                $('.checkboxGroups20').attr('checked', $(this).is(':checked')).change();
+                            });
+
+                            //wire up checkboxes.
+                            $('#grid20').on('change', 'input[type=checkbox][id!=mastercheckbox20]', function (e) {
+                                var $check = $(this);
+                                if ($check.is(":checked") == true) {
+                                    var checked = jQuery.inArray($check.val(), selectedIds20);
+                                    if (checked == -1) {
+                                        //add id to selectedIds20.
+                                        selectedIds20.push($check.val());
+                                    }
+                                }
+                                else {
+                                    var checked = jQuery.inArray($check.val(), selectedIds20);
+                                    if (checked > -1) {
+                                        //remove id from selectedIds20.
+                                        selectedIds20 = $.grep(selectedIds20, function (item, index) {
+                                            return item != $check.val();
+                                        });
+                                    }
+                                }
+                                updateMasterCheckbox20();
+                            });
+
+                        });
+                        function additionalData20() {
+                            return {
+                                QuestionID: $('#QuestionID').val(),
+                                ProjectID: $('#ProjectID').val()
+                            };
+                        }
+                        function onDataBound20(e) {
+                            $('#grid20 input[type=checkbox][id!=mastercheckbox20]').each(function () {
+                                var currentId = $(this).val();
+                                var checked = jQuery.inArray(currentId, selectedIds20);
+                                //set checked based on if current checkbox's value is in selectedIds20.
+                                $(this).attr('checked', checked > -1);
+                            });
+
+                            updateMasterCheckbox20();
+                        }
+
+                        function updateMasterCheckbox20() {
+                            var numChkBoxes = $('#grid20 input[type=checkbox][id!=mastercheckbox20]').length;
+                            var numChkBoxesChecked = $('#grid20 input[type=checkbox][id!=mastercheckbox20]:checked').length;
+                            $('#mastercheckbox20').attr('checked', numChkBoxes == numChkBoxesChecked && numChkBoxes > 0);
+                        }
+                    </script>
+                </div>
+            </div>
+            <div class="col-md-1 text-center">
+                <br /><br /><br />
+                <div class="row"><button type="button" class="btn btn-primary" id="sharesurvey-selected"> > </button></div>
+                <br />
+                <div class="row"><button type="button" class="btn btn-primary" id="destroysurvey-selected"> < </button></div>
+            </div>
+            <div class="col-md-6">
+                <h3 class="page-header text-info">Câu trả lời đã chọn</h3>
+                <div id="grid21" class="box-body table-responsive no-padding k-grid k-widget">
+                    <script type="text/javascript">
+                        var selectedIds21 = [];
+                        $(document).ready(function () {
+                            $("#grid21").kendoGrid({
+                                dataSource: {
+                                    type: "json",
+                                    transport: {
+                                        read: {
+                                            url: "@Html.Raw(Url.Action("GetListSurveyInQuestion", "Question"))",
+                                            type: "POST",
+                                            dataType: "json",
+                                            data: additionalData21,
+                                            success: function (result) {
+                                                options.success(result);
+                                            }
+                                        }
+                                    },
+                                    schema: {
+                                        data: "Data",
+                                        total: "Total",
+                                        errors: "Errors"
+                                    },
+                                    error: function (e) {
+                                        display_kendoui_grid_error(e);
+                                        // Cancel the changes
+                                        this.cancelChanges();
+                                    },
+                                    parameterMap: function (options, type) {
+                                        return JSON.stringify(options);
+                                    },
+                                    pageSize: 20,
+                                    serverPaging: true,
+                                    serverFiltering: true,
+                                    serverSorting: true
+                                },
+                                pageable: {
+                                    refresh: true,
+                                    pageSizes: [20, 50, 100, 200, 500],
+                                    messages: {
+                                        display: "Hiển thị {0} - {1} trong {2} dòng",
+                                        empty: "Không có dữ liệu",
+                                        itemsPerPage: "dòng trên trang. "
+                                    }
+                                },
+                                sortable: true,
+                                filterable: {
+                                    extra: false,
+                                    operators: {
+                                        string: {
+                                            contains: "Kết quả chứa"
+                                        }
+                                    },
+                                    messages: {
+                                        info: "Chọn các mục tìm kiếm : ",
+                                        clear: "Xóa",
+                                        filter: "Tìm kiếm"
+                                    }
+                                },
+                                scrollable: false,
+                                dataBound: onDataBound21,
+                                columns: [{
+                                    field: "SurveyID",
+                                    headerTemplate: "<input id='mastercheckbox21' type='checkbox'/>",
+                                    headerAttributes: { style: "text-align:center" },
+                                    attributes: { style: "text-align:center" },
+                                    template: "<input type='checkbox' value='#=SurveyID#' class='checkboxGroups21'/>",
+                                    width: 30,
+                                    filterable: false,
+                                    sortable: false
+                                }, {
+                                    field: "Code",
+                                    title: "Mã",
+                                    headerAttributes: { style: "text-align:left;" },
+                                    width: 60
+                                }, {
+                                    field: "NoiDungNgan",
+                                    title: "Nội dung",
+                                    headerAttributes: { style: "text-align:left;" },
+                                    encoded: false,
+                                    width: 150
+                                }, {
+                                    field: "DisplayOrder",
+                                    title: "TT",
+                                    template: "<span class='k-arrow k-button fa fa-arrow-up row-up' aria-hidden='true'></span><span class='k-arrow k-button fa fa-arrow-down row-down' aria-hidden='true'></span>",
+                                    headerAttributes: { style: "text-align:left;" },
+                                    width: 20,
+                                    filterable: false,
+                                    sortable: false
+                                }, {
+                                    title: "",
+                                    width: 40,
+                                    command: [{
+                                        name: "Cập nhật",
+                                        text: "",
+                                        imageClass: "fa fa-arrow-right",
+                                        //template: "<i class='fa fa-arrow-right'></i>",
+                                        click: function (e) {
+                                            // prevent page scroll position change
+                                            e.preventDefault();
+                                            // e.target is the DOM element representing the button
+                                            var tr = $(e.target).closest("tr"); // get the current table row (tr)
+                                            // get the data bound to the current table row
+                                            var data = this.dataItem(tr);
+
+                                            $.ajax({
+                                                type: "GET",
+                                                dataType: 'json',
+                                                url: '@Url.Action("NextQuestion", "Question")?projectId=' + $('#ProjectID').val() + '&questionId=' + $('#QuestionID').val() + '&surveyId=' + data.SurveyID,
+                                                success: function (result) {
+                                                    if (result.success) {
+                                                        var mymodal = $('#myModal1');
+                                                        mymodal.find('.modal-body').html(result.html);
+                                                        mymodal.modal('show');
+                                                    }
+                                                    else {
+                                                        swal({ title: result.message, confirmButtonText: "Đóng" });
+                                                    }
+                                                }
+                                            });
+                                        }
+                                    }]
+                                }
+                                ]
+                            });
+                            $("#grid21").kendoTooltip({
+                                filter: "td:nth-child(3)", //this filter selects the second column's cells
+                                position: "right",
+                                content: function (e) {
+                                    var dataItem = $("#grid21").data("kendoGrid").dataItem(e.target.closest("tr"));
+                                    var content = dataItem.SurveyContent;
+                                    return content;
+                                }
+                            }).data("kendoTooltip");
+                            $("#grid21").kendoTooltip({
+                                filter: "td:nth-child(5)", //this filter selects the second column's cells
+                                position: "right",
+                                content: function (e) {
+                                    var dataItem = $("#grid21").data("kendoGrid").dataItem(e.target.closest("tr"));
+                                    var contenta = dataItem.NextQuestionID;
+                                    return dataItem.NextQuestionID.toString();
+                                }
+                            }).data("kendoTooltip");
+
+                            //Share Survey
+                            $('#destroysurvey-selected').click(function (e) {
+                                e.preventDefault();
+
+                                var postData = {
+                                    selectedIds: selectedIds21,
+                                    questionId: $('#QuestionID').val(),
+                                    projectID: $('#ProjectID').val()
+                                };
+
+                                $.ajax({
+                                    cache: false,
+                                    type: "POST",
+                                    url: "@(Url.Action("DestroySurveySelected", "Question"))",
+                                    data: postData,
+                                    complete: function (data) {
+                                        //reload grid
+                                        var grid20 = $('#grid20').data('kendoGrid');
+                                        grid20.dataSource.read();
+
+                                        var grid21 = $('#grid21').data('kendoGrid');
+                                        grid21.dataSource.read();
+
+                                        selectedIds21 = [];
+                                    },
+                                    error: function (xhr, ajaxOptions, thrownError) {
+                                        alert(thrownError);
+                                    },
+                                    traditional: true
+                                });
+                                return false;
+                            });
+
+                            $('#mastercheckbox21').click(function () {
+                                $('.checkboxGroups21').attr('checked', $(this).is(':checked')).change();
+                            });
+
+                            //wire up checkboxes.
+                            $('#grid21').on('change', 'input[type=checkbox][id!=mastercheckbox21]', function (e) {
+                                var $check = $(this);
+                                if ($check.is(":checked") == true) {
+                                    var checked = jQuery.inArray($check.val(), selectedIds21);
+                                    if (checked == -1) {
+                                        //add id to selectedIds21.
+                                        selectedIds21.push($check.val());
+                                    }
+                                }
+                                else {
+                                    var checked = jQuery.inArray($check.val(), selectedIds21);
+                                    if (checked > -1) {
+                                        //remove id from selectedIds21.
+                                        selectedIds21 = $.grep(selectedIds21, function (item, index) {
+                                            return item != $check.val();
+                                        });
+                                    }
+                                }
+                                updateMasterCheckbox21();
+                            });
+                        });
+                        function additionalData21() {
+                            return {
+                                QuestionID: $('#QuestionID').val(),
+                                ProjectID: $('#ProjectID').val()
+                            };
+                        }
+                        function onDataBound21(e) {
+                            $('#grid21 input[type=checkbox][id!=mastercheckbox21]').each(function () {
+                                var currentId = $(this).val();
+                                var checked = jQuery.inArray(currentId, selectedIds21);
+                                //set checked based on if current checkbox's value is in selectedIds21.
+                                $(this).attr('checked', checked > -1);
+                            });
+
+                            updateMasterCheckbox21();
+
+                            $('.row-up').click(function () {
+
+                                var grid = $("#grid21").data("kendoGrid");
+                                var row = $($(this).closest('tr')[0]);
+                                var rowIdx = $($(this).closest('tr')[0]).index();
+
+
+                                var cur_Survey = grid.dataItems()[rowIdx].SurveyID,
+                                    pre_Survey = null ? 0 : grid.dataItems()[rowIdx - 1].SurveyID,
+                                    questionID = $("#QuestionID").val();
+                                var postDataUp = {
+                                    projectID: $("#ProjectID").val(),
+                                    cur_Survey: cur_Survey,
+                                    pre_Survey: pre_Survey,
+                                    questionID: questionID
+                                };
+                                $.ajax({
+                                    cache: false,
+                                    type: "POST",
+                                    url: "@(Url.Action("ReOrderSurvey", "Project"))",
+                                    data: postDataUp,
+                                    success: function (data) {
+                                        //reload grid
+                                        var grid9 = $('#grid21').data('kendoGrid');
+                                        grid9.dataSource.read();
+
+                                        postDataUp = [];
+                                    },
+                                    error: function (xhr, ajaxOptions, thrownError) {
+                                        alert(thrownError);
+                                    },
+                                    traditional: true
+                                });
+                            });
+
+                            $('.row-down').click(function () {
+                                var grid = $("#grid21").data("kendoGrid");
+                                var row = $($(this).closest('tr')[0]);
+                                var rowIdx = $($(this).closest('tr')[0]).index();
+
+
+                                var cur_Survey = grid.dataItems()[rowIdx].SurveyID,
+                                    pre_Survey = null ? 0 : grid.dataItems()[rowIdx + 1].SurveyID,
+                                    questionID = $("#QuestionID").val();
+                                var postDataDown = {
+                                    projectID: $("#ProjectID").val(),
+                                    cur_Survey: cur_Survey,
+                                    pre_Survey: pre_Survey,
+                                    questionID: questionID
+                                };
+                                $.ajax({
+                                    cache: false,
+                                    type: "POST",
+                                    url: "@(Url.Action("ReOrderSurvey", "Project"))",
+                                    data: postDataDown,
+                                    complete: function (data) {
+                                        var grid9 = $('#grid21').data('kendoGrid');
+                                        grid9.dataSource.read();
+
+                                        postDataDown = [];
+                                    },
+                                    error: function (xhr, ajaxOptions, thrownError) {
+                                        alert(thrownError);
+                                    },
+                                    traditional: true
+                                });
+                            });
+                        }
+
+                        function updateMasterCheckbox21() {
+                            var numChkBoxes = $('#grid21 input[type=checkbox][id!=mastercheckbox21]').length;
+                            var numChkBoxesChecked = $('#grid21 input[type=checkbox][id!=mastercheckbox21]:checked').length;
+                            $('#mastercheckbox21').attr('checked', numChkBoxes == numChkBoxesChecked && numChkBoxes > 0);
+                        }
+                    </script>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

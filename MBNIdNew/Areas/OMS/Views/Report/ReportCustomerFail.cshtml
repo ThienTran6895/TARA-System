@@ -1,0 +1,140 @@
+﻿@using MB.OMS.Telesale.Domain.Model
+@model TsReportModel
+
+@{
+    ViewBag.Title = "<small>Báo cáo phân tích từ chối tham gia</small>";
+    Layout = "~/Views/Shared/_MasterLayout.cshtml";
+    double total = Model.ReportData.Sum(d => d.Number);
+
+    double totalDataOfSource = Model.ReportData.ToList()[0].TotalDataOfSource;
+
+    double totalPercent = 0;
+    double totalPercenOverSource = 0;
+}
+
+@section Breadcrumb {
+    <h1>
+        Báo cáo phân tích khách hàng không đủ điều kiện
+    </h1>
+}
+
+<div class="box box-success">
+    <div class="box-header with-border">
+        <h3 class="box-title">Báo cáo phân tích khách hàng không đủ điều kiện</h3>
+    </div>
+    <div class="box-body">
+        <div class="row form-horizontal">
+            <div class="form-group">
+                <label class="col-sm-2 control-label">Chọn ngày</label>
+                <div class="col-sm-3">
+                    <div class="input-group">
+                        <input type="text" class="form-control pull-right" id="DateStart" value="@Model.DateStart.ToString("MM/dd/yyyy")">
+                        <div class="input-group-addon">
+                            <i class="fa fa-calendar"></i>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-3">
+                    <div class="input-group">
+                        <input type="text" class="form-control pull-right" id="DateEnd" value="@Model.DateEnd.ToString("MM/dd/yyyy")">
+                        <div class="input-group-addon">
+                            <i class="fa fa-calendar"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2 control-label">Chọn nguồn</label>
+                <div class="col-md-6">
+                    <select class="form-control" id="ddlsource">
+                        <option value="0">-- Tất cả --</option>
+                        @{
+                            foreach (var it in Model.AvaiableSources)
+                            {
+                                <option value="@it.Value" @(it.Selected ? "selected" : "")>@it.Text</option>
+                            }
+                        }
+                    </select>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-2"></div>
+                <div class="col-sm-6">
+                    <button type="button" id="search" class="btn btn-default"><i class="fa fa-fw fa-search"></i>Tìm kiếm</button>
+                    <button type="button" id="btnExport" class="btn btn-link"><i class="fa fa-fw fa-download"></i>Export excel</button>
+                </div>
+            </div>
+        </div>
+
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th colspan="2"></th>
+                    <th>Tổng data đã tiếp cận</th>
+                    <th>@totalDataOfSource</th>
+                </tr>
+                <tr>
+                    <th>Nội dung</th>
+                    <th>Số lượng</th>
+                    <th>Tỷ lệ</th>
+                    <th>Tỷ lệ/data tiếp cận</th>
+                </tr>
+            </thead>
+            <tbody>
+                @{
+                    foreach (ReportOverviewData rp in Model.ReportData)
+                    {
+                        double ratio = 0;
+                        if(total != 0) {
+                            ratio = Math.Round((double)(100 * rp.Number) / total);
+                        }
+
+                        double ratioOverData = 0;
+                        if(totalDataOfSource != 0) {
+                            ratioOverData = Math.Round((double)(100 * rp.Number) / totalDataOfSource);
+                        }
+
+                        totalPercent += ratio;
+                        totalPercenOverSource += ratioOverData;
+                        <tr>
+                            <td>@rp.RowTitle</td>
+                            <td>@rp.Number</td>
+                            <td>@ratio %</td>
+                            <td>@ratioOverData %</td>
+                        </tr>
+                    }
+                    <tr>
+                        <td>Tổng</td>
+                        <td>@total</td>
+                        <td>@totalPercent %</td>
+                        <td>@totalPercenOverSource %</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $("#DateStart").datepicker({ autoclose: true });
+        $("#DateEnd").datepicker({ autoclose: true });
+    });
+
+
+    $('#search').click(function () {
+        var DateFrom = $('#DateStart').val();
+        var DateEnd = $('#DateEnd').val();
+        var SourceID = $("#ddlsource").val();
+        window.location.href = '@Url.Action("ReportCustomerFail", "Report")?sourceId=' + SourceID + '&ds=' + DateFrom + '&de=' + DateEnd;
+    });
+
+    $("#btnExport").click(function () {
+        var DateFrom = $('#DateStart').val();
+        var DateEnd = $('#DateEnd').val();
+        var SourceID = $("#ddlsource").val();
+        window.location.href = '@Url.Action("ExportReportCustomerFail", "Report")?sourceId=' + SourceID + '&ds=' + DateFrom + '&de=' + DateEnd;
+    });
+</script>
+
